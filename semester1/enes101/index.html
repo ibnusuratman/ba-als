@@ -32,26 +32,25 @@
             margin-bottom: 12px;
             border-radius: 8px;
             border: 1px solid #333;
-            overflow: hidden; /* Biar rapi */
+            overflow: hidden;
         }
 
         summary {
             padding: 15px;
             font-weight: bold;
             cursor: pointer;
-            list-style: none; /* Hilangkan panah bawaan browser */
+            list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #252525;
         }
 
-        /* Tanda Plus (+) berubah jadi Minus (-) */
-        summary::after { content: '+'; font-size: 1.4rem; color: var(--primary); font-weight: bold; }
+        summary::after { content: '+'; font-size: 1.4rem; color: var(--primary); }
         details[open] summary::after { content: '-'; color: var(--accent); }
         details[open] summary { border-bottom: 1px solid #444; }
 
-        /* ISI MATERI (YANG MUNCUL SAAT DIKLIK) */
+        /* ISI MATERI */
         .materi-content {
             padding: 15px;
             background-color: #1a1a1a;
@@ -60,36 +59,27 @@
             gap: 12px;
         }
 
-        /* GAYA 3 TOMBOL (AUDIO, PDF, KUIS) */
+        /* TOMBOL AUDIO, PDF, KUIS */
         .btn-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: white;
-            font-size: 0.95rem;
-            transition: 0.2s;
+            display: flex; align-items: center; padding: 12px;
+            border-radius: 6px; text-decoration: none; color: white;
+            font-size: 0.95rem; transition: 0.2s;
         }
-
         .audio-box { background-color: #2c3e50; border-left: 5px solid #3498db; padding: 10px; border-radius: 6px; }
         .pdf { background-color: #3e2723; border-left: 5px solid #e74c3c; }
         .kuis { background-color: #1b2631; border-left: 5px solid #f1c40f; }
-
         .btn-item:hover { opacity: 0.9; transform: translateX(3px); }
         .icon { margin-right: 12px; font-size: 1.3rem; }
-
-        /* Audio Player Custom */
         audio { width: 100%; height: 35px; margin-top: 5px; }
 
-        /* PEMBATAS UJIAN */
+        /* DIVIDER */
         .divider {
-            text-align: center; margin: 30px 0 15px 0;
+            text-align: center; margin: 35px 0 20px 0;
             color: var(--accent); font-weight: bold;
             border-bottom: 1px solid #333; line-height: 0.1em;
         }
         .divider span { background: var(--bg-dark); padding: 0 10px; }
-
+        
         /* TOMBOL KEMBALI */
         .btn-back {
             display: block; text-align: center; margin-top: 40px; margin-bottom: 20px;
@@ -106,57 +96,300 @@
     </div>
 
     <details>
-        <summary>Pertemuan 1: Introduction</summary>
+        <summary>Unit 1: Studi Akademik & Gaya Belajar</summary>
         <div class="materi-content">
-            
             <div class="audio-box">
-                <div style="margin-bottom:5px; font-weight:bold;">🎧 Simak Materi Audio</div>
-                <audio controls>
-                    <source src="audio/enes101-01.mp3" type="audio/mpeg">
-                    Browser Anda tidak mendukung audio player.
-                </audio>
+                <div style="margin-bottom:5px;">🎧 Audio Materi</div>
+                <audio controls><source src="audio/enes101-01.mp3" type="audio/mpeg"></audio>
             </div>
-            
-            <a href="pdf/enes101-01.pdf" class="btn-item pdf" target="_blank">
-                <span class="icon">📄</span> Download Materi PDF
-            </a>
-
-            <a href="enes101-01.html" class="btn-item kuis">
-                <span class="icon">📝</span> Latihan / Kuis P-1
-            </a>
-
+            <a href="pdf/enes101-01.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-01.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 1</a>
         </div>
     </details>
 
     <details>
-        <summary>Pertemuan 2: Grammar Basics</summary>
+        <summary>Unit 2: Mengembangkan Kosakata</summary>
         <div class="materi-content">
-            <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+            <div class="audio-box">
+                <div style="margin-bottom:5px;">🎧 Audio Materi</div>
+                <audio controls><source src="audio/enes101-02.mp3" type="audio/mpeg"></audio>
+            </div>
+            <a href="pdf/enes101-02.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-02.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 2</a>
         </div>
     </details>
 
     <details>
-        <summary>Pertemuan 3: Vocabulary</summary>
+        <summary>Unit 3: Membaca - Metode SQ3R</summary>
         <div class="materi-content">
-            <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-03.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-03.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-03.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 3</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 4: Membaca & Mencatat Teks</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-04.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-04.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-04.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 4</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 5: Teknik Mencatat Dasar</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-05.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-05.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-05.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 5</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 6: Mencatat (Intro Academic Writing)</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-06.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-06.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-06.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 6</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 7: Mencatat - Pemetaan Pikiran</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-07.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-07.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-07.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 7</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 8: Mencatat - Menguraikan (Outlining)</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-08.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-08.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-08.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 8</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 9: Memahami Argumen Akademik</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-09.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-09.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-09.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 9</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 10: Plagiarisme & Parafrase</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-10.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-10.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-10.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 10</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 11: Tinjauan Proses Penulisan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-11.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-11.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-11.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 11</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 12: Proses Pramenulis</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-12.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-12.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-12.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 12</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 13: Pramenulis untuk Tugas</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-13.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-13.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-13.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 13</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 14: Menulis - Topik & Tesis</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-14.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-14.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-14.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 14</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 15: Proses Merevisi</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-15.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-15.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-15.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 15</a>
         </div>
     </details>
 
     <h2 class="divider"><span>UJIAN TENGAH SEMESTER</span></h2>
 
-    <details style="border: 1px solid var(--accent);">
+    <details style="border-color: var(--accent);">
         <summary style="color: var(--accent);">📝 SOAL UTS</summary>
         <div class="materi-content">
-            <a href="#" class="btn-item kuis">Kerjakan Soal UTS</a>
+            <p style="color:#aaa;">Silakan kerjakan soal UTS melalui link di bawah ini:</p>
+            <a href="enes101-uts.html" class="btn-item kuis">Buka Soal UTS</a>
         </div>
     </details>
 
     <h2 class="divider"><span>SESI PASCA-UTS</span></h2>
 
     <details>
-        <summary>Pertemuan 16: Reading Comprehension</summary>
+        <summary>Unit 16: Merevisi & Kata Hubung</summary>
         <div class="materi-content">
-             <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-16.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-16.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-16.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 16</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 17: Proses Penyuntingan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-17.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-17.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-17.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 17</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 18: Tanda Baca Dasar</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-18.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-18.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-18.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 18</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 19: Tanda Baca Lanjutan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-19.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-19.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-19.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 19</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 20: Mencocokkan Bagian Kalimat</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-20.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-20.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-20.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 20</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 21: Klausa & Koordinasi</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-21.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-21.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-21.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 21</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 22: Paralelisme</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-22.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-22.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-22.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 22</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 23: Menulis Pendahuluan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-23.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-23.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-23.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 23</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 24: Menulis Kesimpulan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-24.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-24.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-24.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 24</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 25: Menulis Ringkasan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-25.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-25.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-25.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 25</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 26: Penulisan Laporan</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-26.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-26.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-26.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 26</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 27: Menjelajahi Sampel Menulis</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-27.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-27.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-27.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 27</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 28: Kemampuan Belajar</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-28.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-28.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-28.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 28</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 29: Keterampilan Penelitian 1</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-29.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-29.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-29.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 29</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>Unit 30: Keterampilan Penelitian 2</summary>
+        <div class="materi-content">
+            <div class="audio-box"><div style="margin-bottom:5px;">🎧 Audio Materi</div><audio controls><source src="audio/enes101-30.mp3" type="audio/mpeg"></audio></div>
+            <a href="pdf/enes101-30.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> Download PDF</a>
+            <a href="enes101-30.html" class="btn-item kuis"><span class="icon">📝</span> Latihan Unit 30</a>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>UJIAN AKHIR SEMESTER</span></h2>
+
+    <details style="border-color: var(--accent);">
+        <summary style="color: var(--accent);">🎓 SOAL UAS</summary>
+        <div class="materi-content">
+            <p style="color:#aaa;">Silakan kerjakan soal UAS melalui link di bawah ini:</p>
+            <a href="enes101-uas.html" class="btn-item kuis">Buka Soal UAS</a>
         </div>
     </details>
 
