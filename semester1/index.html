@@ -1,1 +1,160 @@
-semestei1/index.html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 1 - BA-ALS</title>
+    <style>
+        /* TEMA DARK MODE */
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #e0e0e0;
+            --primary: #2e8b57;  /* Hijau */
+            --accent: #FFD700;   /* Emas */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 { color: var(--primary); margin: 0; font-size: 1.6rem; }
+        p { color: #888; margin-top: 5px; font-size: 0.9rem; }
+
+        /* GRID KARTU MATKUL */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr; /* Di HP 1 kolom biar lebar */
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Tampilan Tablet/PC jadi 2 kolom */
+        @media (min-width: 600px) {
+            .grid-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-left: 5px solid var(--primary); /* Garis warna di kiri */
+            border-radius: 8px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: transform 0.2s, background 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card:hover, .card:active {
+            transform: translateX(5px); /* Efek geser dikit pas disentuh */
+            background-color: #2c2c2c;
+        }
+
+        .matkul-info { display: flex; flex-direction: column; }
+        .kode { font-size: 0.8rem; color: #aaa; margin-bottom: 4px; font-weight: bold; }
+        .nama { font-size: 1.1rem; font-weight: bold; }
+        
+        /* Badge Kredit */
+        .kredit-badge {
+            background-color: #333;
+            color: var(--accent);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Tombol Kembali */
+        .btn-back {
+            margin-top: 40px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            border: 1px solid #333;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Semester 1</h1>
+        <p>Program BA-ALS (Total Kredit: 60)</p>
+    </div>
+
+    <div class="grid-container">
+        <a href="isgs101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">ISGS101</span>
+                <span class="nama">Studi Islam</span>
+            </div>
+            <div class="kredit-badge">6 Kredit</div>
+        </a>
+
+        <a href="enes101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">ENES101</span>
+                <span class="nama">Bhs. Inggris</span>
+            </div>
+            <div class="kredit-badge">6 Kredit</div>
+        </a>
+
+        <a href="amdb101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">AMDB101</span>
+                <span class="nama">Bhs. Arab Al-Madinah</span>
+            </div>
+            <div class="kredit-badge">12 Kredit</div>
+        </a>
+
+        <a href="agrm101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">AGRM101</span>
+                <span class="nama">Tata Bahasa Arab</span>
+            </div>
+            <div class="kredit-badge">12 Kredit</div>
+        </a>
+
+        <a href="alnq101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">ALNQ101</span>
+                <span class="nama">Teks Al-Qur’an</span>
+            </div>
+            <div class="kredit-badge">12 Kredit</div>
+        </a>
+
+        <a href="alwr101/index.html" class="card">
+            <div class="matkul-info">
+                <span class="kode">ALWR101</span>
+                <span class="nama">Mendengar & Menulis</span>
+            </div>
+            <div class="kredit-badge">12 Kredit</div>
+        </a>
+    </div>
+
+    <a href="../index.html" class="btn-back">⬅ Kembali ke Menu Utama</a>
+
+</body>
+</html>
+
