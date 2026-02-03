@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENES101 - Bahasa Inggris</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #e0e0e0;
+            --primary: #2e8b57;
+            --accent: #FFD700;
+        }
+        body {
+            font-family: sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { color: var(--primary); margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
+        
+        /* PEMBAGIAN SESI (SEBELUM/SESUDAH UTS) */
+        .section-title {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 30px 0 15px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* GRID TOMBOL PERTEMUAN */
+        .grid-pertemuan {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn-meet {
+            background-color: var(--bg-card);
+            border: 1px solid #444;
+            color: var(--text-main);
+            padding: 15px 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .btn-meet:hover { background-color: var(--primary); border-color: var(--primary); }
+        
+        /* TOMBOL UJIAN (BESAR) */
+        .btn-exam {
+            display: block;
+            background: linear-gradient(45deg, #b8860b, #ffd700);
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 580px;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-back { display: inline-block; margin-top: 40px; color: #888; text-decoration: none; border: 1px solid #555; padding: 10px 20px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Bahasa Inggris (ENES101)</h1>
+    <p class="subtitle">6 Kredit • 30 Pertemuan</p>
+
+    <div class="section-title">Sesi 1: Pra-UTS</div>
+    <div class="grid-pertemuan">
+        <a href="p1.html" class="btn-meet">P-1</a>
+        <a href="p2.html" class="btn-meet">P-2</a>
+        <a href="p3.html" class="btn-meet">P-3</a>
+        <a href="p4.html" class="btn-meet">P-4</a>
+        <a href="p5.html" class="btn-meet">P-5</a>
+        <a href="p6.html" class="btn-meet">P-6</a>
+        <a href="p7.html" class="btn-meet">P-7</a>
+        <a href="p8.html" class="btn-meet">P-8</a>
+        <a href="p9.html" class="btn-meet">P-9</a>
+        <a href="p10.html" class="btn-meet">P-10</a>
+        <a href="p11.html" class="btn-meet">P-11</a>
+        <a href="p12.html" class="btn-meet">P-12</a>
+        <a href="p13.html" class="btn-meet">P-13</a>
+        <a href="p14.html" class="btn-meet">P-14</a>
+        <a href="p15.html" class="btn-meet">P-15</a>
+        <a href="p16.html" class="btn-meet">P-16</a>
+    </div>
+
+    <a href="uts.html" class="btn-exam">📝 UJIAN TENGAH SEMESTER (UTS)</a>
+
+    <div class="section-title">Sesi 2: Pasca-UTS</div>
+    <div class="grid-pertemuan">
+        <a href="p17.html" class="btn-meet">P-17</a>
+        <a href="p18.html" class="btn-meet">P-18</a>
+        <a href="p19.html" class="btn-meet">P-19</a>
+        <a href="p20.html" class="btn-meet">P-20</a>
+        <a href="p21.html" class="btn-meet">P-21</a>
+        <a href="p22.html" class="btn-meet">P-22</a>
+        <a href="p23.html" class="btn-meet">P-23</a>
+        <a href="p24.html" class="btn-meet">P-24</a>
+        <a href="p25.html" class="btn-meet">P-25</a>
+        <a href="p26.html" class="btn-meet">P-26</a>
+        <a href="p27.html" class="btn-meet">P-27</a>
+        <a href="p28.html" class="btn-meet">P-28</a>
+        <a href="p29.html" class="btn-meet">P-29</a>
+        <a href="p30.html" class="btn-meet">P-30</a>
+    </div>
+
+    <a href="uas.html" class="btn-exam">🎓 UJIAN AKHIR SEMESTER (UAS)</a>
+
+    <br>
+    <a href="../semester1/index.html" class="btn-back">⬅ Kembali ke Semester 1</a>
+
+</body>
+</html>
