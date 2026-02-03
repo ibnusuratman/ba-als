@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 1 Simulation</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .video-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 4px solid var(--accent-color);
+        }
+
+        .review-item {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.8rem;
+            color: #ff9800;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Navigation Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 1 Simulation</h1>
+        <p class="subtitle">Academic Literacy & Study Skills</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container"></div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL (Module 1a - 1f)
+    const quizData = [
+        {
+            video: "Video 1a: Intro & Objectives",
+            questions: [
+                {
+                    id: 1,
+                    text: "According to the course pedagogical tenets, how should students conceptualize the skill of academic writing?",
+                    options: [
+                        "It should be viewed as a static ability that depends largely on a student's innate talent rather than practice.",
+                        "It should be seen as a developmental process that evolves over time, rather than merely as a final product.",
+                        "It should be focused primarily on memorizing complex vocabulary to impress the reader with sophisticated language.",
+                        "It should be treated as a strict adherence to grammatical rules where accuracy is more important than the development of ideas."
+                    ],
+                    correct: 1, // Index 1 (Option B)
+                    explanation: "Modul ini menekankan bahwa menulis adalah proses perkembangan ('developmental process'). Bukan bakat instan, dan bukan sekadar mementingkan hasil akhir, melainkan proses belajar yang bertahap."
+                },
+                {
+                    id: 2,
+                    text: "The instructor issues a specific warning regarding the lecture slides (PDFs). Which statement accurately reflects this warning?",
+                    options: [
+                        "The lecture slides are comprehensive and can be used as a complete substitute for watching the video lectures.",
+                        "The page numbers listed in the syllabus and slides correspond directly to the physical pages of the required textbooks.",
+                        "The lecture slides serve only as supplementary aids and cannot replace the critical information found in the videos.",
+                        "The final examination will only be based on the reading materials, not the lectures."
+                    ],
+                    correct: 2, // Index 2 (Option C)
+                    explanation: "Instruktur secara tegas memperingatkan bahwa PDF hanyalah alat bantu tambahan ('supplementary aids'). Menonton video wajib dilakukan karena PDF tidak memuat semua informasi penting untuk ujian."
+                }
+            ]
+        },
+        {
+            video: "Video 1b: Academic Engagement",
+            questions: [
+                {
+                    id: 3,
+                    text: "According to the lecture, what is the primary societal objective of higher education?",
+                    options: [
+                        "To provide professional training that underpins societal stability and workforce competence.",
+                        "To allow individuals to delay their entry into the workforce while exploring personal hobbies.",
+                        "To focus exclusively on theoretical knowledge without regard for practical application in society.",
+                        "To ensure that every citizen obtains a degree regardless of their academic performance."
+                    ],
+                    correct: 0,
+                    explanation: "Tujuan utama pendidikan tinggi adalah memberikan pelatihan profesional yang mendukung stabilitas masyarakat. Kesuksesan mahasiswa berdampak langsung pada kualitas angkatan kerja."
+                },
+                {
+                    id: 4,
+                    text: "Besides spiritual rewards, what is a strategic professional benefit of participating in community service (volunteering)?",
+                    options: [
+                        "It automatically grants extra credit points that can replace a failed exam grade.",
+                        "It guarantees immediate employment at the university upon graduation.",
+                        "It enhances professional portfolios (CVs) and provides opportunities to secure reference letters from supervisors.",
+                        "It exempts students from paying tuition fees for the semester in which they volunteer."
+                    ],
+                    correct: 2,
+                    explanation: "Volunteering strategis untuk karier karena memperkaya CV/Portofolio dan memberi kesempatan mendapatkan surat referensi dari supervisor, yang sangat berguna saat melamar kerja."
+                }
+            ]
+        },
+        {
+            video: "Video 1c: Independent Learning",
+            questions: [
+                {
+                    id: 5,
+                    text: "How does the online university environment differ significantly from secondary education (High School)?",
+                    options: [
+                        "University instructors are available 24/7 to remind students of every deadline.",
+                        "Interaction may be limited to teaching assistants or email, necessitating high self-reliance and motivation.",
+                        "The volume of reading material in university is significantly less than in high school.",
+                        "University exams are easier because they rely solely on memorization."
+                    ],
+                    correct: 1,
+                    explanation: "Di kuliah online, akses ke instruktur terbatas (beda dengan guru SMA yang ada tiap hari). Oleh karena itu, mahasiswa harus mandiri ('self-reliant') dan punya motivasi diri yang tinggi."
+                },
+                {
+                    id: 6,
+                    text: "Modern academic literacy emphasizes a transition from 'rote memorization' to which higher-order skill?",
+                    options: [
+                        "The ability to copy textbooks verbatim without error.",
+                        "Information processing, inquiry, and critical thinking skills.",
+                        "Memorizing as many facts as possible without understanding their context.",
+                        "Avoiding the use of technology to ensure traditional learning methods."
+                    ],
+                    correct: 1,
+                    explanation: "Pendidikan modern meninggalkan hafalan mati ('rote memorization') dan beralih ke kemampuan berpikir tingkat tinggi seperti memproses informasi, bertanya (inkuiri), dan berpikir kritis."
+                }
+            ]
+        },
+        {
+            video: "Video 1d: Career Planning",
+            questions: [
+                {
+                    id: 7,
+                    text: "Why are students advised to consider pursuing double majors?",
+                    options: [
+                        "Because it is the only way to graduate with honors.",
+                        "To enhance marketability and professional flexibility in a changing career landscape.",
+                        "Because taking one major is considered too easy for university students.",
+                        "To avoid taking difficult courses in their primary major."
+                    ],
+                    correct: 1,
+                    explanation: "Double major (jurusan ganda) disarankan untuk meningkatkan daya jual ('marketability') dan fleksibilitas. Contoh: Lulusan bahasa yang juga mengerti bisnis akan lebih mudah cari kerja."
+                },
+                {
+                    id: 8,
+                    text: "Which of the following activities best describes the strategy of 'Active Reading'?",
+                    options: [
+                        "Reading the text quickly once to get the general idea without stopping.",
+                        "Listening to music while reading to make the process more enjoyable.",
+                        "Interacting with the text by highlighting, annotating margins, and generating questions.",
+                        "Memorizing every single word on the page regardless of its importance."
+                    ],
+                    correct: 2,
+                    explanation: "Membaca Aktif berarti berinteraksi dengan teks. Bukan cuma melihat tulisan, tapi memberi tanda (highlight), mencatat di pinggir (anotasi), dan membuat pertanyaan."
+                }
+            ]
+        },
+        {
+            video: "Video 1e: Learning Styles Intro",
+            questions: [
+                {
+                    id: 9,
+                    text: "A learner who prefers visual stimuli like diagrams, graphs, and facial recognition over plain text is classified as a:",
+                    options: [
+                        "Auditory Learner",
+                        "Kinesthetic Learner",
+                        "Visual Learner",
+                        "Rote Learner"
+                    ],
+                    correct: 2,
+                    explanation: "Pembelajar Visual lebih mudah mengingat jika ada gambar, diagram, grafik, atau wajah, dibandingkan hanya teks polos."
+                },
+                {
+                    id: 10,
+                    text: "Which brief strategy is suggested for Kinesthetic Learners?",
+                    options: [
+                        "Using flowcharts and color-coded notes.",
+                        "Creating posters or using flashcards while moving around.",
+                        "Recording lectures and listening to them repeatedly.",
+                        "Sitting quietly in the library for long periods."
+                    ],
+                    correct: 1,
+                    explanation: "Kinestetik butuh gerakan. Menggunakan flashcards sambil berjalan atau bergerak ('while moving') adalah cara efektif agar mereka tidak bosan dan lebih ingat."
+                }
+            ]
+        },
+        {
+            video: "Video 1f: Learning Styles Detailed",
+            questions: [
+                {
+                    id: 11,
+                    text: "Why are Visual Learners specifically advised to sit at the front of the classroom?",
+                    options: [
+                        "To ensure their view of the instructor and visual aids is unobstructed.",
+                        "To hear the instructor's voice more clearly above the noise.",
+                        "To be able to move around the class without disturbing others.",
+                        "To demonstrate to the teacher that they are paying attention."
+                    ],
+                    correct: 0,
+                    explanation: "Bagi Visual Learner, alasan duduk di depan adalah agar **pandangan tidak terhalang**. Mereka perlu melihat bahasa tubuh guru dan tulisan di papan tulis dengan jelas."
+                },
+                {
+                    id: 12,
+                    text: "What unique strategy is recommended for Auditory Learners to minimize distractions while studying?",
+                    options: [
+                        "Using colored highlighters to focus on the text.",
+                        "Studying while walking on a treadmill.",
+                        "Repeating information with their eyes closed to isolate the auditory channel.",
+                        "Watching videos with the sound turned off."
+                    ],
+                    correct: 2,
+                    explanation: "Pembelajar Auditori disarankan **menutup mata** saat mengulang pelajaran. Ini memblokir gangguan visual sehingga otak mereka bisa fokus 100% pada suara/memori audio."
+                }
+            ]
+        }
+    ];
+
+    let currentVideoIndex = 0;
+    const userAnswers = {};
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        
+        // Loop through data to create steps
+        quizData.forEach((section, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${index === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${index}`;
+
+            let html = `<div class="card">
+                <span class="video-label">${section.video}</span>`;
+
+            section.questions.forEach(q => {
+                html += `
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top:20px;">
+                    <p class="question-text"><strong>${q.id}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`; // Close Card
+
+            // Button Logic
+            if (index < quizData.length - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${index})">Next Video</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        });
+
+        // Add Result Container
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentIndex) {
+        // Validation: Check if all questions in this step are answered
+        const currentQuestions = quizData[currentIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        // Show next
+        document.getElementById(`step-${currentIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        // Validate last step
+        const lastIndex = quizData.length - 1;
+        const currentQuestions = quizData[lastIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let score = 0;
+        let total = 0;
+        let reviewHTML = '';
+
+        quizData.forEach(section => {
+            section.questions.forEach(q => {
+                total++;
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusIcon = isCorrect ? '✅ Benar' : '❌ Salah';
+                
+                reviewHTML += `
+                <div class="review-item ${statusClass}">
+                    <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">${section.video}</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">${q.id}. ${q.text}</div>
+                    <div style="margin-bottom: 5px; color: ${isCorrect ? '#4caf50' : '#f44336'}">
+                        ${statusIcon} (You answered: ${q.options[userAnswer]})
+                    </div>
+                    ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.9rem;">Correct Answer: ${q.options[q.correct]}</div>` : ''}
+                    
+                    <div class="review-explanation">
+                        <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                        ${q.explanation}
+                    </div>
+                </div>`;
+            });
+        });
+
+        const finalScore = Math.round((score / total) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">${finalScore}</div>
+                <p>You got ${score} out of ${total} correct.</p>
+            </div>
+            <h3 style="margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 10px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Try Again</button>
+        `;
+
+        // Hide last step, show result
+        document.getElementById(`step-${quizData.length - 1}`).classList.remove('active');
+        resultContainer.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    // Run initialization
+    initQuiz();
+
+</script>
+
+</body>
+</html>
