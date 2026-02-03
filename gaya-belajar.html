@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Gaya Belajar (Pendekatan Islami)</title>
+    <style>
+        :root {
+            --primary: #2e8b57; /* Sea Green */
+            --light: #f4f9f4;
+            --white: #ffffff;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        h1 { color: var(--primary); margin-bottom: 10px; }
+        h2 { color: #555; font-size: 1.2rem; margin-bottom: 20px; }
+        p { line-height: 1.6; color: #666; margin-bottom: 20px; }
+        
+        /* Tombol */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #246b43;
+            transform: scale(1.05);
+        }
+        .btn-option {
+            background-color: white;
+            color: #444;
+            border: 2px solid #eee;
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: left;
+            border-radius: 10px;
+        }
+        .btn-option:hover {
+            background-color: #e8f5e9;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: none;
+        }
+
+        /* Halaman (Pages) */
+        .page { display: none; animation: fadeIn 0.5s; }
+        .active { display: block; }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #eee;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none; /* Muncul saat kuis mulai */
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* Hasil */
+        .result-box {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+        .result-box ul { padding-left: 20px; }
+        .result-box li { margin-bottom: 8px; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="page-intro" class="page active">
+        <h1>Tes Gaya Belajar</h1>
+        <h2>Kenali Potensi Diri Anda</h2>
+        <div style="text-align: left; background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem;">
+            <strong>PENGANTAR PENTING:</strong><br>
+            Kuesioner ini menggunakan contoh kegiatan sehari-hari seorang Muslim (ibadah & muamalah) agar lebih mudah Anda bayangkan. 
+            <br><br>
+            Namun, hasil analisanya adalah <strong>Gaya Belajar Umum (Visual/Auditory/Kinestetik)</strong> yang berlaku untuk segala aspek kehidupan Anda (Sekolah, Kuliah, Kerja, Menghafal Qur'an, dll).
+        </div>
+        <p>Jawablah dengan spontan sesuai kebiasaan Anda sehari-hari.</p>
+        <button class="btn" onclick="startQuiz()">Mulai Tes</button>
+    </div>
+
+    <div id="page-quiz" class="page">
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <h2 id="question-text">Pertanyaan...</h2>
+        <div id="options-container">
+            </div>
+    </div>
+
+    <div id="page-result" class="page">
+        <h1>Hasil Analisa</h1>
+        <p>Gaya belajar dominan Anda adalah:</p>
+        <h2 id="result-type" style="font-size: 2rem; color: var(--primary); margin: 10px 0;">TIPE</h2>
+        
+        <div id="result-content" class="result-box">
+            </div>
+
+        <button class="btn" onclick="location.reload()" style="background:#555; margin-top:20px;">Ulangi Tes</button>
+    </div>
+
+</div>
+
+<script>
+    // DATA PERTANYAAN (Format: type v=visual, a=auditory, k=kinestetik)
+    // Konten pertanyaan disesuaikan Islami, tapi tipe tetap dilacak untuk scoring.
+    const rawQuestions = [
+        {
+            q: "Saat ingin menghafal ayat Al-Qur'an baru, cara apa yang paling mudah bagi Anda?",
+            opts: [
+                { text: "Melihat mushaf, memperhatikan tanda baca, & membayangkan letak ayat.", type: "v" },
+                { text: "Mendengarkan rekaman murottal atau mengulang hafalan secara lisan.", type: "a" },
+                { text: "Menuliskan ayat tersebut atau menggunakan jari untuk menghitung.", type: "k" }
+            ]
+        },
+        {
+            q: "Apa yang Anda lakukan saat mendengarkan Murottal (tanpa musik)?",
+            opts: [
+                { text: "Membayangkan arti ayatnya (visualisasi).", type: "v" },
+                { text: "Ikut bergumam melafalkan bacaannya (humming).", type: "a" },
+                { text: "Menggerakkan jari/kaki mengikuti irama bacaan.", type: "k" }
+            ]
+        },
+        {
+            q: "Ketika memecahkan masalah, Anda biasanya...",
+            opts: [
+                { text: "Membuat daftar (list) langkah-langkah lalu mencentangnya.", type: "v" },
+                { text: "Menelepon teman atau bertanya pada ahli untuk diskusi.", type: "a" },
+                { text: "Mempraktikkan langkah-langkahnya dalam pikiran sambil berjalan.", type: "k" }
+            ]
+        },
+        {
+            q: "Buku hiburan seperti apa yang Anda sukai?",
+            opts: [
+                { text: "Buku sirah/sejarah dengan banyak gambar ilustrasi.", type: "v" },
+                { text: "Buku misteri/novel yang banyak percakapan (dialog).", type: "a" },
+                { text: "Buku teka-teki atau buku yang mengajak pembaca menjawab kuis.", type: "k" }
+            ]
+        },
+        {
+            q: "Untuk mempelajari cara kerja aplikasi jadwal sholat baru, Anda memilih:",
+            opts: [
+                { text: "Menonton video tutorialnya.", type: "v" },
+                { text: "Mendengarkan penjelasan orang lain.", type: "a" },
+                { text: "Langsung mencoba-coba aplikasinya sendiri.", type: "k" }
+            ]
+        },
+        {
+            q: "Masuk ke Masjid besar yang baru pertama kali dikunjungi, Anda akan:",
+            opts: [
+                { text: "Mencari peta atau papan petunjuk arah.", type: "v" },
+                { text: "Bertanya pada satpam/takmir arahnya ke mana.", type: "a" },
+                { text: "Langsung jalan saja menelusuri masjid sampai ketemu.", type: "k" }
+            ]
+        },
+        {
+            q: "Tempat makan/majlis ilmu mana yang paling TIDAK Anda sukai?",
+            opts: [
+                { text: "Yang lampunya terlalu terang menyilaukan.", type: "v" },
+                { text: "Yang suaranya terlalu bising/ramai.", type: "a" },
+                { text: "Yang kursinya keras tidak nyaman diduduki.", type: "k" }
+            ]
+        },
+        {
+            q: "Jika ikut kursus tambahan, Anda lebih memilih:",
+            opts: [
+                { text: "Kelas Kaligrafi atau Desain.", type: "v" },
+                { text: "Kelas Bahasa Arab atau Tahsin.", type: "a" },
+                { text: "Kelas Memanah atau Bela Diri.", type: "k" }
+            ]
+        },
+        {
+            q: "Saat sangat bahagia/bersyukur, ekspresi Anda:",
+            opts: [
+                { text: "Tersenyum lebar (berseri-seri).", type: "v" },
+                { text: "Mengucap hamdalah/takbir dengan suara keras.", type: "a" },
+                { text: "Melompat kegirangan atau sujud syukur.", type: "k" }
+            ]
+        },
+        {
+            q: "Pulang dari acara Walimah/Silaturahmi, apa yang paling diingat?",
+            opts: [
+                { text: "Wajah orang-orang, tapi lupa namanya.", type: "v" },
+                { text: "Nama-nama orang, tapi lupa wajahnya.", type: "a" },
+                { text: "Kejadian atau aktivitas yang dilakukan di sana.", type: "k" }
+            ]
+        },
+        {
+            q: "Melihat kata 'KUCING', reaksi pertama Anda?",
+            opts: [
+                { text: "Membayangkan gambar kucing.", type: "v" },
+                { text: "Mengucapkan kata 'Kucing' atau suara 'Meong' di hati.", type: "a" },
+                { text: "Merasakan sensasi membelai bulu kucing.", type: "k" }
+            ]
+        },
+        {
+            q: "Saat menceritakan Kisah Nabi, Anda lebih suka:",
+            opts: [
+                { text: "Menuliskannya.", type: "v" },
+                { text: "Menceritakannya secara lisan.", type: "a" },
+                { text: "Memperagakannya (acting) dengan gerakan.", type: "k" }
+            ]
+        },
+        {
+            q: "Gangguan paling berat saat mencoba khusyuk/konsentrasi:",
+            opts: [
+                { text: "Gangguan visual (orang lewat, sajadah motif ramai).", type: "v" },
+                { text: "Suara-suara (bising, orang ngobrol).", type: "a" },
+                { text: "Fisik tidak nyaman (lapar, gerah, baju sempit).", type: "k" }
+            ]
+        },
+        {
+            q: "Saat sedang marah, Anda cenderung:",
+            opts: [
+                { text: "Cemberut/memasang muka masam.", type: "v" },
+                { text: "Berteriak atau meninggikan suara.", type: "a" },
+                { text: "Menghentakkan kaki/membanting pintu/pergi.", type: "k" }
+            ]
+        },
+        {
+            q: "Saat ragu mengeja kata Arab/Inggris, Anda akan:",
+            opts: [
+                { text: "Menulisnya, lihat apakah bentuknya 'terlihat' benar.", type: "v" },
+                { text: "Mengejanya dalam hati (bunyinya benar/salah).", type: "a" },
+                { text: "Menulisnya, rasakan apakah gerakan tulisannya 'terasa' benar.", type: "k" }
+            ]
+        },
+        {
+            q: "Saat antre panjang wudhu, Anda akan:",
+            opts: [
+                { text: "Melihat-lihat poster dinding/mading masjid.", type: "v" },
+                { text: "Mengobrol dengan orang sebelah.", type: "a" },
+                { text: "Mengetuk kaki atau pindah-pindah posisi (pegal).", type: "k" }
+            ]
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let scores = { v: 0, a: 0, k: 0 };
+
+    // Fungsi Mengacak Array (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function startQuiz() {
+        document.getElementById('page-intro').classList.remove('active');
+        document.getElementById('page-quiz').classList.add('active');
+        document.getElementById('progress-container').style.display = 'block';
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const qData = rawQuestions[currentQuestionIndex];
+        
+        // Update Progress Bar
+        const percent = ((currentQuestionIndex) / rawQuestions.length) * 100;
+        document.getElementById('progress-bar').style.width = percent + "%";
+
+        // Tampilkan Teks Pertanyaan
+        document.getElementById('question-text').innerText = (currentQuestionIndex + 1) + ". " + qData.q;
+
+        // Siapkan Opsi Jawaban (Copy array agar array asli tidak rusak, lalu acak)
+        let currentOptions = [...qData.opts];
+        shuffleArray(currentOptions);
+
+        // Render Tombol Opsi
+        const optsContainer = document.getElementById('options-container');
+        optsContainer.innerHTML = ""; // Bersihkan
+        
+        currentOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-option';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectAnswer(opt.type);
+            optsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(type) {
+        // Tambah skor
+        scores[type]++;
+
+        // Pindah soal
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < rawQuestions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('page-quiz').classList.remove('active');
+        document.getElementById('page-result').classList.add('active');
+        document.getElementById('progress-container').style.display = 'none';
+
+        // Tentukan Pemenang
+        let maxScore = Math.max(scores.v, scores.a, scores.k);
+        let winnerType = "";
+        
+        // Cek jika seri (Campuran)
+        let winners = [];
+        if (scores.v === maxScore) winners.push("Visual");
+        if (scores.a === maxScore) winners.push("Auditory");
+        if (scores.k === maxScore) winners.push("Kinestetik");
+
+        let contentHTML = "";
+
+        if (winners.length > 1) {
+            document.getElementById('result-type').innerText = "TIPE CAMPURAN (" + winners.join(" & ") + ")";
+            contentHTML += `<p>Anda memiliki kombinasi gaya belajar yang seimbang. Anda bisa menggunakan strategi dari kedua gaya tersebut.</p><hr>`;
+        } else {
+            document.getElementById('result-type').innerText = winners[0].toUpperCase() + " LEARNER";
+        }
+
+        // Generate Konten Berdasarkan PDF Asli
+        // Sumber: Halaman 5 Dokumen PDF
+        
+        if (scores.v === maxScore || winners.includes("Visual")) {
+            contentHTML += `
+                <h3>VISUAL LEARNERS (Belajar dengan Melihat)</h3>
+                <p><strong>Karakteristik:</strong></p>
+                <ul>
+                    <li>Belajar dengan melihat dan mengamati (Learn by seeing and looking).</li>
+                    <li>Sering menutup mata untuk memvisualisasikan atau mengingat sesuatu.</li>
+                    <li>Biasanya rapi dan bersih.</li>
+                    <li>Menyukai bahasa tertulis atau lisan yang kaya akan gambaran (imagery).</li>
+                    <li>Lebih menyukai lingkungan yang tenang (passive surroundings).</li>
+                </ul>
+                <p><strong>Strategi Belajar Terbaik:</strong></p>
+                <ul>
+                    <li>Buat catatan yang detail dan banyak (Take numerous detailed notes).</li>
+                    <li>Gunakan ilustrasi, presentasi berwarna, dan diagram.</li>
+                    <li>Duduk di bagian depan agar bisa melihat jelas.</li>
+                    <li>Lihat apa yang sedang dipelajari (like to see what they are learning).</li>
+                </ul>
+            `;
+        }
+
+        if (scores.a === maxScore || winners.includes("Auditory")) {
+            contentHTML += `
+                <h3>AUDITORY LEARNERS (Belajar dengan Mendengar)</h3>
+                <p><strong>Karakteristik:</strong></p>
+                <ul>
+                    <li>Belajar dengan mendengar dan menyimak.</li>
+                    <li>Suka bergumam atau berbicara sendiri saat bosan.</li>
+                    <li>Duduk di tempat yang bisa mendengar jelas, tidak harus melihat ke depan.</li>
+                    <li>Mengingat pelajaran dengan mengucapkannya kembali (verbalizing lessons).</li>
+                </ul>
+                <p><strong>Strategi Belajar Terbaik:</strong></p>
+                <ul>
+                    <li>Mendapatkan ilmu dengan membaca keras-keras (reading aloud).</li>
+                    <li>Jelaskan materi kepada diri sendiri atau orang lain secara lisan.</li>
+                    <li>Untuk materi konsep (seperti matematika), ucapkan langkah-langkahnya.</li>
+                    <li>Gunakan rekaman suara/audio untuk mengulang pelajaran.</li>
+                </ul>
+            `;
+        }
+
+        if (scores.k === maxScore || winners.includes("Kinestetik")) {
+            contentHTML += `
+                <h3>KINESTHETIC LEARNERS (Belajar dengan Melakukan)</h3>
+                <p><strong>Karakteristik:</strong></p>
+                <ul>
+                    <li>Belajar dengan menyentuh dan melakukan (touching and doing).</li>
+                    <li>Perlu aktif dan sering mengambil jeda istirahat (frequent breaks).</li>
+                    <li>Berbicara dengan tangan dan gerakan tubuh.</li>
+                    <li>Ingat apa yang dilakukan, tapi sering lupa apa yang didengar/dilihat.</li>
+                    <li>Tidak betah di kelas yang kurang kesempatan praktik (hands-on).</li>
+                </ul>
+                <p><strong>Strategi Belajar Terbaik:</strong></p>
+                <ul>
+                    <li>Andalkan pengalaman langsung atau praktik (perform).</li>
+                    <li>Lakukan aktivitas fisik seperti merakit, menggambar, atau field trips.</li>
+                    <li>Duduk di dekat pintu agar mudah bergerak jika perlu.</li>
+                    <li>Belajar sambil bergerak atau memanipulasi benda/alat peraga.</li>
+                </ul>
+            `;
+        }
+
+        document.getElementById('result-content').innerHTML = contentHTML;
+    }
+</script>
+
+</body>
+</html>
