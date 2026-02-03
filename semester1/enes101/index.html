@@ -5,122 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENES101 - Bahasa Inggris</title>
     <style>
+        /* TEMA DARK MODE */
         :root {
             --bg-dark: #121212;
             --bg-card: #1e1e1e;
             --text-main: #e0e0e0;
-            --primary: #2e8b57;
-            --accent: #FFD700;
+            --primary: #2e8b57; /* Hijau Islami */
+            --accent: #FFD700;  /* Emas */
         }
+
         body {
-            font-family: sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 { color: var(--primary); margin-bottom: 5px; }
-        .subtitle { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
-        
-        /* PEMBAGIAN SESI (SEBELUM/SESUDAH UTS) */
-        .section-title {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 30px 0 15px 0;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 15px;
         }
 
-        /* GRID TOMBOL PERTEMUAN */
-        .grid-pertemuan {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        h1 { color: var(--primary); margin: 0; font-size: 1.6rem; }
+        p.info { color: #888; font-size: 0.9rem; margin-top: 5px; }
 
-        .btn-meet {
+        /* GAYA TOMBOL BUKA-TUTUP (ACCORDION) */
+        details {
             background-color: var(--bg-card);
-            border: 1px solid #444;
-            color: var(--text-main);
-            padding: 15px 5px;
+            margin-bottom: 12px;
             border-radius: 8px;
+            border: 1px solid #333;
+            overflow: hidden; /* Biar rapi */
+        }
+
+        summary {
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none; /* Hilangkan panah bawaan browser */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252525;
+        }
+
+        /* Tanda Plus (+) berubah jadi Minus (-) */
+        summary::after { content: '+'; font-size: 1.4rem; color: var(--primary); font-weight: bold; }
+        details[open] summary::after { content: '-'; color: var(--accent); }
+        details[open] summary { border-bottom: 1px solid #444; }
+
+        /* ISI MATERI (YANG MUNCUL SAAT DIKLIK) */
+        .materi-content {
+            padding: 15px;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* GAYA 3 TOMBOL (AUDIO, PDF, KUIS) */
+        .btn-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 0.9rem;
+            color: white;
+            font-size: 0.95rem;
             transition: 0.2s;
         }
-        .btn-meet:hover { background-color: var(--primary); border-color: var(--primary); }
-        
-        /* TOMBOL UJIAN (BESAR) */
-        .btn-exam {
-            display: block;
-            background: linear-gradient(45deg, #b8860b, #ffd700);
-            color: #000;
-            font-weight: bold;
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px auto;
-            max-width: 580px;
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
-        }
 
-        .btn-back { display: inline-block; margin-top: 40px; color: #888; text-decoration: none; border: 1px solid #555; padding: 10px 20px; border-radius: 20px; }
+        .audio-box { background-color: #2c3e50; border-left: 5px solid #3498db; padding: 10px; border-radius: 6px; }
+        .pdf { background-color: #3e2723; border-left: 5px solid #e74c3c; }
+        .kuis { background-color: #1b2631; border-left: 5px solid #f1c40f; }
+
+        .btn-item:hover { opacity: 0.9; transform: translateX(3px); }
+        .icon { margin-right: 12px; font-size: 1.3rem; }
+
+        /* Audio Player Custom */
+        audio { width: 100%; height: 35px; margin-top: 5px; }
+
+        /* PEMBATAS UJIAN */
+        .divider {
+            text-align: center; margin: 30px 0 15px 0;
+            color: var(--accent); font-weight: bold;
+            border-bottom: 1px solid #333; line-height: 0.1em;
+        }
+        .divider span { background: var(--bg-dark); padding: 0 10px; }
+
+        /* TOMBOL KEMBALI */
+        .btn-back {
+            display: block; text-align: center; margin-top: 40px; margin-bottom: 20px;
+            color: #888; text-decoration: none; padding: 12px;
+            border: 1px solid #444; border-radius: 30px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Bahasa Inggris (ENES101)</h1>
-    <p class="subtitle">6 Kredit • 30 Pertemuan</p>
-
-    <div class="section-title">Sesi 1: Pra-UTS</div>
-    <div class="grid-pertemuan">
-        <a href="p1.html" class="btn-meet">P-1</a>
-        <a href="p2.html" class="btn-meet">P-2</a>
-        <a href="p3.html" class="btn-meet">P-3</a>
-        <a href="p4.html" class="btn-meet">P-4</a>
-        <a href="p5.html" class="btn-meet">P-5</a>
-        <a href="p6.html" class="btn-meet">P-6</a>
-        <a href="p7.html" class="btn-meet">P-7</a>
-        <a href="p8.html" class="btn-meet">P-8</a>
-        <a href="p9.html" class="btn-meet">P-9</a>
-        <a href="p10.html" class="btn-meet">P-10</a>
-        <a href="p11.html" class="btn-meet">P-11</a>
-        <a href="p12.html" class="btn-meet">P-12</a>
-        <a href="p13.html" class="btn-meet">P-13</a>
-        <a href="p14.html" class="btn-meet">P-14</a>
-        <a href="p15.html" class="btn-meet">P-15</a>
-        <a href="p16.html" class="btn-meet">P-16</a>
+    <div class="header">
+        <h1>Bahasa Inggris</h1>
+        <p class="info">Kode: ENES101 • 6 Kredit</p>
     </div>
 
-    <a href="uts.html" class="btn-exam">📝 UJIAN TENGAH SEMESTER (UTS)</a>
+    <details>
+        <summary>Pertemuan 1: Introduction</summary>
+        <div class="materi-content">
+            
+            <div class="audio-box">
+                <div style="margin-bottom:5px; font-weight:bold;">🎧 Simak Materi Audio</div>
+                <audio controls>
+                    <source src="audio/enes101-01.mp3" type="audio/mpeg">
+                    Browser Anda tidak mendukung audio player.
+                </audio>
+            </div>
+            
+            <a href="pdf/enes101-01.pdf" class="btn-item pdf" target="_blank">
+                <span class="icon">📄</span> Download Materi PDF
+            </a>
 
-    <div class="section-title">Sesi 2: Pasca-UTS</div>
-    <div class="grid-pertemuan">
-        <a href="p17.html" class="btn-meet">P-17</a>
-        <a href="p18.html" class="btn-meet">P-18</a>
-        <a href="p19.html" class="btn-meet">P-19</a>
-        <a href="p20.html" class="btn-meet">P-20</a>
-        <a href="p21.html" class="btn-meet">P-21</a>
-        <a href="p22.html" class="btn-meet">P-22</a>
-        <a href="p23.html" class="btn-meet">P-23</a>
-        <a href="p24.html" class="btn-meet">P-24</a>
-        <a href="p25.html" class="btn-meet">P-25</a>
-        <a href="p26.html" class="btn-meet">P-26</a>
-        <a href="p27.html" class="btn-meet">P-27</a>
-        <a href="p28.html" class="btn-meet">P-28</a>
-        <a href="p29.html" class="btn-meet">P-29</a>
-        <a href="p30.html" class="btn-meet">P-30</a>
-    </div>
+            <a href="enes101-01.html" class="btn-item kuis">
+                <span class="icon">📝</span> Latihan / Kuis P-1
+            </a>
 
-    <a href="uas.html" class="btn-exam">🎓 UJIAN AKHIR SEMESTER (UAS)</a>
+        </div>
+    </details>
 
-    <br>
+    <details>
+        <summary>Pertemuan 2: Grammar Basics</summary>
+        <div class="materi-content">
+            <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pertemuan 3: Vocabulary</summary>
+        <div class="materi-content">
+            <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>UJIAN TENGAH SEMESTER</span></h2>
+
+    <details style="border: 1px solid var(--accent);">
+        <summary style="color: var(--accent);">📝 SOAL UTS</summary>
+        <div class="materi-content">
+            <a href="#" class="btn-item kuis">Kerjakan Soal UTS</a>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>SESI PASCA-UTS</span></h2>
+
+    <details>
+        <summary>Pertemuan 16: Reading Comprehension</summary>
+        <div class="materi-content">
+             <p style="color:#777; font-style:italic; text-align:center;">Materi belum diupload...</p>
+        </div>
+    </details>
+
     <a href="../semester1/index.html" class="btn-back">⬅ Kembali ke Semester 1</a>
 
 </body>
