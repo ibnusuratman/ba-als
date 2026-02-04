@@ -62,7 +62,7 @@
         /* CONTAINER 5 AUDIO */
         .audio-group {
             background-color: #2c3e50;
-            border-right: 5px solid #3498db; /* Garis biru di kanan */
+            border-right: 5px solid #3498db;
             padding: 10px;
             border-radius: 6px;
         }
@@ -71,28 +71,15 @@
             font-weight: bold; margin-bottom: 10px; color: #3498db; font-size: 1.1rem;
         }
 
-        /* BARIS AUDIO KECIL (A, B, C...) */
         .audio-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            background: rgba(0,0,0,0.2);
-            padding: 5px;
-            border-radius: 5px;
+            display: flex; align-items: center; margin-bottom: 8px;
+            background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px;
         }
 
         .audio-label {
-            background: #3498db;
-            color: white;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-weight: bold;
-            margin-left: 10px; /* Jarak dengan player */
-            flex-shrink: 0;
+            background: #3498db; color: white; width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-weight: bold; margin-left: 10px; flex-shrink: 0;
         }
 
         audio { width: 100%; height: 30px; }
@@ -108,6 +95,14 @@
         .btn-item:hover { opacity: 0.9; transform: translateX(-5px); }
         .icon { margin-left: 12px; font-size: 1.3rem; }
 
+        /* DIVIDER */
+        .divider {
+            text-align: center; margin: 35px 0 20px 0;
+            color: var(--accent); font-weight: bold; font-size: 1.4rem;
+            border-bottom: 1px solid #333; line-height: 0.1em;
+        }
+        .divider span { background: var(--bg-dark); padding: 0 10px; }
+
         /* TOMBOL KEMBALI */
         .btn-back {
             display: block; text-align: center; margin-top: 40px; margin-bottom: 20px;
@@ -121,60 +116,371 @@
 
     <div class="header">
         <h1>مقدمة في الحاسب الآلي</h1>
-        <p class="info">TITC102 • 6 Credits</p>
+        <p class="info">TITC102 • 12 Credits</p>
     </div>
 
     <details>
-        <summary>اللقاء الأول: مقدمة (Introduction)</summary>
+        <summary>١. مقدمة في تقنية المعلومات (Intro to IT)</summary>
         <div class="materi-content">
-            
             <div class="audio-group">
-                <div class="audio-title">🎧 التسجيلات الصوتية (٥ أجزاء)</div>
-                
-                <div class="audio-item">
-                    <div class="audio-label">أ</div>
-                    <audio controls><source src="audio/titc102-01a.mp3" type="audio/mpeg"></audio>
-                </div>
-
-                <div class="audio-item">
-                    <div class="audio-label">ب</div>
-                    <audio controls><source src="audio/titc102-01b.mp3" type="audio/mpeg"></audio>
-                </div>
-
-                <div class="audio-item">
-                    <div class="audio-label">ج</div>
-                    <audio controls><source src="audio/titc102-01c.mp3" type="audio/mpeg"></audio>
-                </div>
-
-                <div class="audio-item">
-                    <div class="audio-label">د</div>
-                    <audio controls><source src="audio/titc102-01d.mp3" type="audio/mpeg"></audio>
-                </div>
-
-                <div class="audio-item">
-                    <div class="audio-label">هـ</div>
-                    <audio controls><source src="audio/titc102-01e.mp3" type="audio/mpeg"></audio>
-                </div>
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ١)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-01a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-01b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-01c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-01d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-01e.mp3"></audio></div>
             </div>
-            
-            <a href="pdf/titc102-01.pdf" class="btn-item pdf" target="_blank">
-                <span class="icon">📄</span> تحميل ملف PDF
-            </a>
-
-            <a href="titc102-01.html" class="btn-item kuis">
-                <span class="icon">📝</span> التمرين / الاختبار
-            </a>
-
+            <a href="pdf/titc102-01.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-01.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الأول</a>
         </div>
     </details>
 
     <details>
-        <summary>اللقاء الثاني: أجزاء الحاسب (Hardware)</summary>
+        <summary>٢. وحدة المعالجة المركزية (CPU)</summary>
         <div class="materi-content">
-            <p style="color:#777; text-align:center;">المحتوى غير متوفر حالياً...</p>
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٢)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-02a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-02b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-02c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-02d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-02e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-02.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-02.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الثاني</a>
         </div>
     </details>
-    
+
+    <details>
+        <summary>٣. وحدات الإدخال والإخراج (Input/Output)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٣)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-03a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-03b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-03c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-03d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-03e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-03.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-03.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الثالث</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٤. التخزين الثانوي (Secondary Storage)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٤)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-04a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-04b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-04c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-04d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-04e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-04.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-04.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الرابع</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٥. برمجيات التطبيقات (Application Software)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٥)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-05a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-05b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-05c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-05d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-05e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-05.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-05.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الخامس</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٦. برمجيات النظام (System Software)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٦)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-06a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-06b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-06c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-06d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-06e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-06.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-06.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء السادس</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٧. شبكة الإنترنت (The Internet)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٧)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-07a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-07b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-07c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-07d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-07e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-07.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-07.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء السابع</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٨. التجارة الإلكترونية وتطبيقات الويب ١</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٨)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-08a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-08b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-08c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-08d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-08e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-08.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-08.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء الثامن</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٩. التجارة الإلكترونية وتطبيقات الويب ٢</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ٩)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-09a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-09b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-09c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-09d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-09e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-09.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-09.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء التاسع</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٠. الأمن الرقمي والتهديدات (Digital Security)</summary>
+        <div class="materi-content">
+            <div class="audio-group">
+                <div class="audio-title">🎧 التسجيلات الصوتية (المحاضرة ١٠)</div>
+                <div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-10a.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-10b.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-10c.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-10d.mp3"></audio></div>
+                <div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-10e.mp3"></audio></div>
+            </div>
+            <a href="pdf/titc102-10.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-10.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء العاشر</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١١. معالجة النصوص ١: الواجهة (Word I)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١١</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-11a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-11b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-11c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-11d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-11e.mp3"></audio></div></div>
+            <a href="pdf/titc102-11.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-11.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١١</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٢. معالجة النصوص ٢: تحسين المستند (Word II)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٢</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-12a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-12b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-12c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-12d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-12e.mp3"></audio></div></div>
+            <a href="pdf/titc102-12.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-12.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٢</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٣. معالجة النصوص ٣: التصميم (Word III)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٣</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-13a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-13b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-13c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-13d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-13e.mp3"></audio></div></div>
+            <a href="pdf/titc102-13.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-13.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٣</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٤. معالجة النصوص ٤: الجداول (Word IV)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٤</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-14a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-14b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-14c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-14d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-14e.mp3"></audio></div></div>
+            <a href="pdf/titc102-14.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-14.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٤</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٥. معالجة النصوص ٥: التقارير (Word V)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٥</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-15a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-15b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-15c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-15d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-15e.mp3"></audio></div></div>
+            <a href="pdf/titc102-15.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-15.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٥</a>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>اختبار منتصف الفصل (Midterm Exam)</span></h2>
+
+    <details style="border-color: var(--accent);">
+        <summary style="color: var(--accent);">📝 أسئلة الاختبار النصفي (UTS)</summary>
+        <div class="materi-content">
+            <p style="text-align:center;">يرجى الضغط على الرابط أدناه لبدء الاختبار:</p>
+            <a href="titc102-uts.html" class="btn-item kuis">بدء الاختبار (Start UTS)</a>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>النصف الثاني من الفصل</span></h2>
+
+    <details>
+        <summary>١٦. الجداول الإلكترونية ١: الواجهة (Excel I)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٦</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-16a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-16b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-16c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-16d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-16e.mp3"></audio></div></div>
+            <a href="pdf/titc102-16.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-16.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٦</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٧. الجداول الإلكترونية ٢: التنسيق (Excel II)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٧</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-17a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-17b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-17c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-17d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-17e.mp3"></audio></div></div>
+            <a href="pdf/titc102-17.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-17.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٧</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٨. الجداول الإلكترونية ٣: الصيغ (Excel III)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٨</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-18a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-18b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-18c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-18d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-18e.mp3"></audio></div></div>
+            <a href="pdf/titc102-18.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-18.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٨</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>١٩. الجداول الإلكترونية ٤: الدوال (Excel IV)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ١٩</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-19a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-19b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-19c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-19d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-19e.mp3"></audio></div></div>
+            <a href="pdf/titc102-19.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-19.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ١٩</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٠. الجداول الإلكترونية ٥: المخططات (Excel V)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٠</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-20a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-20b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-20c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-20d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-20e.mp3"></audio></div></div>
+            <a href="pdf/titc102-20.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-20.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٠</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢١. العروض التقديمية ١: الواجهة (PPT I)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢١</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-21a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-21b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-21c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-21d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-21e.mp3"></audio></div></div>
+            <a href="pdf/titc102-21.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-21.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢١</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٢. العروض التقديمية ٢: التنسيق (PPT II)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٢</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-22a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-22b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-22c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-22d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-22e.mp3"></audio></div></div>
+            <a href="pdf/titc102-22.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-22.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٢</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٣. العروض التقديمية ٣: الأشكال (PPT III)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٣</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-23a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-23b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-23c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-23d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-23e.mp3"></audio></div></div>
+            <a href="pdf/titc102-23.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-23.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٣</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٤. العروض التقديمية ٤: المخططات (PPT IV)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٤</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-24a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-24b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-24c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-24d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-24e.mp3"></audio></div></div>
+            <a href="pdf/titc102-24.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-24.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٤</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٥. العروض التقديمية ٥: الحركة (PPT V)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٥</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-25a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-25b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-25c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-25d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-25e.mp3"></audio></div></div>
+            <a href="pdf/titc102-25.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-25.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٥</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٦. قواعد البيانات ١: الواجهة (Database I)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٦</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-26a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-26b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-26c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-26d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-26e.mp3"></audio></div></div>
+            <a href="pdf/titc102-26.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-26.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٦</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٧. قواعد البيانات ٢: العلاقات (Database II)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٧</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-27a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-27b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-27c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-27d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-27e.mp3"></audio></div></div>
+            <a href="pdf/titc102-27.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-27.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٧</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٨. التعاون عبر الإنترنت (Google Docs/Forms)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٨</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-28a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-28b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-28c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-28d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-28e.mp3"></audio></div></div>
+            <a href="pdf/titc102-28.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-28.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٨</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٢٩. مقدمة في الذكاء الاصطناعي (Intro to AI)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٢٩</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-29a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-29b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-29c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-29d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-29e.mp3"></audio></div></div>
+            <a href="pdf/titc102-29.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-29.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٢٩</a>
+        </div>
+    </details>
+
+    <details>
+        <summary>٣٠. أخلاقيات الإنترنت والصحة (Netiquette)</summary>
+        <div class="materi-content">
+            <div class="audio-group"><div class="audio-title">🎧 المحاضرة ٣٠</div><div class="audio-item"><div class="audio-label">أ</div><audio controls><source src="audio/titc102-30a.mp3"></audio></div><div class="audio-item"><div class="audio-label">ب</div><audio controls><source src="audio/titc102-30b.mp3"></audio></div><div class="audio-item"><div class="audio-label">ج</div><audio controls><source src="audio/titc102-30c.mp3"></audio></div><div class="audio-item"><div class="audio-label">د</div><audio controls><source src="audio/titc102-30d.mp3"></audio></div><div class="audio-item"><div class="audio-label">هـ</div><audio controls><source src="audio/titc102-30e.mp3"></audio></div></div>
+            <a href="pdf/titc102-30.pdf" class="btn-item pdf" target="_blank"><span class="icon">📄</span> تحميل ملف PDF</a>
+            <a href="titc102-30.html" class="btn-item kuis"><span class="icon">📝</span> تمرين اللقاء ٣٠</a>
+        </div>
+    </details>
+
+    <h2 class="divider"><span>الاختبار النهائي (Final Exam)</span></h2>
+
+    <details style="border-color: var(--accent);">
+        <summary style="color: var(--accent);">🎓 أسئلة الاختبار النهائي (UAS)</summary>
+        <div class="materi-content">
+            <p style="text-align:center;">يرجى الضغط على الرابط أدناه لبدء الاختبار:</p>
+            <a href="titc102-uas.html" class="btn-item kuis">بدء الاختبار (Start UAS)</a>
+        </div>
+    </details>
+
     <a href="../semester2/index.html" class="btn-back">⬅ الرجوع إلى الفصل الثاني</a>
 
 </body>
