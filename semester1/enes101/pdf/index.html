@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Belum Tersedia</title>
+    <style>
+        /* TEMA DARK MODE */
+        :root {
+            --bg-dark: #121212;
+            --text-main: #e0e0e0;
+            --primary: #2e8b57;
+            --accent: #FFD700;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90vh; /* Agar posisi pas di tengah layar */
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* TOMBOL KEMBALI */
+        .btn-back {
+            background-color: transparent;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 12px 30px;
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Animasi Melayang Dikit */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="icon">🚧</div>
+    
+    <h1>Afwan, Materi Belum Tersedia</h1>
+    
+    <p>
+        Halaman ini sedang dalam proses penyusunan.<br>
+        Insya Allah akan segera hadir.
+    </p>
+
+    <a href="../index.html" class="btn-back">Kembali ke Menu Utama</a>
+
+</body>
+</html>
