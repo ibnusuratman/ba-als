@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 2 Simulation</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .video-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        /* Tombol Navigasi Khusus */
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 10px; /* Jarak ke tombol bawahnya */
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 4px solid var(--accent-color);
+        }
+
+        .review-item {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.8rem;
+            color: #ff9800;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Navigation Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 2 Simulation</h1>
+        <p class="subtitle">Vocabulary Development</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container"></div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL (Module 2a - 2f)
+    const quizData = [
+        {
+            video: "Video 2A: Intro & Roots",
+            questions: [
+                {
+                    id: 1,
+                    text: "According to the module, what is a highly recommended practical method for memorizing prefixes?",
+                    options: [
+                        "Reading the entire dictionary from beginning to end without stopping.",
+                        "Using flashcards on walls in frequently visited rooms like the kitchen.",
+                        "Writing the words repeatedly in a notebook until the ink runs out.",
+                        "Listening to audio recordings of the words while sleeping."
+                    ],
+                    correct: 1, 
+                    explanation: "Modul menyarankan penggunaan 'flashcards' (kartu indeks) yang ditempel di dinding ruangan yang sering dikunjungi (seperti dapur atau kamar tidur) untuk tinjauan terus-menerus."
+                },
+                {
+                    id: 2,
+                    text: "A word consists of three main parts. Which part is added at the end to change the grammatical form or meaning?",
+                    options: [
+                        "The Prefix",
+                        "The Root",
+                        "The Suffix",
+                        "The Compound"
+                    ],
+                    correct: 2, 
+                    explanation: "Suffix (Akhiran) adalah bagian yang ditambahkan di akhir kata (misalnya -ly, -graph) untuk mengubah bentuk tata bahasa atau makna."
+                }
+            ]
+        },
+        {
+            video: "Video 2B: Prefixes Part 1",
+            questions: [
+                {
+                    id: 3,
+                    text: "Based on the prefix 'Ante-', what is the correct definition of an 'Antechamber'?",
+                    options: [
+                        "A small room serving as an entryway or waiting area before a larger room.",
+                        "A large dining hall located at the back of the main house.",
+                        "A hidden basement level used for storage purposes.",
+                        "A separate building used specifically for guests to sleep in."
+                    ],
+                    correct: 0, 
+                    explanation: "Prefix 'Ante-' berarti 'Before/Di depan'. Antechamber adalah ruangan kecil/ruang tunggu di depan ruangan utama."
+                },
+                {
+                    id: 4,
+                    text: "The patient was hooked up to an 'anticoagulant' drip. What is the function of this substance?",
+                    options: [
+                        "It helps to increase the blood pressure rapidly.",
+                        "It serves to prevent the blood from clotting.",
+                        "It acts as a pain reliever for post-surgery recovery.",
+                        "It is used to induce sleep before a major operation."
+                    ],
+                    correct: 1, 
+                    explanation: "Prefix 'Anti-' berarti 'Against/Melawan'. Anticoagulant adalah zat yang mencegah (melawan) pembekuan darah (clotting)."
+                }
+            ]
+        },
+        {
+            video: "Video 2C: Prefixes Part 2",
+            questions: [
+                {
+                    id: 5,
+                    text: "Which of the following words is synonymous with 'Antenatal'?",
+                    options: [
+                        "Postnatal",
+                        "Perinatal",
+                        "Prenatal",
+                        "Neonatal"
+                    ],
+                    correct: 2, 
+                    explanation: "Dalam teks disebutkan: 'Prenatal (synonymous with antenatal)'. Keduanya berarti sebelum kelahiran (Pre = Before, Ante = Before)."
+                },
+                {
+                    id: 6,
+                    text: "Select the word that correctly uses a prefix to mean 'stealing and lying'.",
+                    options: [
+                        "Unhonest",
+                        "Dishonest",
+                        "Imhonest",
+                        "Nonhonest"
+                    ],
+                    correct: 1, 
+                    explanation: "Bentuk negatif yang benar untuk 'honest' adalah 'Dishonest'. Modul menyoroti ini sebagai contoh: Dishonest (stealing and lying)."
+                }
+            ]
+        },
+        {
+            video: "Video 2D: Suffixes",
+            questions: [
+                {
+                    id: 7,
+                    text: "According to the text, 'Psychosis' is described as a mental disorder involving hallucinations. How is it distinguished in the module?",
+                    options: [
+                        "It is considered identical to spiritual ailments caused by Jinn.",
+                        "It is distinct from spiritual ailments and is a condition of the mind.",
+                        "It is a physical disease affecting the heart valves.",
+                        "It is a temporary state of confusion caused by lack of sleep."
+                    ],
+                    correct: 1, 
+                    explanation: "Teks secara spesifik membedakan Psychosis (gangguan mental/kondisi pikiran) dari penyakit spiritual (distinct from spiritual ailments)."
+                },
+                {
+                    id: 8,
+                    text: "The suffix '-ose' in the word 'Adipose' indicates that the tissue is:",
+                    options: [
+                        "Full of fluid",
+                        "Full of muscle",
+                        "Full of fat",
+                        "Full of nerves"
+                    ],
+                    correct: 2, 
+                    explanation: "Suffix '-ose' berarti 'Full of'. Adipose didefinisikan dalam teks sebagai 'full of fat/fatty tissue'."
+                }
+            ]
+        },
+        {
+            video: "Video 2E: Compound Words",
+            questions: [
+                {
+                    id: 9,
+                    text: "Which of the following is an example of an 'Open' compound word (separated by space)?",
+                    options: [
+                        "Limestone",
+                        "Mother-in-law",
+                        "Post office",
+                        "Foreclosure"
+                    ],
+                    correct: 2, 
+                    explanation: "Limestone & Foreclosure adalah 'Closed' (gabung). Mother-in-law adalah 'Hyphenated'. Post office adalah 'Open' (terpisah spasi)."
+                },
+                {
+                    id: 10,
+                    text: "What does the compound word 'Foreclosure' mean?",
+                    options: [
+                        "A detailed plan of action or blueprint for a building.",
+                        "Bank seizure of property due to unpaid loans.",
+                        "Performing below one's actual potential in school.",
+                        "A part of personality representing conscience."
+                    ],
+                    correct: 1, 
+                    explanation: "Foreclosure didefinisikan sebagai penyitaan properti oleh bank karena pinjaman yang tidak dibayar."
+                }
+            ]
+        },
+        {
+            video: "Video 2F: Homophones",
+            questions: [
+                {
+                    id: 11,
+                    text: "Select the sentence that uses the homophone 'Principal/Principle' correctly.",
+                    options: [
+                        "It is against my moral principal to lie to my parents.",
+                        "The principle of the high school gave a long speech today.",
+                        "He was happy to be hired as the new principal of the school.",
+                        "The main principle city of Georgia is Atlanta."
+                    ],
+                    correct: 2, 
+                    explanation: "Principal = Kepala Sekolah/Utama. Principle = Prinsip/Moral. Kalimat C benar ('Kepala Sekolah baru'). Kalimat A & D harusnya 'Principle' (Moral) dan 'Capital' (Kota), Kalimat B harusnya 'Principal'."
+                },
+                {
+                    id: 12,
+                    text: "If a student uses the contrast between 'Tentative' and 'Willing' to guess a meaning, which context clue strategy are they using?",
+                    options: [
+                        "Synonym",
+                        "Antonym",
+                        "Definition",
+                        "Summary"
+                    ],
+                    correct: 1, 
+                    explanation: "Tentative (ragu) berlawanan dengan Willing (bersedia). Menggunakan kata yang berlawanan untuk menebak makna disebut strategi 'Antonym'."
+                }
+            ]
+        }
+    ];
+
+    let currentVideoIndex = 0;
+    const userAnswers = {};
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        
+        quizData.forEach((section, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${index === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${index}`;
+
+            let html = `<div class="card">
+                <span class="video-label">${section.video}</span>`;
+
+            section.questions.forEach(q => {
+                html += `
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top:20px;">
+                    <p class="question-text"><strong>${q.id}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`; 
+
+            if (index < quizData.length - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${index})">Next Video</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        });
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentIndex) {
+        const currentQuestions = quizData[currentIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        document.getElementById(`step-${currentIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const lastIndex = quizData.length - 1;
+        const currentQuestions = quizData[lastIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let score = 0;
+        let total = 0;
+        let reviewHTML = '';
+
+        quizData.forEach(section => {
+            section.questions.forEach(q => {
+                total++;
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusIcon = isCorrect ? '✅ Benar' : '❌ Salah';
+                
+                reviewHTML += `
+                <div class="review-item ${statusClass}">
+                    <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">${section.video}</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">${q.id}. ${q.text}</div>
+                    <div style="margin-bottom: 5px; color: ${isCorrect ? '#4caf50' : '#f44336'}">
+                        ${statusIcon} (You answered: ${q.options[userAnswer]})
+                    </div>
+                    ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.9rem;">Correct Answer: ${q.options[q.correct]}</div>` : ''}
+                    
+                    <div class="review-explanation">
+                        <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                        ${q.explanation}
+                    </div>
+                </div>`;
+            });
+        });
+
+        const finalScore = Math.round((score / total) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        
+        // --- BAGIAN INI YANG DIMODIFIKASI UNTUK NAVIGASI ---
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">${finalScore}</div>
+                <p>You got ${score} out of ${total} correct.</p>
+            </div>
+
+            <button class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button class="btn" onclick="location.reload()">🔄 Kerjakan Ulang</button>
+            
+            <h3 style="margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 10px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:20px;">⬆ Kembali ke Atas</button>
+        `;
+
+        document.getElementById(`step-${quizData.length - 1}`).classList.remove('active');
+        resultContainer.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    initQuiz();
+
+</script>
+
+</body>
+</html>
