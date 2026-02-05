@@ -12,6 +12,7 @@
             --text-main: #e0e0e0;
             --primary: #2e8b57;
             --accent: #FFD700;
+            --wa-color: #25D366; /* Warna Khas WhatsApp */
         }
 
         body {
@@ -46,7 +47,7 @@
             padding: 25px;
             border-radius: 12px;
             line-height: 1.8;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border: 1px solid #333;
             font-size: 1rem;
             text-align: justify;
@@ -65,7 +66,7 @@
             padding-bottom: 5px;
         }
 
-        /* LIST POIN (Nomor 1-5) */
+        /* LIST POIN */
         ul.poin-penting {
             margin: 0;
             padding-left: 20px;
@@ -73,6 +74,20 @@
         ul.poin-penting li {
             margin-bottom: 12px;
         }
+
+        /* INFO LIVE SESSION (BOX KHUSUS) */
+        .live-box {
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #4ade80;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
+        .live-title { font-weight: bold; font-size: 1.2rem; color: #fff; margin-bottom: 10px; display:block; }
+        .live-desc { color: #e9fdf0; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.5; }
+        .live-time { background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; display: inline-block; font-weight: bold; color: #FFD700; margin-bottom: 15px;}
 
         /* GRID TOMBOL */
         .btn-grid {
@@ -95,6 +110,18 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
+        /* Tombol WA (Putih di dalam Box Hijau) */
+        .btn-wa {
+            background-color: #fff;
+            color: #075e54;
+            width: 100%;
+            max-width: 90%;
+            margin: 0 auto;
+            display: flex;
+            padding: 15px;
+        }
+        .btn-wa:hover { background-color: #f0f0f0; transform: scale(1.02); }
+
         /* Tombol 1: Tes Gaya Belajar (Emas) */
         .btn-style {
             background: linear-gradient(45deg, #b8860b, #ffd700);
@@ -102,7 +129,7 @@
         }
         .btn-style:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
 
-        /* Tombol 2: Modul ENES (Hijau) */
+        /* Tombol 2: Modul ENES (Dark Blue/Hijau) */
         .btn-enes {
             background-color: #2c3e50;
             border-left: 8px solid var(--primary);
@@ -138,34 +165,40 @@
             
             <p>Namun, di balik semangat itu, ada satu "jebakan" yang sering tidak disadari. Banyak mahasiswa baru—terutama yang baru lulus SMA atau sedang sibuk mengabdi di pondok—merasa kaget saat perkuliahan dimulai. Mereka berpikir kuliah online itu sama seperti sekolah biasa, padahal <strong>kulturnya sangat berbeda</strong>.</p>
 
-            <p>Di sini, tidak ada lagi guru yang menuntun tangan kita setiap hari. Standar tugasnya pun tinggi, mengikuti kaidah akademik internasional. Akibatnya, banyak mahasiswa berguguran di tengah jalan bukan karena kurang pintar, tapi karena <strong>belum siap mental dan strategi</strong>.</p>
+            <p>Di sini, tidak ada lagi guru yang menuntun tangan kita setiap hari. Akibatnya, banyak mahasiswa berguguran di tengah jalan karena <strong>belum siap mental dan strategi</strong>.</p>
 
             <p>Karena itulah halaman ini dibuat. Anggaplah ini sebagai "Pemanasan" agar antum tidak cedera saat lari maraton nanti.</p>
 
             <p>Alat pemanasan utama yang kami sediakan adalah <strong>Modul ENES101</strong>. Ini bukan sekadar materi tambahan, melainkan "bekal wajib" yang berisi panduan teknis bagaimana cara bertahan dan sukses kuliah di IOU.</p>
 
-            <span class="sub-header">Mengapa Modul Ini Harus Selesai Sebelum Kuliah?</span>
+            <span class="sub-header">Mengapa Harus Selesai Sebelum Kuliah?</span>
             <ul class="poin-penting">
-                <li>
-                    <strong>Kenali Gaya Belajar:</strong> Di awal materi dijelaskan 3 model belajar (Visual, Auditori, Kinestetik) agar Anda bisa menemukan metode paling efektif untuk diri sendiri.
-                </li>
-                <li>
-                    <strong>Sekolah vs Kuliah:</strong> Mengubah pola pikir dari siswa menjadi mahasiswa yang mandiri dan disiplin tanpa harus selalu dituntun guru.
-                </li>
-                <li>
-                    <strong>Strategi Manajemen Waktu:</strong> Tips praktis bagi yang punya banyak waktu luang, maupun strategi khusus bagi yang sibuk bekerja/mengabdi.
-                </li>
-                <li>
-                    <strong>Membaca Aktif (Active Reading):</strong> Menguasai teknik membuat catatan, ringkasan, dan memahami bacaan akademik (SQ3R) agar tidak sekadar "lewat".
-                </li>
-                <li>
-                    <strong>Fondasi Akademik:</strong> Bekal seumur hidup untuk menulis Esai Ilmiah, penggunaan referensi, dan format standar yang akan dipakai di seluruh mata kuliah IOU.
-                </li>
+                <li><strong>Kenali Gaya Belajar:</strong> Menemukan metode (Visual/Auditori/Kinestetik) paling efektif.</li>
+                <li><strong>Sekolah vs Kuliah:</strong> Mengubah mindset menjadi mahasiswa mandiri.</li>
+                <li><strong>Strategi Manajemen Waktu:</strong> Tips bagi yang luang maupun yang sibuk/bekerja.</li>
+                <li><strong>Membaca Aktif:</strong> Teknik SQ3R untuk memahami bacaan akademik.</li>
+                <li><strong>Fondasi Akademik:</strong> Cara menulis Esai Ilmiah & Referensi standar IOU.</li>
             </ul>
 
-            <p style="text-align: center; font-style: italic; color: #aaa; margin-top: 30px; border-top: 1px solid #444; padding-top: 15px;">
+            <p style="text-align: center; font-style: italic; color: #aaa; margin-top: 20px; border-top: 1px solid #444; padding-top: 10px;">
                 Target: Selesaikan dalam waktu <strong>3 Pekan - 1 Bulan</strong>.
             </p>
+        </div>
+
+        <div class="live-box">
+            <span class="live-title">📢 Jangan Belajar Sendirian!</span>
+            <p class="live-desc">
+                Kami mengadakan sesi <strong>Live Mentoring via Zoom</strong> untuk membahas materi ENES101 dan mengerjakan latihan bersama.
+            </p>
+            <div class="live-time">🕒 Setiap Hari Pukul 16.00 WIB</div>
+            
+            <p class="live-desc" style="font-size:0.9rem; margin-top:5px;">
+                Link Zoom & Info harian hanya dibagikan di grup.
+            </p>
+
+            <a href="https://chat.whatsapp.com/KC4xR5iAKES8c2yEhg2oFv?mode=gi_t" class="btn-action btn-wa" target="_blank">
+                <span class="icon" style="color:#25D366">📱</span> Gabung Grup WhatsApp
+            </a>
         </div>
 
         <div class="btn-grid">
