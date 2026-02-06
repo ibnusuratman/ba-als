@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 3 Simulation</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .video-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        /* Tombol Navigasi Khusus */
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 4px solid var(--accent-color);
+        }
+
+        .review-item {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.8rem;
+            color: #ff9800;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Navigation Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 3 Simulation</h1>
+        <p class="subtitle">Reading for Study Purposes</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container"></div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL (Module 3a - 3f)
+    const quizData = [
+        {
+            video: "Video 3a: Intro & Academic Reading",
+            questions: [
+                {
+                    id: 1,
+                    text: "According to the module, a 'Topic Sentence' is best defined as:",
+                    options: [
+                        "Most of the time the last sentence of the paragraph that summarizes the content.",
+                        "Many times the first sentence of the paragraph that contains the main idea.",
+                        "A sentence found only in the conclusion of the article.",
+                        "Usually found in the middle of a paragraph to confuse the reader."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Kalimat topik ('Topic Sentence') memuat ide utama dan sering ditemukan sebagai kalimat pertama ('first sentence') dalam paragraf tersebut."
+                },
+                {
+                    id: 2,
+                    text: "In a professional journal article, an 'Abstract' is:",
+                    options: [
+                        "A summary found at the beginning of a professional article explaining the research goal and findings.",
+                        "The final section of the paper that lists references and citations.",
+                        "A detailed explanation of the research methodology found in the middle of the paper.",
+                        "A collection of charts and illustrations used to support the thesis."
+                    ],
+                    correct: 0, // Option A
+                    explanation: "Abstrak adalah ringkasan singkat di awal artikel ('beginning') yang menjelaskan tentang apa penelitian itu, temuan, dan pentingnya."
+                }
+            ]
+        },
+        {
+            video: "Video 3b: Scanning vs Skimming",
+            questions: [
+                {
+                    id: 3,
+                    text: "Prior to reading, Sara, a second grader, has just looked at the pictures and headings to see what the story is about. She is:",
+                    options: [
+                        "Scanning",
+                        "Doing a critical analysis",
+                        "Skimming",
+                        "Reading an abstract"
+                    ],
+                    correct: 2, // Option C
+                    explanation: "Melihat gambar dan judul untuk mendapatkan ide umum ('what the story is about') adalah definisi dari Skimming. Scanning adalah mencari detail spesifik."
+                },
+                {
+                    id: 4,
+                    text: "Fatima is about to make Chicken Tikka Masala. She quickly looks at the recipe to see what ingredients she will need (e.g., garlic cloves). This is called:",
+                    options: [
+                        "Skimming",
+                        "Scanning",
+                        "Surveying",
+                        "Reviewing"
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Mencari detail spesifik seperti 'bahan apa yang dibutuhkan' atau 'angka' tanpa membaca seluruh teks adalah definisi dari Scanning."
+                }
+            ]
+        },
+        {
+            video: "Video 3c: Practical Scanning",
+            questions: [
+                {
+                    id: 5,
+                    text: "When scanning for answers in an exam, what is the recommended first step?",
+                    options: [
+                        "Read the entire text thoroughly from start to finish.",
+                        "Read the question first to detect keywords (e.g., names, dates).",
+                        "Guess the answer without looking at the text.",
+                        "Write a summary of the text in your own words."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Tips ujian: Baca pertanyaan dulu untuk deteksi kata kunci ('keywords'), baru pindai teks untuk mencari kata kunci tersebut."
+                },
+                {
+                    id: 6,
+                    text: "Scanning is most useful for which of the following scenarios?",
+                    options: [
+                        "Gaining a deep understanding of a complex philosophical argument.",
+                        "Finding a specific phone number or price in a catalog.",
+                        "Enjoying a novel for relaxation and entertainment.",
+                        "Analyzing the author's writing style and tone."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Scanning melibatkan gerakan mata cepat untuk mencari fakta spesifik, seperti nomor telepon atau harga, bukan untuk pemahaman mendalam."
+                }
+            ]
+        },
+        {
+            video: "Video 3d: SQ3R Method Intro",
+            questions: [
+                {
+                    id: 7,
+                    text: "Select the statement about reading that is NOT true according to the module.",
+                    options: [
+                        "Reading entails interacting with the text.",
+                        "Highlighting is a good way of surveying a text.",
+                        "Reading is a passive process.",
+                        "You should make notes in your textbook while reading."
+                    ],
+                    correct: 2, // Option C
+                    explanation: "Modul menekankan bahwa membaca harus menjadi proses AKTIF, bukan pasif. Jadi pernyataan 'Reading is a passive process' adalah SALAH (NOT true)."
+                },
+                {
+                    id: 8,
+                    text: "The SQ3R method is designed to help students:",
+                    options: [
+                        "Memorize text word-for-word without understanding.",
+                        "Move information into long-term memory through active engagement.",
+                        "Finish reading a book as quickly as possible regardless of comprehension.",
+                        "Avoid reading the text by only looking at pictures."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "SQ3R (Survey, Question, Read, Recite, Review) adalah strategi aktif untuk memindahkan informasi ke memori jangka panjang ('long-term memory')."
+                }
+            ]
+        },
+        {
+            video: "Video 3e: SQ3R Steps",
+            questions: [
+                {
+                    id: 9,
+                    text: "In the SQ3R method, what does the 'Q' (Question) step involve?",
+                    options: [
+                        "Asking the teacher for the answers before reading.",
+                        "Turning headings and subheadings into questions to guide your reading.",
+                        "Questioning the validity of the author's credentials.",
+                        "Answering questions at the end of the chapter without reading."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Langkah 'Question' dalam SQ3R berarti mengubah judul/subjudul menjadi pertanyaan (misal: 'Apa itu X?') agar otak fokus mencari jawabannya saat membaca."
+                },
+                {
+                    id: 10,
+                    text: "What does the final 'R' (Review) in SQ3R suggest for optimal retention?",
+                    options: [
+                        "Review your notes only once right before the final exam.",
+                        "Check notes for accuracy and review frequently, ideally every 48 hours.",
+                        "Rewrite the entire chapter by hand to ensure you remember it.",
+                        "Read the text again from start to finish every day."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Langkah 'Review' menyarankan untuk meninjau catatan secara sering, idealnya setiap 48 jam, untuk mencegah lupa."
+                }
+            ]
+        },
+        {
+            video: "Video 3f: SQ3R Example",
+            questions: [
+                {
+                    id: 11,
+                    text: "In the History class example, finding out that 'Crete was a center of commerce' corresponds to which step of SQ3R?",
+                    options: [
+                        "Survey",
+                        "Question",
+                        "Read",
+                        "Review"
+                    ],
+                    correct: 2, // Option C
+                    explanation: "Menemukan jawaban spesifik (fakta bahwa Crete adalah pusat perdagangan) terjadi pada langkah 'Read' (Membaca secara aktif untuk mencari jawaban)."
+                },
+                {
+                    id: 12,
+                    text: "The quote by Paulo Freire, 'Reading the world precedes reading the word,' implies that:",
+                    options: [
+                        "Students should travel the world before learning to read books.",
+                        "We integrate new knowledge from text with what we already know about the world.",
+                        "Reading books is more important than understanding real-world events.",
+                        "One cannot learn to read without first learning geography."
+                    ],
+                    correct: 1, // Option B
+                    explanation: "Kutipan ini berarti pengalaman dan pengetahuan kita tentang dunia ('reading the world') menjadi dasar untuk memahami teks ('reading the word'). Kita mengaitkan yang baru dengan yang sudah ada."
+                }
+            ]
+        }
+    ];
+
+    let currentVideoIndex = 0;
+    const userAnswers = {};
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        
+        quizData.forEach((section, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${index === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${index}`;
+
+            let html = `<div class="card">
+                <span class="video-label">${section.video}</span>`;
+
+            section.questions.forEach(q => {
+                html += `
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top:20px;">
+                    <p class="question-text"><strong>${q.id}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`; 
+
+            if (index < quizData.length - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${index})">Next Video</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        });
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentIndex) {
+        const currentQuestions = quizData[currentIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        document.getElementById(`step-${currentIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const lastIndex = quizData.length - 1;
+        const currentQuestions = quizData[lastIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let score = 0;
+        let total = 0;
+        let reviewHTML = '';
+
+        quizData.forEach(section => {
+            section.questions.forEach(q => {
+                total++;
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusIcon = isCorrect ? '✅ Benar' : '❌ Salah';
+                
+                reviewHTML += `
+                <div class="review-item ${statusClass}">
+                    <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">${section.video}</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">${q.id}. ${q.text}</div>
+                    <div style="margin-bottom: 5px; color: ${isCorrect ? '#4caf50' : '#f44336'}">
+                        ${statusIcon} (You answered: ${q.options[userAnswer]})
+                    </div>
+                    ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.9rem;">Correct Answer: ${q.options[q.correct]}</div>` : ''}
+                    
+                    <div class="review-explanation">
+                        <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                        ${q.explanation}
+                    </div>
+                </div>`;
+            });
+        });
+
+        const finalScore = Math.round((score / total) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        
+        // --- BUTTON SUDAH DIPERBAIKI OTOMATIS (type="button") ---
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">${finalScore}</div>
+                <p>You got ${score} out of ${total} correct.</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang</button>
+            
+            <h3 style="margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 10px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:20px;">⬆ Kembali ke Atas</button>
+        `;
+
+        document.getElementById(`step-${quizData.length - 1}`).classList.remove('active');
+        resultContainer.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    initQuiz();
+
+</script>
+
+</body>
+</html>
