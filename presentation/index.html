@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Materi BA-ALS - Abu Ismail Mannix</title>
+    <style>
+        :root {
+            --bg-color: #000000;       /* Hitam Pekat */
+            --card-bg: #1A1A1A;        /* Abu Gelap untuk Tombol */
+            --text-color: #FFFFFF;     /* Putih */
+            --accent-gold: #FFD700;    /* Emas */
+            --accent-green: #4ADE80;   /* Hijau (Untuk File Ready) */
+            --accent-blue: #3399FF;    /* Biru (Untuk Orientasi) */
+            --text-muted: #666666;     /* Abu untuk yang belum ada */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: var(--accent-gold);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p { font-size: 1.2rem; color: #BBB; }
+
+        /* Container Menu */
+        .menu-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Tombol Link Umum */
+        a.card {
+            display: block;
+            text-decoration: none;
+            background-color: var(--card-bg);
+            border: 2px solid #333;
+            padding: 25px;
+            border-radius: 12px;
+            transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+            color: var(--text-color);
+        }
+
+        a.card:hover {
+            transform: scale(1.02);
+            background-color: #252525;
+            border-color: var(--accent-gold);
+        }
+
+        /* Tipe 1: Orientasi (Special Style) */
+        .orientation-card {
+            border-left: 10px solid var(--accent-blue) !important;
+        }
+        .orientation-card h2 { color: var(--accent-blue); }
+
+        /* Tipe 2: Hari Harian (Grid) */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsif */
+            gap: 15px;
+        }
+
+        .day-card {
+            border-left: 5px solid #444; /* Default belum ada */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 120px;
+        }
+
+        .day-card h3 { font-size: 1.5rem; margin-bottom: 5px; }
+        .day-card span { font-size: 1rem; color: #888; }
+
+        /* Status: READY (Hijau) */
+        .ready {
+            border-left-color: var(--accent-green) !important;
+            background-color: #0d1f0d !important; /* Hijau sangat gelap */
+        }
+        .ready h3 { color: var(--accent-green); }
+        .ready span { color: #FFF; font-weight: bold; }
+
+        /* Typography Card */
+        h2 { font-size: 1.8rem; margin-bottom: 5px; }
+        
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Portal Materi BA-ALS</h1>
+        <p>Abu Ismail Mannix</p>
+    </header>
+
+    <div class="menu-container">
+        
+        <a href="Begin.html" class="card orientation-card">
+            <h2>🔰 Orientasi (Ahlan wa Sahlan)</h2>
+            <p>Pengenalan, Strategi SKS, & Manajemen Waktu</p>
+        </a>
+
+        <div style="margin-top: 10px; border-bottom: 1px solid #333;"></div>
+        <h2 style="color: var(--accent-gold); font-size: 1.5rem; margin-top: 10px;">Materi Harian (ENES101)</h2>
+
+        <div class="days-grid">
+            
+            <a href="day-01.html" class="card day-card ready">
+                <h3>HARI 01</h3>
+                <span>Literasi Akademik</span>
+            </a>
+
+            <a href="day-02.html" class="card day-card">
+                <h3>HARI 02</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-03.html" class="card day-card">
+                <h3>HARI 03</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-04.html" class="card day-card">
+                <h3>HARI 04</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-05.html" class="card day-card">
+                <h3>HARI 05</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-06.html" class="card day-card">
+                <h3>HARI 06</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-07.html" class="card day-card">
+                <h3>HARI 07</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-08.html" class="card day-card">
+                <h3>HARI 08</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-09.html" class="card day-card">
+                <h3>HARI 09</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-10.html" class="card day-card">
+                <h3>HARI 10</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-11.html" class="card day-card">
+                <h3>HARI 11</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-12.html" class="card day-card">
+                <h3>HARI 12</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-13.html" class="card day-card">
+                <h3>HARI 13</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-14.html" class="card day-card">
+                <h3>HARI 14</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-15.html" class="card day-card">
+                <h3>HARI 15</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-16.html" class="card day-card">
+                <h3>HARI 16</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-17.html" class="card day-card">
+                <h3>HARI 17</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+            <a href="day-18.html" class="card day-card">
+                <h3>HARI 18</h3>
+                <span>(Belum Tersedia)</span>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Fall 2025 - BA-ALS IOU</p>
+    </footer>
+
+</body>
+</html>
