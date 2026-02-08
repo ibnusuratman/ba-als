@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 02: Vocab & Reading - Abu Ismail Mannix</title>
     <style>
         :root {
             /* SUPER DARK MODE PALETTE */
@@ -17,49 +23,66 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow: hidden; /* Mencegah scroll */
             height: 100vh;
             width: 100vw;
+            overflow: hidden; /* Mencegah body scroll double */
         }
 
+        /* Container Slide */
         .presentation-container {
             width: 100%;
             height: 100%;
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .slide {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            padding: 20px; /* Padding dikurangi biar muat di HP */
-            padding-bottom: 80px; /* Ruang untuk tombol bawah */
-            opacity: 0; visibility: hidden;
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100%;
+            padding: 20px;
+            padding-bottom: 120px; /* Ruang kosong bawah biar teks gak ketutup tombol */
+            
+            /* Animasi Fade */
+            opacity: 0; 
+            visibility: hidden;
             transition: opacity 0.4s ease;
+            
+            /* Layout Isi */
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             text-align: center;
+            
             background-color: var(--bg-color);
             z-index: 1;
-            overflow-y: auto; /* Bisa scroll kalau konten kepanjangan */
+            
+            /* Agar bisa discroll di HP jika konten panjang */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .slide.active { opacity: 1; visibility: visible; z-index: 2; }
+        /* Class untuk memunculkan slide */
+        .slide.active { 
+            opacity: 1; 
+            visibility: visible; 
+            z-index: 5; 
+        }
 
-        /* Typography */
-        h1 { color: var(--accent-gold); font-size: 2.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; }
+        /* Centering content vertikal jika slide pendek */
+        .slide.centered {
+            justify-content: center;
+        }
+
+        /* Typography HP Friendly */
+        h1 { color: var(--accent-gold); font-size: 2.2rem; margin-top: 40px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { color: var(--accent-gold); font-size: 1.6rem; margin-top: 20px; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; width: 100%; }
         
-        /* Module Title Slide Style */
-        .module-title { font-size: 3rem; color: var(--blue-accent); font-weight: bold; border-bottom: none; margin-bottom: 10px; }
-        .module-subtitle { font-size: 1.5rem; color: #FFF; letter-spacing: 3px; text-transform: uppercase; }
+        .module-title { font-size: 3rem; color: var(--blue-accent); font-weight: bold; border-bottom: none; margin-bottom: 10px; margin-top: 30%;}
+        .module-subtitle { font-size: 1.2rem; color: #FFF; letter-spacing: 3px; text-transform: uppercase; }
 
-        p, li { font-size: 1.2rem; line-height: 1.5; max-width: 800px; margin-bottom: 10px; color: #EEE; }
-        ul, ol { text-align: left; margin-left: 20px; display: inline-block; width: 90%; }
+        p, li { font-size: 1.1rem; line-height: 1.5; max-width: 800px; margin-bottom: 10px; color: #EEE; }
+        ul, ol { text-align: left; margin-left: 20px; display: inline-block; width: 95%; }
         li { margin-bottom: 8px; }
         
         strong { color: var(--success-color); font-weight: 700; }
@@ -78,61 +101,349 @@
             width: 100%; max-width: 800px;
             text-align: left;
         }
-        .highlight-box h3 { color: var(--blue-accent); font-size: 1.3rem; margin-bottom: 5px; }
-
-        /* Checkpoint Box */
+        .highlight-box h3 { color: var(--blue-accent); font-size: 1.2rem; margin-bottom: 5px; }
         .checkpoint-box { border-left-color: var(--danger-color); }
         .checkpoint-box h3 { color: var(--danger-color); }
 
         /* Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 1rem; background-color: var(--highlight-bg); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; background-color: var(--highlight-bg); }
         th, td { border: 1px solid #555; padding: 8px; text-align: left; }
-        th { background-color: #222; color: var(--accent-gold); font-size: 1.1rem; text-align: center; }
+        th { background-color: #222; color: var(--accent-gold); font-size: 1rem; text-align: center; }
         
-        /* Grid for Examples */
-        .example-grid {
-            display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px;
+        /* Grid */
+        .example-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px; }
+
+        /* --- NAVIGATION BUTTONS (FIXED & HIGH Z-INDEX) --- */
+        .nav-container {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            height: 80px;
+            z-index: 9999;
+            pointer-events: none; /* Supaya area kosong tembus pandang */
         }
 
-        /* --- NAVIGATION FIXED (SOLUSI UTAMA) --- */
         .control-btn { 
-            position: fixed; /* Wajib FIXED agar nempel di layar */
-            bottom: 30px; /* Naikkan biar ga kena menu browser */
+            pointer-events: auto; /* Tombol bisa diklik */
+            position: absolute; 
+            bottom: 20px; 
             background-color: #111; 
             color: #FFF; 
-            border: 1px solid #555; 
-            padding: 15px 25px; 
-            border-radius: 50px; /* Tombol bulat biar enak ditekan */
+            border: 2px solid #444; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
             cursor: pointer; 
-            font-size: 1.2rem; 
+            font-size: 1rem; 
             font-weight: bold;
-            z-index: 9999; /* Pastikan selalu paling atas */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Bayangan biar terlihat melayang */
+            box-shadow: 0 0 15px rgba(0,0,0,0.8); /* Shadow tebal biar kelihatan */
         }
-        .control-btn:active { background-color: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+        .control-btn:active { background-color: var(--accent-gold); color: #000; }
         
         .btn-prev { left: 20px; }
         .btn-next { right: 20px; background-color: #222; border-color: var(--accent-gold); color: var(--accent-gold); }
 
         .slide-number { 
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); 
-            font-size: 1rem; color: #888; z-index: 9999; 
-            background-color: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 10px;
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); 
+            font-size: 0.9rem; color: #888; background-color: rgba(0,0,0,0.8);
+            padding: 5px 10px; border-radius: 10px;
         }
         
         .home-btn { 
-            position: fixed; top: 20px; left: 20px; 
+            position: fixed; top: 15px; left: 15px; 
             font-size: 0.9rem; color: #AAA; text-decoration: none; 
             border: 1px solid #333; padding: 8px 12px; border-radius: 5px; 
-            z-index: 9999; background-color: rgba(0,0,0,0.8);
+            z-index: 9999; background-color: #000;
         }
 
+        /* Desktop Styles */
         @media (min-width: 768px) {
-            /* Style khusus Laptop/Tablet */
             h1 { font-size: 3.5rem; } h2 { font-size: 2.2rem; } 
             p, li, td { font-size: 1.5rem; }
-            .slide { padding: 60px; }
+            .slide { padding: 60px; justify-content: center; }
             .example-grid { display: grid; grid-template-columns: 1fr 1fr; }
-            .control-btn { bottom: 30px; padding: 10px 20px; border-radius: 8px; }
+            .control-btn { bottom: 30px; padding: 15px 30px; font-size: 1.2rem; }
         }
     </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠 Home</a>
+
+    <div class="presentation-container">
+
+        <div class="slide active centered">
+            <h1>DAY 02: Vocabulary & Reading</h1>
+            <p style="color: var(--blue-accent); font-size: 1.5rem;">Modules 2 & 3</p>
+            <div style="margin-top: 30px; border: 1px solid #555; padding: 15px; border-radius: 30px;">
+                <span>The Lego of Words & The Art of Strategy</span>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🛑 Checkpoint 1: Orientation Recap</h2>
+            <p>Before we start, are you mentally prepared?</p>
+            <div class="highlight-box checkpoint-box">
+                <h3>The System & Rules</h3>
+                <ul>
+                    <li>✅ <strong>Study Load:</strong> Full-time (60 Cr) vs Part-time. <em>Have you decided?</em></li>
+                    <li>✅ <strong>Time Theft:</strong> When will you study? (Morning/Night). <em>No "SKS"!</em></li>
+                    <li>✅ <strong>Self-Discipline:</strong> You are your own Police. No teacher will chase you.</li>
+                    <li>✅ <strong>The Goal:</strong> Just a degree, or real knowledge?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🧠 Checkpoint 2: Module 1 Recap</h2>
+            <p>Do you remember the "Survival Kit" from yesterday?</p>
+            <div class="highlight-box checkpoint-box">
+                <h3>Grades & Skills</h3>
+                <ul>
+                    <li>✅ <strong>The 60% Rule:</strong> Exams (UTS+UAS) decide your fate.</li>
+                    <li>✅ <strong>Essay Distinction:</strong>
+                        <ul>
+                            <li>📝 <em>Research Assignment:</em> Take-home, weeks to do, deep research.</li>
+                            <li>⚡ <em>Exam Essay:</em> Timed, written during exam. <strong>Never skip this!</strong></li>
+                        </ul>
+                    </li>
+                    <li>✅ <strong>Source Trap:</strong> PDF Slides are NOT enough. Watch Videos & Read Books!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide centered" style="background-color: #0a0a0a;">
+            <h1 class="module-title">MODULE 2</h1>
+            <p class="module-subtitle">Vocabulary Development</p>
+            <div style="width: 100px; height: 5px; background-color: var(--accent-gold); margin-top: 30px;"></div>
+        </div>
+
+        <div class="slide">
+            <h2>Word Structure: The "Lego" Concept</h2>
+            <p>Words are built from pieces. Guess meanings without a dictionary!</p>
+            <div class="highlight-box">
+                <ul>
+                    <li><strong>Root:</strong> The base meaning. (e.g., <em>Photo, Clear</em>)</li>
+                    <li><strong>Prefix:</strong> Added at the <strong>BEGINNING</strong>. Changes meaning.<br>
+                    <em>(e.g., <strong>Un</strong>-clear = Not clear)</em></li>
+                    <li><strong>Suffix:</strong> Added at the <strong>END</strong>. Changes grammar/form.<br>
+                    <em>(e.g., Clear-<strong>ly</strong> = Adverb)</em></li>
+                </ul>
+            </div>
+            <p style="color: var(--accent-gold); margin-top: 20px;"><em>Tip: Use Flashcards on your bedroom wall!</em></p>
+        </div>
+
+        <div class="slide">
+            <h2>⚠️ Common Confusing Prefixes</h2>
+            <p>These appear in quizzes often. Don't mix them up!</p>
+            <table>
+                <tr>
+                    <th>Prefix</th>
+                    <th>Meaning</th>
+                    <th>Examples (Variants)</th>
+                </tr>
+                <tr>
+                    <td><strong class="blue-text">Ante-</strong></td>
+                    <td>Before / In front</td>
+                    <td><strong>Antechamber</strong> (waiting room)<br><strong>Antenatal</strong> (before birth)</td>
+                </tr>
+                <tr>
+                    <td><strong class="danger-text">Anti-</strong></td>
+                    <td>Against</td>
+                    <td><strong>Anticoagulant</strong> (prevents clotting)<br><strong>Anticlockwise</strong> (reverse direction)</td>
+                </tr>
+                <tr>
+                    <td><strong>Hyper-</strong></td>
+                    <td>Excessive</td>
+                    <td><strong>Hyperactive</strong>, <strong>Hypermarket</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Hypo-</strong></td>
+                    <td>Under / Less</td>
+                    <td><strong>Hypothermia</strong> (low body heat)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>Suffixes & Compound Words</h2>
+            <div class="example-grid">
+                <div class="highlight-box" style="margin:0; width:100%;">
+                    <h3>Suffix Examples</h3>
+                    <ul>
+                        <li><strong>-ose</strong> (Full of): <em>Adipose</em> (fatty tissue).</li>
+                        <li><strong>-osis</strong> (Condition): <em>Psychosis</em>.</li>
+                        <li><strong>-cide</strong> (Killer): <em>Pesticide</em>.</li>
+                        <li><strong>-ous</strong> (Full of): <em>Nauseous</em>.</li>
+                    </ul>
+                </div>
+                <div class="highlight-box" style="margin:0; width:100%; border-left-color: var(--purple-accent);">
+                    <h3>Compound Words</h3>
+                    <ul>
+                        <li><strong>Closed:</strong> <em>Football, Pacemaker.</em></li>
+                        <li><strong>Hyphenated:</strong> <em>Mother-in-law.</em></li>
+                        <li><strong>Open:</strong> <em>Post office.</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="danger-text">Homophones: Same Sound, Diff Meaning</h2>
+            <p><em>Memorize these pairs! Favorites for exam questions.</em></p>
+            <table>
+                <tr>
+                    <th>Word A</th>
+                    <th>Word B</th>
+                </tr>
+                <tr>
+                    <td><strong>Accept</strong> (Receive)<br><em>"I accept the gift."</em></td>
+                    <td><strong>Except</strong> (Excluding)<br><em>"Everyone except me."</em></td>
+                </tr>
+                <tr>
+                    <td><strong>Affect</strong> (Verb: Influence)</td>
+                    <td><strong>Effect</strong> (Noun: Result)</td>
+                </tr>
+                <tr>
+                    <td><strong>Principal</strong> (Head of School)</td>
+                    <td><strong>Principle</strong> (Moral/Rule)</td>
+                </tr>
+                <tr>
+                    <td><strong>Capital</strong> (City/Money)</td>
+                    <td><strong>Capitol</strong> (Building)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>Context Clues: Guessing Game</h2>
+            <p>Don't stop reading when you see a hard word. Look for clues:</p>
+            <div class="highlight-box">
+                <ol>
+                    <li><strong>Definition:</strong> The sentence explains it.<br><em>"Homogeneous, which means uniform..."</em></li>
+                    <li><strong>Synonym:</strong> A similar word is nearby.<br><em>"He was exalted, overjoyed by the news."</em></li>
+                    <li><strong>Antonym:</strong> A contrast word.<br><em>"Unlike his tentative brother, he was willing."</em></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="slide centered" style="background-color: #0a0a0a;">
+            <h1 class="module-title">MODULE 3</h1>
+            <p class="module-subtitle">Reading Strategies</p>
+            <div style="width: 100px; height: 5px; background-color: var(--success-color); margin-top: 30px;"></div>
+        </div>
+
+        <div class="slide">
+            <h2>Battle: Scanning vs. Skimming</h2>
+            <table>
+                <tr>
+                    <th style="width:50%;">Scanning (The Hunter) 🦅</th>
+                    <th style="width:50%;">Skimming (The Tourist) 🚌</th>
+                </tr>
+                <tr>
+                    <td><strong>Goal:</strong> Find SPECIFIC info (dates, numbers).</td>
+                    <td><strong>Goal:</strong> Get GENERAL idea / Overview.</td>
+                </tr>
+                <tr>
+                    <td><strong>Action:</strong> Rapid eye movement for keywords.</td>
+                    <td><strong>Action:</strong> Read Title, Headings, First/Last lines.</td>
+                </tr>
+                <tr>
+                    <td><strong>Example:</strong> Checking a price in a catalog.</td>
+                    <td><strong>Example:</strong> Reading headlines.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>Anatomy of a Journal Article</h2>
+            <div class="highlight-box" style="border-left-color: var(--success-color);">
+                <ul>
+                    <li><strong>Abstract:</strong> Short summary (Read this first!).</li>
+                    <li><strong>Introduction:</strong> Background & Goal.</li>
+                    <li><strong>Methods:</strong> How research was done.</li>
+                    <li><strong>Results:</strong> The Findings.</li>
+                    <li><strong>Discussion:</strong> Interpretation.</li>
+                </ul>
+            </div>
+            <p style="margin-top:10px;"><em>Remember: <strong>Topic Sentence</strong> is usually the FIRST sentence of a paragraph.</em></p>
+        </div>
+
+        <div class="slide">
+            <h2>The Ultimate Weapon: SQ3R</h2>
+            <p>Move info from Short-term to <strong>Long-term Memory</strong>.</p>
+            <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+                <div style="background:#222; padding:10px; border:1px solid #444;">
+                    <h3 class="blue-text">S</h3>Survey
+                </div>
+                <div style="background:#222; padding:10px; border:1px solid #444;">
+                    <h3 class="blue-text">Q</h3>Question
+                </div>
+                <div style="background:#222; padding:10px; border:1px solid #444;">
+                    <h3 class="blue-text">R</h3>Read
+                </div>
+                <div style="background:#222; padding:10px; border:1px solid #444;">
+                    <h3 class="blue-text">R</h3>Recite
+                </div>
+                <div style="background:#222; padding:10px; border:1px solid #444;">
+                    <h3 class="blue-text">R</h3>Review
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <h3>Example (History Class):</h3>
+                <ul>
+                    <li><strong>Q:</strong> Turn title <em>"Minoan Society"</em> into <em>"What is Minoan Society?"</em></li>
+                    <li><strong>R:</strong> Read to find the answer (Crete Island).</li>
+                    <li><strong>Recite:</strong> Say aloud: <em>"Minoan = Crete."</em></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide centered">
+            <h2>Mission Accomplished</h2>
+            <p>You have mastered the building blocks of words & reading strategies.</p>
+            <div class="highlight-box" style="text-align: center;">
+                <h3>Next Step:</h3>
+                <p>1. Make Flashcards for Prefixes.<br>2. Practice SQ3R on your next reading.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-container">
+        <button class="control-btn btn-prev" onclick="move(-1)">❮ Back</button>
+        <div class="slide-number" id="slideNum">1 / 14</div>
+        <button class="control-btn btn-next" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const numDisplay = document.getElementById('slideNum');
+
+        function move(dir) {
+            // Sembunyikan slide saat ini
+            slides[current].classList.remove('active');
+            
+            // Hitung index baru
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            
+            // Munculkan slide baru
+            slides[current].classList.add('active');
+            
+            // Update nomor halaman
+            numDisplay.innerText = (current + 1) + " / " + slides.length;
+
+            // Scroll slide ke paling atas (biar kalau slide sebelumnya discroll, yang baru mulai dari atas)
+            slides[current].scrollTop = 0;
+        }
+
+        // Support Keyboard (Laptop)
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
