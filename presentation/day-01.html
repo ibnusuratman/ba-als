@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENES101 Modul 1 - Abu Ismail Mannix</title>
+    <style>
+        :root {
+            /* SUPER DARK MODE PALETTE - High Contrast for Low Vision */
+            --bg-color: #000000;       /* Hitam Pekat */
+            --text-color: #FFFFFF;     /* Putih Murni */
+            --accent-color: #FFD700;   /* Emas (Gold) untuk Judul */
+            --highlight-bg: #1A1A1A;   /* Abu Gelap untuk Kotak */
+            --danger-color: #FF4444;   /* Merah Terang untuk Peringatan */
+            --success-color: #00FF7F;  /* Hijau Neon untuk Solusi */
+            --blue-accent: #3399FF;    /* Biru Terang untuk Info */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container Utama */
+        .presentation-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Slide Styles */
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 40px 60px;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: var(--bg-color);
+            z-index: 1;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 2; }
+
+        /* Typography Besar */
+        h1 { color: var(--accent-color); font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        
+        p, li { font-size: 1.8rem; line-height: 1.6; max-width: 1100px; margin-bottom: 20px; color: #EEE; }
+        ul, ol { text-align: left; margin-left: 50px; display: inline-block; width: 85%; }
+        li { margin-bottom: 15px; }
+        
+        strong { color: var(--success-color); font-weight: 700; }
+        .danger-text { color: var(--danger-color); font-weight: bold; }
+
+        /* Kotak Highlight */
+        .highlight-box {
+            background-color: var(--highlight-bg);
+            border: 2px solid #444;
+            border-left: 8px solid var(--accent-color);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 90%; max-width: 1200px;
+            text-align: left;
+        }
+        .highlight-box h3 { color: var(--blue-accent); font-size: 2rem; margin-bottom: 15px; }
+
+        /* Tabel Besar */
+        table { width: 90%; max-width: 1000px; border-collapse: collapse; margin-top: 20px; font-size: 1.6rem; background-color: var(--highlight-bg); }
+        th, td { border: 2px solid #555; padding: 15px; text-align: center; }
+        th { background-color: #222; color: var(--accent-color); font-size: 1.8rem; }
+        
+        /* Navigasi */
+        .controls { position: absolute; bottom: 30px; right: 30px; z-index: 10; display: flex; gap: 20px; }
+        .control-btn { 
+            background-color: #222; color: var(--accent-color); border: 2px solid var(--accent-color); 
+            padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.5rem; font-weight: bold;
+        }
+        .control-btn:hover { background-color: var(--accent-color); color: #000; }
+        
+        .slide-number { position: absolute; bottom: 30px; left: 30px; font-size: 1.5rem; color: #888; font-weight: bold; }
+
+        /* Responsif HP */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; } h2 { font-size: 1.8rem; } p, li { font-size: 1.2rem; }
+            .slide { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+    <div class="slide active">
+        <h1>ENES101 - Modul 1</h1>
+        <p style="color: var(--blue-accent); font-size: 2rem;">Literasi Akademik & Keterampilan Belajar</p>
+        <div style="margin-top: 50px; border: 1px solid #555; padding: 20px; border-radius: 50px;">
+            <span style="font-size: 1.5rem;">Pondasi Sukses di IOU</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Bukan Sekadar Bahasa Inggris</h2>
+        <p>Mata kuliah ini adalah <strong>"Survival Kit"</strong> antum untuk bertahan sampai wisuda.</p>
+        <div class="highlight-box">
+            <h3>Konsep Utama:</h3>
+            <ul>
+                <li>Menulis adalah sebuah <strong>PROSES</strong>, bukan sekadar produk akhir.</li>
+                <li>Tujuan: Sukses Akademik & Karier Profesional.</li>
+                <li>Fokus: Grammar, Mencatat, Meringkas, & Esai.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Sumber Belajar & Peringatan</h2>
+        <div class="highlight-box" style="border-left-color: var(--danger-color);">
+            <h3 class="danger-text">⚠️ PERINGATAN KERAS</h3>
+            <p>Slide PDF hanyalah alat bantu tambahan.</p>
+            <p><strong>DILARANG MENGANDALKAN PDF SAJA!</strong></p>
+            <p>Ujian diambil dari materi VIDEO dan BUKU TEKS.</p>
+        </div>
+        <p><strong>Buku Wajib:</strong> Academic Literacy (Underhill), Grammar (Rosakis), Writing (Oshima).</p>
+    </div>
+
+    <div class="slide">
+        <h2>Anatomi Nilai (The Grade Pie)</h2>
+        <table>
+            <tr><th>Komponen</th><th>Bobot</th><th>Catatan Strategis</th></tr>
+            <tr><td>Partisipasi</td><td>5%</td><td>Wajib >70% Live / Rekaman (Easy Money)</td></tr>
+            <tr><td>Tugas Esai</td><td>15%</td><td>Jangan Copy-Paste! (Fatal)</td></tr>
+            <tr><td>Modul Tes</td><td>20%</td><td>30 Modul x 5 Soal (Recehan tapi Rutin)</td></tr>
+            <tr><td><strong>UTS + UAS</strong></td><td><strong>60%</strong></td><td><span class="danger-text">Penentu Hidup Mati</span></td></tr>
+        </table>
+    </div>
+
+    <div class="slide">
+        <h2 class="danger-text">Bedah "Mengerikan" Ujian</h2>
+        <p>Total Ujian (UTS+UAS) = 60%. Format: 20 PG + 3 Esai.</p>
+        <div class="highlight-box" style="border-left-color: var(--danger-color);">
+            <h3>Fakta Matematis:</h3>
+            <ul>
+                <li><strong>1 Soal Esai Ujian = 3% Nilai Akhir</strong><br>
+                <em>(Setara mengerjakan 4,5 Pekan Kuis Modul!)</em></li>
+                <li><strong>1 Soal PG (Tipe 3 Poin) = 1,8% Nilai Akhir</strong><br>
+                <em>(Setara mengerjakan hampir 3 Pekan Kuis Modul!)</em></li>
+            </ul>
+        </div>
+        <p><strong>Kesimpulan:</strong> Haram hukumnya mengosongkan soal Esai saat ujian!</p>
+    </div>
+
+    <div class="slide">
+        <h2>Target Nilai & IPK</h2>
+        <table>
+            <tr><th>Nilai</th><th>Huruf</th><th>IP</th><th>Status</th></tr>
+            <tr><td>90 - 100</td><td>A+</td><td>4.00</td><td>Mumtaz (Pujian)</td></tr>
+            <tr><td>80 - 89.99</td><td>A</td><td>3.85</td><td>Sangat Baik</td></tr>
+            <tr><td>75 - 79.99</td><td>B+</td><td>3.67</td><td>Baik</td></tr>
+            <tr><td>50 - 54.99</td><td>D</td><td>2.00</td><td><strong>Batas Lulus</strong></td></tr>
+            <tr><td>< 50</td><td class="danger-text">F</td><td>0.00</td><td class="danger-text">GAGAL</td></tr>
+        </table>
+        <p><em>Ingat: Kehilangan 20 poin saja, antum terlempar dari A.</em></p>
+    </div>
+
+    <div class="slide">
+        <h2>Gegar Budaya: Sekolah vs Kuliah</h2>
+        <div style="display: flex; gap: 20px; width: 95%; justify-content: center;">
+            <div class="highlight-box" style="width: 45%; border-color: #555;">
+                <h3>🏫 Sekolah (SMA)</h3>
+                <ul>
+                    <li>Disuapi guru tiap hari.</li>
+                    <li>Hafalan (Rote Memorization).</li>
+                    <li>Guru selalu mengingatkan.</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="width: 45%; border-color: var(--accent-color);">
+                <h3>🎓 Kuliah Online</h3>
+                <ul>
+                    <li>Mandiri & Interaksi Terbatas.</li>
+                    <li><strong>Inkuiri & Berpikir Kritis</strong>.</li>
+                    <li>Tidak ada yang mengejar antum.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Jadilah Mahasiswa Proaktif</h2>
+        <ul>
+            <li><strong>Manajemen Diri:</strong> Buat jadwal revisi mingguan. Jangan SKS (Sistem Kebut Semalam).</li>
+            <li><strong>Motivasi:</strong> Sertifikasi vs Pengembangan Intelektual.</li>
+            <li><strong>Strategi Karier:</strong> Pertimbangkan <em>Double Major</em> & <em>Volunteering</em> (Sukarelawan) untuk mempercantik CV.</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>Teknik Belajar: Membaca Aktif</h2>
+        <p>Jangan sekadar membaca lewat mata!</p>
+        <div class="highlight-box">
+            <h3>Lakukan 3 Hal Ini:</h3>
+            <ol>
+                <li><strong>Highlighting:</strong> Tandai poin penting (jangan semua diwarnai).</li>
+                <li><strong>Annotating:</strong> Tulis catatan/komentar di pinggir halaman.</li>
+                <li><strong>Questioning:</strong> Ajukan pertanyaan pada teks yang dibaca.</li>
+            </ol>
+        </div>
+        <p>Patuhi aturan penulisan referensi/bibliografi sejak awal.</p>
+    </div>
+
+    <div class="slide">
+        <h2>Kenali Gaya Belajar Antum</h2>
+        <p>Ada 3 Tipe Utama. Kenali diri antum agar tidak buang waktu.</p>
+        <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 30px;">
+            <div style="text-align: center;">
+                <h1 style="color: var(--blue-accent);">60%</h1>
+                <p>Visual</p>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="color: var(--success-color);">30%</h1>
+                <p>Auditory</p>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="color: var(--danger-color);">10%</h1>
+                <p>Kinesthetic</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2 style="color: var(--blue-accent);">Tipe Visual (Si Mata Elang)</h2>
+        <div class="highlight-box" style="border-left-color: var(--blue-accent);">
+            <h3>Ciri & Strategi:</h3>
+            <ul>
+                <li>Suka diagram, grafik, dan teks tertulis.</li>
+                <li><strong>Strategi:</strong> Gunakan stabilo warna-warni (color-coding).</li>
+                <li>Buat <em>Mind Map</em> atau Diagram Alur.</li>
+                <li>Duduk paling depan (fokus ke layar) untuk menjaga kontak mata.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2 style="color: var(--success-color);">Tipe Auditory (Si Pendengar)</h2>
+        <div class="highlight-box" style="border-left-color: var(--success-color);">
+            <h3>Ciri & Strategi:</h3>
+            <ul>
+                <li>Ingat apa yang didengar & suka diskusi.</li>
+                <li><strong>Strategi:</strong> Baca buku teks dengan suara keras (reciting).</li>
+                <li>Rekam materi kuliah dan dengarkan ulang.</li>
+                <li>Hindari gangguan suara (belajar di tempat hening).</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2 style="color: var(--danger-color);">Tipe Kinesthetic (Si Penggerak)</h2>
+        <div class="highlight-box" style="border-left-color: var(--danger-color);">
+            <h3>Ciri & Strategi:</h3>
+            <ul>
+                <li>Tidak betah duduk diam, suka praktik ("Hands-on").</li>
+                <li><strong>Strategi:</strong> Belajar sambil berjalan/bergerak.</li>
+                <li>Gunakan posisi nyaman (berbaring di lantai/berdiri), jangan terpaku di kursi.</li>
+                <li>Sering ambil jeda istirahat (break).</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>The Sky is The Limit</h2>
+        <p>"Langit adalah batasnya."</p>
+        <div class="highlight-box">
+            <ul>
+                <li>Jangan hanya jadi konsumen informasi.</li>
+                <li>Jadilah <strong>Pemecah Masalah (Problem Solver)</strong>.</li>
+                <li>Manfaatkan teknologi untuk memperluas ilmu di luar silabus.</li>
+            </ul>
+        </div>
+        <h2 style="margin-top: 40px;">Semoga Sukses di ENES101!</h2>
+    </div>
+
+    <div class="slide-number" id="slideNum">1 / 14</div>
+    <div class="controls">
+        <button class="control-btn" onclick="move(-1)">❮ Back</button>
+        <button class="control-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+</div>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const numDisplay = document.getElementById('slideNum');
+
+    function move(dir) {
+        slides[current].classList.remove('active');
+        current += dir;
+        if (current >= slides.length) current = 0;
+        if (current < 0) current = slides.length - 1;
+        slides[current].classList.add('active');
+        numDisplay.innerText = (current + 1) + " / " + slides.length;
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+        if(e.key === 'ArrowLeft') move(-1);
+    });
+</script>
+
+</body>
+</html>
