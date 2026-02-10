@@ -40,19 +40,43 @@
         h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
         p, li { font-size: 1.2rem; line-height: 1.6; max-width: 900px; color: #EEE; }
         
-        /* Layouts */
+        /* Containers */
         .text-container {
             background: #111; border: 1px solid #333; padding: 20px; border-radius: 10px;
             width: 100%; max-width: 900px; margin-bottom: 20px; text-align: left;
         }
         
+        /* SPLIT VIEW FOR SIMULATION */
         .split-view {
             display: flex; width: 100%; max-width: 1100px; height: 50vh; gap: 15px;
         }
-        .col-left { width: 50%; background: #111; padding: 15px; overflow-y: auto; border: 1px solid #333; }
-        .col-right { width: 50%; background: #fffde7; color: #000; padding: 15px; overflow-y: auto; border: 1px solid #d4af37; font-family: 'Courier New', monospace; }
+        .col-left { 
+            width: 50%; background: #222; padding: 20px; overflow-y: auto; 
+            border: 1px solid #444; color: #AAA; font-family: 'Georgia', serif; 
+            line-height: 1.8; position: relative;
+        }
+        .col-right { 
+            width: 50%; background: #fffde7; color: #000; padding: 20px; 
+            overflow-y: auto; border: 1px solid #d4af37; font-family: 'Courier New', monospace; 
+            position: relative; background-image: linear-gradient(#999 1px, transparent 1px);
+            background-size: 100% 1.5rem; line-height: 1.5rem;
+        }
 
-        /* Interactive Elements */
+        /* HIGHLIGHT LOGIC */
+        .hl-target { transition: all 0.5s; padding: 2px 0; border-radius: 3px; color: #AAA; }
+        .hl-target.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 5px var(--accent-gold); }
+        .hl-target.green.active { background-color: var(--success-color); color: #000; }
+        .hl-target.red.active { background-color: var(--danger-color); color: #FFF; }
+        .hl-target.blue.active { background-color: var(--blue-accent); color: #FFF; }
+
+        /* NOTE ITEMS ANIMATION */
+        .note-item { 
+            opacity: 0; transform: translateX(-20px); transition: all 0.5s ease; 
+            margin-bottom: 0; font-weight: bold; 
+        }
+        .note-item.show { opacity: 1; transform: translateX(0); }
+
+        /* Buttons */
         .quiz-btn {
             background: #222; color: #FFF; border: 1px solid #555; padding: 15px;
             width: 100%; max-width: 600px; margin: 10px 0; cursor: pointer; text-align: left;
@@ -62,10 +86,12 @@
         .quiz-btn.correct { background: rgba(0,255,127,0.2); border-color: var(--success-color); color: var(--success-color); }
         .quiz-btn.wrong { background: rgba(255, 68, 68, 0.2); border-color: var(--danger-color); color: var(--danger-color); }
 
-        .magic-text span { transition: all 0.5s; padding: 2px 5px; border-radius: 3px; }
-        .highlight-on { background-color: var(--accent-gold); color: #000; font-weight: bold; }
-        .highlight-red { background-color: var(--danger-color); color: #FFF; font-weight: bold; }
-        .dim-text { opacity: 0.2; }
+        .action-btn {
+            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
+            padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; margin: 0 10px;
+        }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
 
         /* Navigation */
         .nav-bar {
@@ -86,6 +112,8 @@
             padding: 5px 10px; cursor: pointer; font-size: 0.9rem; margin-bottom: 10px; border-radius: 4px;
         }
         .id-text { display: none; color: var(--blue-accent); border-top: 1px solid #444; margin-top: 10px; padding-top: 10px; }
+        
+        .flow-box { border: 2px solid #333; padding: 3px 8px; display: inline-block; margin: 3px 0; background: #FFF; border-radius: 5px; }
 
     </style>
 </head>
@@ -95,9 +123,36 @@
 
     <div class="slide active centered">
         <h1>Module 5: Note-Taking</h1>
-        <p style="color:var(--blue-accent)">Part 1: Filtering & Formatting</p>
+        <p style="color:var(--blue-accent)">From Book to Brain</p>
         <div style="margin-top:20px; border:1px solid #333; padding:20px; border-radius:10px;">
             <p>"Stop Painting, Start Thinking."</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Rule 1: Specific Titles</h2>
+        <p>A specific title helps your brain recall the content.</p>
+        <div class="text-container" style="display:flex; justify-content:space-around;">
+            <div style="color:var(--danger-color)">❌ "Physical Activity"</div>
+            <div style="color:var(--success-color)">✅ "Benefits of Physical Activity"</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Rule 2: The Filter</h2>
+        <p>Stop writing full sentences! Remove "Filler Words".</p>
+        <div class="text-container" style="text-align:center;">
+            <p>"One of the best ways is to draw up a weekly schedule."</p>
+            <p style="font-size:2rem;">⬇️</p>
+            <p style="color:var(--accent-gold); font-weight:bold;">"Weekly Schedule"</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Rule 3: Use Symbols</h2>
+        <p>Save time with abbreviations.</p>
+        <div class="text-container" style="text-align:center;">
+            w/ (with) &nbsp;•&nbsp; b/c (because) &nbsp;•&nbsp; ➔ (leads to) &nbsp;•&nbsp; ↑ (increase)
         </div>
     </div>
 
@@ -112,51 +167,45 @@
 
     <div class="slide centered">
         <h2>Step 1: Specific Title</h2>
-        <p>Which title is better?</p>
         <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "Manager Training"</button>
         <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "IMPM Selection & Structure"</button>
-        <p id="q1-feed" style="margin-top:10px; font-weight:bold;"></p>
     </div>
 
     <div class="slide">
         <h2>Step 2: Filter & Nuance</h2>
-        <p><strong>Crucial Detail:</strong> What does the text imply about Intelligence?</p>
+        <p><strong>Crucial Detail:</strong> Intelligence vs Proven Records.</p>
         <div class="text-container">
             <p>Companies look for: "Strong intellectual abilities" AND "Proven records".</p>
-            <p>Note: <span class="highlight-red">Intelligence alone is NOT an indicator.</span></p>
-            <p>We must capture this contrast!</p>
+            <p style="color:var(--danger-color)">Note: Intelligence alone is NOT an indicator.</p>
         </div>
     </div>
 
     <div class="slide">
         <h2>Step 3: The Numbers</h2>
         <div class="text-container">
-            <p>Academic texts rely on scope. We need the numbers.</p>
             <ul>
-                <li><span class="highlight-on">5 Modules</span></li>
-                <li><span class="highlight-on">2 Weeks</span> (Duration)</li>
-                <li><span class="highlight-on">16 Months</span> (Total)</li>
+                <li><strong>5 Modules</strong> (On-site)</li>
+                <li><strong>2 Weeks</strong> (Duration)</li>
+                <li><strong>16 Months</strong> (Total)</li>
             </ul>
         </div>
     </div>
 
     <div class="slide">
-        <h2>Case 1: Final Notes</h2>
+        <h2>Case 1: Final Simulation</h2>
         <div class="split-view">
             <div class="col-left">
-                <strong>Source:</strong><br>IMPM Text (Full)
+                <span style="position:absolute; top:0; right:0; background:#333; padding:2px 5px; font-size:0.8rem;">TEXTBOOK</span>
+                ...we accept only <span class="hl-target c1">practicing managers</span>... <span class="hl-target c1">sponsored</span> by their companies... send <span class="hl-target c1">4 or 5 participants</span>... <span class="hl-target c1">5 on-site modules</span>... <span class="hl-target c1">2 weeks each</span>... spread over <span class="hl-target c1">16 months</span>.
             </div>
             <div class="col-right">
-                <strong>TITLE: IMPM Selection & Structure</strong><br><br>
-                • Who: Practicing Managers (Sponsored)<br>
-                • Selection: <br>
-                &nbsp;&nbsp;- Intelligence = NOT enough<br>
-                &nbsp;&nbsp;- Need: Proven Records<br>
-                • Structure:<br>
-                &nbsp;&nbsp;- 5 Modules (On-site)<br>
-                &nbsp;&nbsp;- 2 Weeks each<br>
-                &nbsp;&nbsp;- 16 Months total
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c1"></div>
             </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c1-1" onclick="annotate('c1', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c1-2" onclick="extract('c1', this)" disabled>2. 📝 Extract Notes</button>
         </div>
     </div>
 
@@ -178,9 +227,9 @@
 
     <div class="slide">
         <h2>Step 2: Atmosphere</h2>
-        <p>The PDF says: <em>"Start by capturing the general atmosphere."</em></p>
+        <p>Start by capturing the mood.</p>
         <div class="text-container" style="text-align:center;">
-            <h3 class="highlight-on">STYLE: LAVISH AFFAIRS</h3>
+            <h3 style="color:var(--accent-gold)">STYLE: LAVISH AFFAIRS</h3>
             <p>(Acara Mewah)</p>
         </div>
     </div>
@@ -189,27 +238,24 @@
         <h2>Step 3: Capture All Options</h2>
         <p>Don't just write "Car". Write ALL variations.</p>
         <div class="text-container">
-            Transport Options:
-            <ul>
-                <li>1. White Car</li>
-                <li>OR 2. White Horse</li>
-                <li>OR 3. White Elephant</li>
-            </ul>
+            Transport: White Car / White Horse / White Elephant
         </div>
     </div>
 
     <div class="slide">
-        <h2>Case 2: Final Notes</h2>
+        <h2>Case 2: Final Simulation</h2>
         <div class="split-view">
-            <div class="col-left">Hindu Text (Full)</div>
-            <div class="col-right">
-                <strong>TITLE: Trad. Hindu Wedding</strong><br><br>
-                • Atmosphere: <strong>Lavish Affairs</strong><br>
-                • Gifts: <br>
-                &nbsp;&nbsp;- Groom -> Bride: Mangal Sutra<br>
-                • Transport (Variations):<br>
-                &nbsp;&nbsp;- White Car / Horse / Elephant
+            <div class="col-left">
+                ...usually <span class="hl-target c2">lavish affairs</span>... gives <span class="hl-target c2">Mangal Sutra</span>... arrives in a <span class="hl-target c2">white car</span> or on a <span class="hl-target c2">white horse</span>... sometimes <span class="hl-target c2">white elephant</span>.
             </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c2"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c2-1" onclick="annotate('c2', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c2-2" onclick="extract('c2', this)" disabled>2. 📝 Extract Notes</button>
         </div>
     </div>
 
@@ -233,34 +279,38 @@
         <h2>Step 2: Filter Description</h2>
         <p>Turn long sentences into punchy phrases.</p>
         <div class="text-container">
-            <p class="dim-text">"The villagers stand in doorways and they do not smile."</p>
-            <p style="font-size:2rem; text-align:center;">⬇️</p>
-            <p class="highlight-on">"Villagers: Unsmiling"</p>
+            <p style="opacity:0.5">"The villagers stand in doorways and they do not smile."</p>
+            <p style="font-size:1.5rem; text-align:center;">⬇️</p>
+            <p style="color:var(--accent-gold); font-weight:bold;">"Villagers: Unsmiling"</p>
         </div>
     </div>
 
     <div class="slide">
         <h2>Step 3: Numbered List</h2>
-        <p>PDF Rule: <em>"For travel guides, use Numbered Lists."</em></p>
+        <p>Use lists for travel guides.</p>
         <div class="text-container">
             <ol>
-                <li><strong>Location:</strong> North Arizona.</li>
-                <li><strong>Access:</strong> Hike / Horse.</li>
-                <li><strong>Atmosphere:</strong> Quiet.</li>
+                <li>Location: North Arizona.</li>
+                <li>Access: Hike / Horse.</li>
+                <li>Atmosphere: Quiet.</li>
             </ol>
         </div>
     </div>
 
     <div class="slide">
-        <h2>Case 3: Final Notes</h2>
+        <h2>Case 3: Final Simulation</h2>
         <div class="split-view">
-            <div class="col-left">Havasu Text (Full)</div>
-            <div class="col-right">
-                <strong>TITLE: Havasu Canyon Guide</strong><br><br>
-                1. Location: N. Arizona (Havasupai)<br>
-                2. Access: 10-15 miles (Hike/Horse)<br>
-                3. Atmosphere: Quiet, Unsmiling dogs/people.
+            <div class="col-left">
+                ...in <span class="hl-target c3">Northern Arizona</span>... <span class="hl-target c3">10 or 15 miles</span> from road... <span class="hl-target c3">hike or ride a horse</span>... village is <span class="hl-target c3">quiet</span>... villagers <span class="hl-target c3">do not smile</span>.
             </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c3"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c3-1" onclick="annotate('c3', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c3-2" onclick="extract('c3', this)" disabled>2. 📝 Organize</button>
         </div>
     </div>
 
@@ -282,14 +332,14 @@
 
     <div class="slide">
         <h2>Step 2: Cause & Effect</h2>
-        <p><strong>Warning:</strong> Self-Appointment leads to Sin.</p>
+        <p>Warning: Self-Appointment leads to Sin.</p>
         <div style="display:flex; gap:10px; align-items:center; justify-content:center; margin-top:20px;">
             <div style="background:#333; padding:20px; border:1px solid #555;">
-                CAUSE:<br><span class="highlight-red">Self-Appointment</span>
+                CAUSE:<br><span style="color:var(--danger-color); font-weight:bold;">Self-Appointment</span>
             </div>
             <div style="font-size:2rem;">➔</div>
             <div style="background:#333; padding:20px; border:1px solid #555;">
-                EFFECT:<br><span class="highlight-red">Unfit / Khalwat / Sin</span>
+                EFFECT:<br><span style="color:var(--danger-color); font-weight:bold;">Unfit / Khalwat / Sin</span>
             </div>
         </div>
     </div>
@@ -298,24 +348,24 @@
         <h2>Step 3: Hierarchy</h2>
         <p>Use arrows for order.</p>
         <div class="text-container" style="text-align:center;">
-            <span class="highlight-on">Father</span> ➔ 
-            <span class="highlight-on">Grandfather</span> ➔ 
-            <span class="highlight-on">Brother</span>
+            Father ➔ Grandfather ➔ Brother
         </div>
     </div>
 
     <div class="slide">
-        <h2>Case 4: Final Notes</h2>
+        <h2>Case 4: Final Simulation</h2>
         <div class="split-view">
-            <div class="col-left">Wali Text (Full)</div>
-            <div class="col-right">
-                <strong>TITLE: Rulings on The Wali</strong><br><br>
-                • Ruling: No Wali = Invalid.<br>
-                • Hierarchy: Father ➔ Grandfather ➔ Brother.<br>
-                • <strong>PROHIBITION:</strong> Self-Appointment.<br>
-                &nbsp;&nbsp;➔ Cause: Woman appoints friend.<br>
-                &nbsp;&nbsp;➔ Effect: Khalwat & Major Sin.
+            <div class="col-left">
+                ...<span class="hl-target c4 red">cannot marry herself</span>... <span class="hl-target c4 green">No marriage is valid without a Wali</span>... <span class="hl-target c4 blue">Father</span>... <span class="hl-target c4 blue">Grandfather</span>... false practice leads to <span class="hl-target c4 red">Khalwat and major sins</span>.
             </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c4"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c4-1" onclick="annotate('c4', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c4-2" onclick="extract('c4', this)" disabled>2. 📝 Build Flowchart</button>
         </div>
     </div>
 
@@ -334,7 +384,7 @@
 
     <div class="nav-bar">
         <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
-        <span class="slide-num" id="slideNum">1 / 22</span>
+        <span class="slide-num" id="slideNum">1 / 25</span>
         <button class="nav-btn" onclick="move(1)">Next ❯</button>
     </div>
 
@@ -342,6 +392,14 @@
         let current = 0;
         const slides = document.querySelectorAll('.slide');
         const numDisplay = document.getElementById('slideNum');
+
+        // DATABASE CATATAN
+        const notesDB = {
+            c1: ["<strong>TITLE: IMPM Selection</strong>", "• Who: Practicing Managers", "• Selection: Intelligence NOT enough -> Need Proven Records", "• Structure: 5 Modules, 2 Weeks ea, 16 Months"],
+            c2: ["<strong>TITLE: Trad. Hindu Wedding</strong>", "• Atmosphere: <strong>Lavish Affairs</strong>", "• Gift: Mangal Sutra", "• Transport: White Car / Horse / Elephant"],
+            c3: ["<strong>TITLE: Havasu Canyon Guide</strong>", "1. Location: N. Arizona", "2. Access: Hike / Horse (10-15 miles)", "3. Atmosphere: Quiet, Unsmiling"],
+            c4: ["<strong>TITLE: Rulings on The Wali</strong>", "• <span style='color:green'>[Dalil]</span> No Wali = Invalid", "• <span style='color:blue'>[Order]</span> <span class='flow-box'>Father</span> ➔ <span class='flow-box'>Grandfather</span>", "• <span style='color:red'>[Haram]</span> Self-Appointment ➔ Khalwat/Sin"]
+        };
 
         function move(dir) {
             slides[current].classList.remove('active');
@@ -372,6 +430,36 @@
                 btn.innerText += " ❌ Too Vague!";
             }
         }
+
+        function annotate(id, btn) {
+            const targets = document.querySelectorAll('.hl-target.' + id);
+            targets.forEach(t => t.classList.add('active'));
+            btn.disabled = true;
+            btn.innerText = "Done ✓";
+            document.getElementById('btn-' + id + '-2').disabled = false;
+        }
+
+        function extract(id, btn) {
+            const list = document.getElementById('list-' + id);
+            list.innerHTML = ""; 
+            const data = notesDB[id];
+            data.forEach((text, i) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'note-item';
+                    div.innerHTML = text;
+                    list.appendChild(div);
+                    setTimeout(() => div.classList.add('show'), 50);
+                }, i * 400);
+            });
+            btn.disabled = true;
+            btn.innerText = "Extracted ✓";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
     </script>
 
 </body>
