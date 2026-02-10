@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 04: Note Taking Basics - Abu Ismail Mannix</title>
+    <title>Module 5: Note-Taking - Abu Ismail Mannix</title>
     <style>
         :root {
-            /* SUPER DARK MODE PALETTE */
             --bg-color: #000000;
             --text-color: #FFFFFF;
             --accent-gold: #FFD700;
@@ -14,422 +13,335 @@
             --danger-color: #FF4444;
             --success-color: #00FF7F;
             --blue-accent: #3399FF;
-            --purple-accent: #B026FF; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             height: 100vh; width: 100vw; overflow: hidden;
         }
 
-        .presentation-container { width: 100%; height: 100%; position: relative; }
-
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 20px; padding-bottom: 120px;
+            padding: 20px; padding-bottom: 100px;
             opacity: 0; visibility: hidden; transition: opacity 0.4s ease;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            background-color: var(--bg-color); z-index: 1;
-            overflow-y: auto; -webkit-overflow-scrolling: touch;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
         }
 
         .slide.active { opacity: 1; visibility: visible; z-index: 5; }
-        .slide.centered { justify-content: center; }
+        .slide.centered { justify-content: center; text-align: center; }
 
         /* Typography */
-        h1 { color: var(--accent-gold); font-size: 2.2rem; margin-top: 30px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        h2 { color: var(--accent-gold); font-size: 1.6rem; margin-top: 20px; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; width: 100%; }
+        h1 { color: var(--accent-gold); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p, li { font-size: 1.2rem; line-height: 1.6; max-width: 900px; color: #EEE; }
         
-        p, li { font-size: 1.1rem; line-height: 1.5; max-width: 800px; margin-bottom: 10px; color: #EEE; }
-        ul, ol { text-align: left; margin-left: 20px; display: inline-block; width: 95%; }
-        li { margin-bottom: 8px; }
-        strong { color: var(--success-color); font-weight: 700; }
-        .danger-text { color: var(--danger-color); font-weight: bold; }
-
-        /* Boxes */
-        .highlight-box {
-            background-color: var(--highlight-bg); border: 1px solid #444;
-            border-left: 5px solid var(--accent-gold); padding: 15px; margin: 10px 0; border-radius: 8px;
-            width: 100%; max-width: 800px; text-align: left;
-        }
-
-        /* --- THE SPLIT SCREEN SYSTEM (BUKU vs CATATAN) --- */
-        .split-container {
-            display: flex; width: 100%; max-width: 1100px; height: 55vh;
-            gap: 15px; margin-top: 10px;
+        /* Layouts */
+        .text-container {
+            background: #111; border: 1px solid #333; padding: 20px; border-radius: 10px;
+            width: 100%; max-width: 900px; margin-bottom: 20px; text-align: left;
         }
         
-        /* Kolom Kiri: BUKU */
-        .source-text {
-            width: 50%; background-color: #222; padding: 20px;
-            border-radius: 10px; border: 1px solid #444;
-            font-family: 'Georgia', serif; text-align: left;
-            overflow-y: auto; font-size: 1rem; line-height: 1.8;
-            color: #AAA; position: relative;
+        .split-view {
+            display: flex; width: 100%; max-width: 1100px; height: 50vh; gap: 15px;
         }
-        .source-label {
-            position: absolute; top: 0; left: 0; background: #444; color: #FFF;
-            padding: 5px 15px; font-size: 0.8rem; font-weight: bold;
-            border-bottom-right-radius: 10px; z-index: 2;
-        }
+        .col-left { width: 50%; background: #111; padding: 15px; overflow-y: auto; border: 1px solid #333; }
+        .col-right { width: 50%; background: #fffde7; color: #000; padding: 15px; overflow-y: auto; border: 1px solid #d4af37; font-family: 'Courier New', monospace; }
 
-        /* Highlight Logic */
-        .hl-target { transition: all 0.5s; padding: 2px 0; border-radius: 3px; color: #AAA; }
-        .hl-target.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 5px var(--accent-gold); }
-        .hl-target.green.active { background-color: var(--success-color); color: #000; }
-        .hl-target.red.active { background-color: var(--danger-color); color: #FFF; }
-        .hl-target.blue.active { background-color: var(--blue-accent); color: #FFF; }
+        /* Interactive Elements */
+        .quiz-btn {
+            background: #222; color: #FFF; border: 1px solid #555; padding: 15px;
+            width: 100%; max-width: 600px; margin: 10px 0; cursor: pointer; text-align: left;
+            border-radius: 8px; font-size: 1.1rem; transition: all 0.2s;
+        }
+        .quiz-btn:hover { background: #333; border-color: var(--accent-gold); }
+        .quiz-btn.correct { background: rgba(0,255,127,0.2); border-color: var(--success-color); color: var(--success-color); }
+        .quiz-btn.wrong { background: rgba(255, 68, 68, 0.2); border-color: var(--danger-color); color: var(--danger-color); }
 
-        /* Kolom Kanan: CATATAN */
-        .my-notes {
-            width: 50%; background-color: #fffde7; 
-            padding: 30px 20px; border-radius: 10px; border: 1px solid #d4af37;
-            font-family: 'Courier New', monospace; text-align: left;
-            overflow-y: auto; color: #333; 
-            position: relative;
-            background-image: linear-gradient(#999 1px, transparent 1px);
-            background-size: 100% 1.5rem; line-height: 1.5rem; 
-        }
-        .note-label {
-            position: absolute; top: 0; right: 0; background: #d4af37; color: #000;
-            padding: 5px 15px; font-size: 0.8rem; font-weight: bold;
-            border-bottom-left-radius: 10px; z-index: 2;
-        }
+        .magic-text span { transition: all 0.5s; padding: 2px 5px; border-radius: 3px; }
+        .highlight-on { background-color: var(--accent-gold); color: #000; font-weight: bold; }
+        .highlight-red { background-color: var(--danger-color); color: #FFF; font-weight: bold; }
+        .dim-text { opacity: 0.2; }
 
-        .note-item { opacity: 0; transform: translateX(-20px); transition: all 0.5s ease; margin-bottom: 0; font-weight: bold; }
-        .note-item.show { opacity: 1; transform: translateX(0); }
-        .flow-box { border: 2px solid #333; padding: 3px 8px; display: inline-block; margin: 3px 0; background: #FFF; border-radius: 5px; }
+        /* Navigation */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #111; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn {
+            background: #333; color: var(--accent-gold); border: 1px solid var(--accent-gold);
+            padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;
+        }
+        .slide-num { color: #888; font-size: 0.9rem; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; }
 
-        /* Buttons & Toggles */
-        .btn-group { display: flex; gap: 15px; margin-top: 15px; }
-        .action-btn {
-            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
-            padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
-            font-size: 1rem; transition: all 0.2s;
+        /* Translation Toggle */
+        .trans-btn { 
+            background: transparent; border: 1px solid var(--blue-accent); color: var(--blue-accent);
+            padding: 5px 10px; cursor: pointer; font-size: 0.9rem; margin-bottom: 10px; border-radius: 4px;
         }
-        .action-btn:hover { background-color: var(--accent-gold); color: #000; }
-        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+        .id-text { display: none; color: var(--blue-accent); border-top: 1px solid #444; margin-top: 10px; padding-top: 10px; }
 
-        .lang-btn {
-            position: absolute; top: 10px; right: 10px;
-            background-color: transparent; color: var(--blue-accent); border: 1px solid var(--blue-accent);
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; z-index: 10;
-        }
-        .text-id { display: none; color: var(--blue-accent); margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;}
-
-        /* Navigation Fixed */
-        .nav-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; z-index: 9999; pointer-events: none; }
-        .control-btn { 
-            pointer-events: auto; position: absolute; bottom: 20px; 
-            background-color: #111; color: #FFF; border: 2px solid #444; 
-            padding: 12px 20px; border-radius: 8px; cursor: pointer; 
-            font-size: 1rem; font-weight: bold; box-shadow: 0 0 15px rgba(0,0,0,0.8);
-        }
-        .btn-prev { left: 20px; }
-        .btn-next { right: 20px; background-color: #222; border-color: var(--accent-gold); color: var(--accent-gold); }
-        .slide-number { 
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            font-size: 0.9rem; color: #888; background-color: rgba(0,0,0,0.8); padding: 5px 10px; border-radius: 10px;
-        }
-        .home-btn { 
-            position: fixed; top: 15px; left: 15px; font-size: 0.9rem; color: #AAA; 
-            text-decoration: none; border: 1px solid #333; padding: 8px 12px; 
-            border-radius: 5px; z-index: 9999; background-color: #000;
-        }
-
-        /* Theory Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 1rem; background-color: var(--highlight-bg); }
-        th, td { border: 1px solid #555; padding: 10px; text-align: left; }
-        th { background-color: #222; color: var(--accent-gold); font-size: 1.1rem; text-align: center; }
-
-        @media (min-width: 768px) {
-            h1 { font-size: 3.5rem; } h2 { font-size: 2.2rem; } 
-            .slide { padding: 60px; justify-content: center; }
-            .split-container { height: 60vh; }
-        }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-btn">🏠 Home</a>
+    <a href="day-04.html" class="home-btn">⬅️ Dashboard</a>
 
-    <div class="presentation-container">
-
-        <div class="slide active centered">
-            <h1>DAY 04: Note-Taking Basics</h1>
-            <p style="color: var(--blue-accent); font-size: 1.5rem;">Module 5</p>
-            <div style="margin-top: 30px; border: 1px solid #555; padding: 15px; border-radius: 30px;">
-                <span>"From Book to Brain"</span>
-            </div>
+    <div class="slide active centered">
+        <h1>Module 5: Note-Taking</h1>
+        <p style="color:var(--blue-accent)">Part 1: Filtering & Formatting</p>
+        <div style="margin-top:20px; border:1px solid #333; padding:20px; border-radius:10px;">
+            <p>"Stop Painting, Start Thinking."</p>
         </div>
-
-        <div class="slide">
-            <h2>What is Note-Taking?</h2>
-            <p>It is NOT copying the book.</p>
-            <div class="highlight-box">
-                <ul>
-                    <li>❌ <strong>Copying:</strong> Moving words from page to paper without thinking.</li>
-                    <li>✅ <strong>Note-Taking:</strong> Filtering, organizing, and synthesizing information.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Rule 1: Specific Titles</h2>
-            <p>A specific title helps your brain recall the content.</p>
-            <table>
-                <tr>
-                    <th style="color:var(--danger-color)">❌ Vague (Bad)</th>
-                    <th style="color:var(--success-color)">✅ Specific (Good)</th>
-                </tr>
-                <tr>
-                    <td>"Physical Activity"</td>
-                    <td>"Benefits of Physical Activity"</td>
-                </tr>
-                <tr>
-                    <td>"Manager Training"</td>
-                    <td>"IMPM Selection Criteria"</td>
-                </tr>
-            </table>
-            <p style="font-size:0.9rem; margin-top:10px;"><em>(Source: Module 5a, Page 1)</em></p>
-        </div>
-
-        <div class="slide">
-            <h2>Rule 2: The Filter</h2>
-            <p>Stop writing full sentences! Remove "Filler Words".</p>
-            <div class="highlight-box">
-                <p><strong>Original:</strong> "One of the best ways is to draw up a weekly schedule."</p>
-                <p style="text-align:center; font-size:2rem;">⬇️</p>
-                <p><strong>Notes:</strong> "Weekly Schedule"</p>
-            </div>
-            <p style="font-size:0.9rem;"><em>(Source: Module 5a, Page 1)</em></p>
-        </div>
-
-        <div class="slide">
-            <h2>Rule 3: Use Symbols</h2>
-            <p>Save time with abbreviations.</p>
-            <div style="display:flex; justify-content:center; gap:20px;">
-                <div style="text-align:left; background:#222; padding:20px; border-radius:10px;">
-                    <p>w/ = with</p>
-                    <p>b/c = because</p>
-                    <p>vs = against</p>
-                </div>
-                <div style="text-align:left; background:#222; padding:20px; border-radius:10px;">
-                    <p>➔ = leads to / causes</p>
-                    <p>↑ = increases</p>
-                    <p>↓ = decreases</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Case 1: Reading</h2>
-            <div class="source-text" style="width:80%; height:auto;">
-                <span class="source-label">READ FIRST</span>
-                <button class="lang-btn" onclick="toggleLang('r1')">Translate 🇮🇩</button>
-                <div id="r1-en">
-                    "Making time for extra study needs creativity... If you travel by a slow train, you have at least three hours of study time... Healthy ready-meals from the supermarket save you time over a hot stove... One of the best ways is to draw up a weekly schedule... Reduce your sleep gradually... Your study program should have time for relaxation..."
-                </div>
-                <div id="r1-id" class="text-id">
-                    "Meluangkan waktu tambahan untuk belajar membutuhkan kreativitas... Jika Anda bepergian dengan kereta lambat, setidaknya Anda memiliki waktu belajar selama tiga jam... Makanan sehat siap saji dari supermarket menghemat waktu Anda di depan kompor... Salah satu cara terbaik adalah menyusun jadwal mingguan... Kurangi waktu tidur secara bertahap... Program belajar Anda harus memiliki waktu untuk bersantai..."
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Case 1: The Filter</h2>
-            <p>Remove the junk, keep the gold.</p>
-            <div class="split-container">
-                <div class="source-text">
-                    <span class="source-label">TEXTBOOK</span>
-                    <div id="c1-txt">
-                        "Making time for extra study needs creativity... If you travel by a <span class="hl-target c1">slow train</span>, you have at least three hours... <span class="hl-target c1">Healthy ready-meals</span> from the supermarket save you time... One of the best ways is to draw up a <span class="hl-target c1">weekly schedule</span>... <span class="hl-target c1">Reduce your sleep</span> gradually... have time for <span class="hl-target c1">relaxation</span>...".
-                    </div>
-                </div>
-                <div class="my-notes">
-                    <span class="note-label">NOTEBOOK</span>
-                    <div id="list-c1"></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" id="btn-c1-1" onclick="annotate('c1', this)">1. 🖍️ Filter Text</button>
-                <button class="action-btn" id="btn-c1-2" onclick="extract('c1', this)" disabled>2. 📝 Extract Notes</button>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Case 2: Reading</h2>
-            <div class="source-text" style="width:80%; height:auto;">
-                <span class="source-label">READ FIRST</span>
-                <button class="lang-btn" onclick="toggleLang('r2')">Translate 🇮🇩</button>
-                <div id="r2-en">
-                    "The IMPM runs with five on-site modules of approximately 2 weeks each, spread over 16 months... Participants are usually practice managers who are sponsored by their companies."
-                </div>
-                <div id="r2-id" class="text-id">
-                    "IMPM berjalan dengan lima modul di tempat yang masing-masing berdurasi sekitar 2 minggu, tersebar selama 16 bulan... Peserta biasanya adalah manajer praktik yang disponsori oleh perusahaan mereka."
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Case 2: The Numbers</h2>
-            <p>Accuracy is key for Academic Texts.</p>
-            <div class="split-container">
-                <div class="source-text">
-                    <span class="source-label">TEXTBOOK</span>
-                    <div id="c2-txt">
-                        "The IMPM focuses on <span class="hl-target c2">experienced managers</span>. The program structure consists of <span class="hl-target c2">5 on-site modules</span> held in different countries. Each module lasts for <span class="hl-target c2">2 weeks</span>. The total duration is <span class="hl-target c2">16 months</span>. Participants are <span class="hl-target c2">sponsored by their companies</span>."
-                    </div>
-                </div>
-                <div class="my-notes">
-                    <span class="note-label">NOTEBOOK</span>
-                    <div id="list-c2"></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" id="btn-c2-1" onclick="annotate('c2', this)">1. 🖍️ Highlight Data</button>
-                <button class="action-btn" id="btn-c2-2" onclick="extract('c2', this)" disabled>2. 📝 Extract Notes</button>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Case 3: Reading</h2>
-            <div class="source-text" style="width:80%; height:auto;">
-                <span class="source-label">READ FIRST</span>
-                <button class="lang-btn" onclick="toggleLang('r3')">Translate 🇮🇩</button>
-                <div id="r3-en">
-                    "The groom gives her a necklace of black beads called a mangal sutra... He usually arrives in a white car or on a white horse, but he sometimes rides a white elephant..."
-                </div>
-                <div id="r3-id" class="text-id">
-                    "Pengantin pria memberinya kalung manik-manik hitam yang disebut mangal sutra... Dia biasanya tiba dengan mobil putih atau menunggang kuda putih, tetapi terkadang dia menunggang gajah putih..."
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Case 3: Inclusiveness</h2>
-            <p>Don't miss the variations!</p>
-            <div class="split-container">
-                <div class="source-text">
-                    <span class="source-label">TEXTBOOK</span>
-                    <div id="c3-txt">
-                        "The groom gives a necklace called <span class="hl-target c3">Mangal Sutra</span>. The bride wears <span class="hl-target c3">red and gold</span>. The groom arrives in a <span class="hl-target c3">white car</span> OR on a <span class="hl-target c3">white horse</span>, but sometimes a <span class="hl-target c3">white elephant</span>."
-                    </div>
-                </div>
-                <div class="my-notes">
-                    <span class="note-label">NOTEBOOK</span>
-                    <div id="list-c3"></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" id="btn-c3-1" onclick="annotate('c3', this)">1. 🖍️ Highlight All</button>
-                <button class="action-btn" id="btn-c3-2" onclick="extract('c3', this)" disabled>2. 📝 Extract Notes</button>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Case 4: Reading</h2>
-            <div class="source-text" style="width:80%; height:auto;">
-                <span class="source-label">READ FIRST</span>
-                <button class="lang-btn" onclick="toggleLang('r4')">Translate 🇮🇩</button>
-                <div id="r4-en">
-                    "There is a Canyon in Northern Arizona... called Havasu Canyon... It is not easy to get there... 10 or 15 miles from the nearest road. You have to hike... or hire a guide to take you on horseback..."
-                </div>
-                <div id="r4-id" class="text-id">
-                    "Ada sebuah Ngarai di Arizona Utara... bernama Ngarai Havasu... Tidak mudah untuk sampai ke sana... 10 atau 15 mil dari jalan terdekat. Anda harus mendaki... atau menyewa pemandu untuk membawa Anda dengan kuda..."
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Case 4: The Organizer</h2>
-            <p>Turn messy paragraphs into structured lists.</p>
-            <div class="split-container">
-                <div class="source-text">
-                    <span class="source-label">TEXTBOOK</span>
-                    <div id="c4-txt">
-                        "There is a Canyon in <span class="hl-target c4">Northern Arizona</span>... 10 or 15 miles from the nearest road. You have to <span class="hl-target c4">hike or ride a horse</span>. The village is <span class="hl-target c4">quiet</span>. Dogs sleep in the street. Villagers <span class="hl-target c4">do not smile</span>."
-                    </div>
-                </div>
-                <div class="my-notes">
-                    <span class="note-label">NOTEBOOK</span>
-                    <div id="list-c4"></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" id="btn-c4-1" onclick="annotate('c4', this)">1. 🖍️ Annotate</button>
-                <button class="action-btn" id="btn-c4-2" onclick="extract('c4', this)" disabled>2. 📝 Organize</button>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Case 5: Reading</h2>
-            <div class="source-text" style="width:80%; height:auto;">
-                <span class="source-label">READ FIRST</span>
-                <button class="lang-btn" onclick="toggleLang('r5')">Translate 🇮🇩</button>
-                <div id="r5-en">
-                    "Prophet ﷺ said: 'No marriage is valid without a Wali'... Usually the Wali is the father... If unavailable, it passes to Grandfather then Brother. A woman cannot marry herself off."
-                </div>
-                <div id="r5-id" class="text-id">
-                    "Nabi ﷺ bersabda: 'Tidak sah nikah tanpa Wali'... Biasanya Wali adalah ayah... Jika tidak ada, beralih ke Kakek lalu Saudara. Seorang wanita tidak bisa menikahkan dirinya sendiri."
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Case 5: The Hierarchy</h2>
-            <p>Use diagrams for processes/rulings.</p>
-            <div class="split-container">
-                <div class="source-text">
-                    <span class="source-label">FIQH BOOK</span>
-                    <div id="c5-txt">
-                        "Prophet ﷺ said: <span class="hl-target c5 green">No marriage is valid without a Wali</span>. The <span class="hl-target c5 blue">Father</span> is first. If unavailable, it passes to <span class="hl-target c5 blue">Grandfather</span> then <span class="hl-target c5 blue">Brother</span>. A woman <span class="hl-target c5 red">cannot marry herself off</span>."
-                    </div>
-                </div>
-                <div class="my-notes">
-                    <span class="note-label">NOTEBOOK</span>
-                    <div id="list-c5"></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" id="btn-c5-1" onclick="annotate('c5', this)">1. 🖍️ Color Code</button>
-                <button class="action-btn" id="btn-c5-2" onclick="extract('c5', this)" disabled>2. 📝 Build Flowchart</button>
-            </div>
-        </div>
-
-        <div class="slide centered">
-            <h2>Mission: Day 04</h2>
-            <div class="highlight-box" style="text-align: center;">
-                <h3>Your Task:</h3>
-                <p>1. Open Module 5 PDF.<br>2. <strong>Annotate</strong> first (don't write yet!).<br>3. <strong>Extract</strong> to notebook.</p>
-            </div>
-        </div>
-
     </div>
 
-    <div class="nav-container">
-        <button class="control-btn btn-prev" onclick="move(-1)">❮ Back</button>
-        <div class="slide-number" id="slideNum">1 / 16</div>
-        <button class="control-btn btn-next" onclick="move(1)">Next ❯</button>
+    <div class="slide">
+        <h2>Case 1: IMPM (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c1')">Translate 🇮🇩</button>
+            <p id="c1-en">"Although managers cannot be created in a classroom... we accept only practicing managers... sponsored by their companies. We ask companies to send 4 or 5 participants... The IMPM runs with 5 on-site modules of approximately 2 weeks each, spread over 16 months."</p>
+            <p id="c1-id" class="id-text">"Meskipun manajer tidak bisa diciptakan di kelas... kami hanya menerima manajer praktik... disponsori perusahaan. Kami minta perusahaan kirim 4-5 peserta... IMPM berjalan 5 modul, durasi 2 minggu, selama 16 bulan."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Step 1: Specific Title</h2>
+        <p>Which title is better?</p>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "Manager Training"</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "IMPM Selection & Structure"</button>
+        <p id="q1-feed" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+
+    <div class="slide">
+        <h2>Step 2: Filter & Nuance</h2>
+        <p><strong>Crucial Detail:</strong> What does the text imply about Intelligence?</p>
+        <div class="text-container">
+            <p>Companies look for: "Strong intellectual abilities" AND "Proven records".</p>
+            <p>Note: <span class="highlight-red">Intelligence alone is NOT an indicator.</span></p>
+            <p>We must capture this contrast!</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Step 3: The Numbers</h2>
+        <div class="text-container">
+            <p>Academic texts rely on scope. We need the numbers.</p>
+            <ul>
+                <li><span class="highlight-on">5 Modules</span></li>
+                <li><span class="highlight-on">2 Weeks</span> (Duration)</li>
+                <li><span class="highlight-on">16 Months</span> (Total)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 1: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">
+                <strong>Source:</strong><br>IMPM Text (Full)
+            </div>
+            <div class="col-right">
+                <strong>TITLE: IMPM Selection & Structure</strong><br><br>
+                • Who: Practicing Managers (Sponsored)<br>
+                • Selection: <br>
+                &nbsp;&nbsp;- Intelligence = NOT enough<br>
+                &nbsp;&nbsp;- Need: Proven Records<br>
+                • Structure:<br>
+                &nbsp;&nbsp;- 5 Modules (On-site)<br>
+                &nbsp;&nbsp;- 2 Weeks each<br>
+                &nbsp;&nbsp;- 16 Months total
+            </div>
+        </div>
+    </div>
+
+
+    <div class="slide">
+        <h2>Case 2: Hindu Wedding (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c2')">Translate 🇮🇩</button>
+            <p id="c2-en">"In India, traditional Hindu weddings are usually lavish affairs... The groom gives her a necklace called Mangal Sutra... He usually arrives in a white car or on a white horse, but he sometimes rides a white elephant..."</p>
+            <p id="c2-id" class="id-text">"Di India, pernikahan Hindu biasanya acara mewah... Pria memberi kalung Mangal Sutra... Dia datang dengan mobil putih atau kuda putih, kadang gajah putih..."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Step 1: Specific Title</h2>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "Indian Customs"</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "Trad. Hindu Wedding Customs"</button>
+    </div>
+
+    <div class="slide">
+        <h2>Step 2: Atmosphere</h2>
+        <p>The PDF says: <em>"Start by capturing the general atmosphere."</em></p>
+        <div class="text-container" style="text-align:center;">
+            <h3 class="highlight-on">STYLE: LAVISH AFFAIRS</h3>
+            <p>(Acara Mewah)</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Step 3: Capture All Options</h2>
+        <p>Don't just write "Car". Write ALL variations.</p>
+        <div class="text-container">
+            Transport Options:
+            <ul>
+                <li>1. White Car</li>
+                <li>OR 2. White Horse</li>
+                <li>OR 3. White Elephant</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 2: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">Hindu Text (Full)</div>
+            <div class="col-right">
+                <strong>TITLE: Trad. Hindu Wedding</strong><br><br>
+                • Atmosphere: <strong>Lavish Affairs</strong><br>
+                • Gifts: <br>
+                &nbsp;&nbsp;- Groom -> Bride: Mangal Sutra<br>
+                • Transport (Variations):<br>
+                &nbsp;&nbsp;- White Car / Horse / Elephant
+            </div>
+        </div>
+    </div>
+
+
+    <div class="slide">
+        <h2>Case 3: Havasu Canyon (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c3')">Translate 🇮🇩</button>
+            <p id="c3-en">"There is a Canyon in Northern Arizona... called Havasu Canyon... It is not easy to get there... 10 or 15 miles from the nearest road. You have to hike... or hire a guide to take you on horseback... The village is a quiet place... villagers do not smile."</p>
+            <p id="c3-id" class="id-text">"Ada Ngarai di Arizona Utara... Havasu... Tidak mudah dicapai... 10-15 mil dari jalan. Harus mendaki/kuda... Desa tenang... penduduk tidak senyum."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Step 1: Specific Title</h2>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">A. "Havasu Canyon Guide"</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">B. "Arizona Trip"</button>
+    </div>
+
+    <div class="slide">
+        <h2>Step 2: Filter Description</h2>
+        <p>Turn long sentences into punchy phrases.</p>
+        <div class="text-container">
+            <p class="dim-text">"The villagers stand in doorways and they do not smile."</p>
+            <p style="font-size:2rem; text-align:center;">⬇️</p>
+            <p class="highlight-on">"Villagers: Unsmiling"</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Step 3: Numbered List</h2>
+        <p>PDF Rule: <em>"For travel guides, use Numbered Lists."</em></p>
+        <div class="text-container">
+            <ol>
+                <li><strong>Location:</strong> North Arizona.</li>
+                <li><strong>Access:</strong> Hike / Horse.</li>
+                <li><strong>Atmosphere:</strong> Quiet.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 3: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">Havasu Text (Full)</div>
+            <div class="col-right">
+                <strong>TITLE: Havasu Canyon Guide</strong><br><br>
+                1. Location: N. Arizona (Havasupai)<br>
+                2. Access: 10-15 miles (Hike/Horse)<br>
+                3. Atmosphere: Quiet, Unsmiling dogs/people.
+            </div>
+        </div>
+    </div>
+
+
+    <div class="slide">
+        <h2>Case 4: The Wali (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c4')">Translate 🇮🇩</button>
+            <p id="c4-en">"A woman cannot marry herself off... No marriage is valid without a Wali... Usually the Wali is the father... If unavailable, it passes to Grandfather... A woman cannot appoint her own Wali... This false practice leads to bad consequences: The appointed Wali is usually unfit... leading to Khalwat and major sins."</p>
+            <p id="c4-id" class="id-text">"Wanita tidak bisa menikahkan diri sendiri... Tidak sah tanpa Wali... Biasanya Ayah... jika tidak ada ke Kakek... Wanita tidak bisa menunjuk Wali sendiri... Ini menyebabkan konsekuensi buruk: Wali tidak layak... mengarah ke Khalwat dan dosa besar."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Step 1: Specific Title</h2>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "Islamic Marriage"</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "Rulings on The Wali"</button>
+    </div>
+
+    <div class="slide">
+        <h2>Step 2: Cause & Effect</h2>
+        <p><strong>Warning:</strong> Self-Appointment leads to Sin.</p>
+        <div style="display:flex; gap:10px; align-items:center; justify-content:center; margin-top:20px;">
+            <div style="background:#333; padding:20px; border:1px solid #555;">
+                CAUSE:<br><span class="highlight-red">Self-Appointment</span>
+            </div>
+            <div style="font-size:2rem;">➔</div>
+            <div style="background:#333; padding:20px; border:1px solid #555;">
+                EFFECT:<br><span class="highlight-red">Unfit / Khalwat / Sin</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Step 3: Hierarchy</h2>
+        <p>Use arrows for order.</p>
+        <div class="text-container" style="text-align:center;">
+            <span class="highlight-on">Father</span> ➔ 
+            <span class="highlight-on">Grandfather</span> ➔ 
+            <span class="highlight-on">Brother</span>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 4: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">Wali Text (Full)</div>
+            <div class="col-right">
+                <strong>TITLE: Rulings on The Wali</strong><br><br>
+                • Ruling: No Wali = Invalid.<br>
+                • Hierarchy: Father ➔ Grandfather ➔ Brother.<br>
+                • <strong>PROHIBITION:</strong> Self-Appointment.<br>
+                &nbsp;&nbsp;➔ Cause: Woman appoints friend.<br>
+                &nbsp;&nbsp;➔ Effect: Khalwat & Major Sin.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Mission Complete!</h1>
+        <p>You have mastered filtering, nuance, and formatting.</p>
+        <div style="margin-top:40px;">
+            <a href="day-04.html" style="text-decoration:none;">
+                <button class="nav-btn" style="margin-right:20px;">⬅️ Back to Dashboard</button>
+            </a>
+            <a href="day-04-m06.html" style="text-decoration:none;">
+                <button class="nav-btn" style="background:var(--accent-gold); color:#000;">➡️ Next: Module 6</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span class="slide-num" id="slideNum">1 / 22</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
     </div>
 
     <script>
         let current = 0;
         const slides = document.querySelectorAll('.slide');
         const numDisplay = document.getElementById('slideNum');
-
-        // DATABASE CATATAN
-        const notesDB = {
-            c1: ["• Use Travel Time (Train)", "• Eat Ready-Meals", "• Weekly Schedule", "• Reduce Sleep", "• Relaxation"],
-            c2: ["• Target: Experienced Managers", "• Structure: 5 Modules", "• Duration: 2 Weeks ea.", "• Total: 16 Months", "• Cost: Sponsored"],
-            c3: ["• Gift: Mangal Sutra", "• Dress: Red & Gold", "• Transport Options:", "&nbsp;&nbsp;- White Car", "&nbsp;&nbsp;- White Horse", "&nbsp;&nbsp;- White Elephant"],
-            c4: ["<strong>[Location]</strong>", "• North Arizona", "<br><strong>[Access]</strong>", "• Hike or Horse", "<br><strong>[Atmosphere]</strong>", "• Quiet / Unsmiling"],
-            c5: ["<span class='green'>[Dalil]</span> No Wali = Invalid", "<br><span class='blue'>[Order]</span>", "<span class='flow-box'>Father</span> ➔ <span class='flow-box'>Grandfather</span> ➔ <span class='flow-box'>Brother</span>", "<br><span class='red'>[Haram]</span> Self-Marriage"]
-        };
 
         function move(dir) {
             slides[current].classList.remove('active');
@@ -441,52 +353,25 @@
             numDisplay.innerText = (current + 1) + " / " + slides.length;
         }
 
-        // Toggle Language for Reading Slides
-        function toggleLang(id) {
+        function toggleID(id) {
+            const el = document.getElementById(id + '-id');
             const en = document.getElementById(id + '-en');
-            const idText = document.getElementById(id + '-id');
-            if (en.style.display === "none") {
-                en.style.display = "block"; idText.style.display = "none";
+            if(el.style.display === 'block') {
+                el.style.display = 'none'; en.style.display = 'block';
             } else {
-                en.style.display = "none"; idText.style.display = "block";
+                el.style.display = 'block'; en.style.display = 'none';
             }
         }
 
-        function annotate(id, btn) {
-            // 1. Aktifkan Highlight di Teks Kiri
-            const targets = document.querySelectorAll('.hl-target.' + id);
-            targets.forEach(t => t.classList.add('active'));
-
-            // 2. Disable tombol ini, Enable tombol extract
-            btn.disabled = true;
-            btn.innerText = "Done ✓";
-            document.getElementById('btn-' + id + '-2').disabled = false;
+        function checkQuiz(btn, isCorrect) {
+            if(isCorrect) {
+                btn.classList.add('correct');
+                btn.innerText += " ✅ Correct!";
+            } else {
+                btn.classList.add('wrong');
+                btn.innerText += " ❌ Too Vague!";
+            }
         }
-
-        function extract(id, btn) {
-            const list = document.getElementById('list-' + id);
-            list.innerHTML = ""; // Reset
-            
-            const data = notesDB[id];
-            
-            data.forEach((text, i) => {
-                setTimeout(() => {
-                    const div = document.createElement('div');
-                    div.className = 'note-item';
-                    div.innerHTML = text;
-                    list.appendChild(div);
-                    setTimeout(() => div.classList.add('show'), 50);
-                }, i * 400);
-            });
-
-            btn.disabled = true;
-            btn.innerText = "Extracted ✓";
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
-            if(e.key === 'ArrowLeft') move(-1);
-        });
     </script>
 
 </body>
