@@ -81,12 +81,12 @@
         .marker.red.active { background-color: var(--danger-color); color: #FFF; font-weight: bold; }
         .marker.blue.active { background-color: var(--blue-accent); color: #FFF; font-weight: bold; }
 
-        /* REASONING BOX (NEW FEATURE) */
+        /* REASONING BOX */
         .reason-box {
             background-color: #111; border: 1px dashed #666; padding: 15px;
             border-radius: 8px; margin-top: 10px; text-align: left;
             opacity: 0; transform: translateY(10px); transition: all 0.5s ease;
-            max-width: 800px; width: 100%; display: none; /* Hidden by default */
+            max-width: 800px; width: 100%; display: none;
         }
         .reason-box.show { opacity: 1; transform: translateY(0); display: block; }
         .reason-title { color: var(--accent-gold); font-weight: bold; margin-bottom: 5px; display: block; }
@@ -98,7 +98,6 @@
         }
         .magic-btn:active { background-color: var(--accent-gold); color: #000; }
 
-        /* Toggle Button Language */
         .lang-btn {
             background-color: var(--blue-accent); color: #FFF; border: none;
             padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 15px;
@@ -192,6 +191,39 @@
         </div>
 
         <div class="slide">
+            <h2>The 3-Step Strategy</h2>
+            <p>Don't touch your highlighter yet!</p>
+            <div class="highlight-box">
+                <ol>
+                    <li>👀 <strong>Read Silently:</strong> Get the general overview first.</li>
+                    <li>🗣️ <strong>Read Aloud:</strong> Engage your ears (Auditory Learning).</li>
+                    <li>🖍️ <strong>Annotate:</strong> Now (3rd time), mark the key points.</li>
+                </ol>
+            </div>
+            <p style="margin-top:20px; color:#888;"><em>"Annotating at first sight is dangerous."</em></p>
+        </div>
+
+        <div class="slide">
+            <h2>The Toolkit</h2>
+            <p>What can you do on the page?</p>
+            <div class="highlight-box">
+                <ul>
+                    <li><strong>Keywords Only:</strong> Don't highlight sentences. Pick words.</li>
+                    <li><strong>Marginal Notes:</strong> Write summaries/questions in the margin.</li>
+                    <li><strong>Symbols:</strong> Use shortcuts (e.g., use "4" instead of "four").</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="danger-text">The "Yellow Disease"</h2>
+            <p>Highlighting everything = Highlighting nothing.</p>
+            <div class="magic-text yellow-disease">
+                <span>The International Masters Program for Managers (IMPM) is a unique degree program that focuses on experienced managers. The program structure consists of five on-site modules that are held in different countries. Each of these modules lasts for exactly 2 weeks. The total duration of the program is 16 months. Participants are usually practice managers who are sponsored by their companies.</span>
+            </div>
+        </div>
+
+        <div class="slide">
             <h2>Case 1: Academic Text</h2>
             <button class="lang-btn" onclick="toggleLang('c1')">🔄 Translate (EN / ID)</button>
             <div id="c1-en" class="magic-text">
@@ -199,14 +231,6 @@
             </div>
             <div id="c1-id" class="magic-text lang-text">
                 "Program Magister Internasional untuk Manajer (IMPM) adalah program gelar unik yang berfokus pada manajer berpengalaman. Struktur program terdiri dari lima modul di tempat yang diadakan di berbagai negara. Masing-masing modul ini berlangsung selama tepat 2 minggu. Total durasi program adalah 16 bulan. Peserta biasanya adalah manajer praktik yang disponsori oleh perusahaan mereka."
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2 class="danger-text">The Mistake (Yellow Disease)</h2>
-            <p>Highlighting everything = Highlighting nothing.</p>
-            <div class="magic-text yellow-disease">
-                <span>The International Masters Program for Managers (IMPM) is a unique degree program that focuses on experienced managers. The program structure consists of five on-site modules that are held in different countries. Each of these modules lasts for exactly 2 weeks. The total duration of the program is 16 months. Participants are usually practice managers who are sponsored by their companies.</span>
             </div>
         </div>
 
@@ -258,33 +282,14 @@
         </div>
 
         <div class="slide">
-            <h2 class="danger-text">The Mistake</h2>
-            <div class="magic-text yellow-disease">
-                <span>The groom gives the bride a necklace called 'Mangal Sutra' (blessed thread). The bride wears red and gold; the groom arrives on a white horse. The couple walks around a sacred fire seven times while making 7 promises.</span>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Step 1: Terminology</h2>
+            <h2>Annotating Culture</h2>
             <div class="magic-text">
-                The groom gives the bride a necklace called <span class="marker gold m-c2-s1">"Mangal Sutra"</span> (blessed thread).
+                The groom gives the bride a necklace called <span class="marker gold m-c2-s1">"Mangal Sutra"</span>. The bride wears <span class="marker gold m-c2-s1">red and gold</span>; the groom arrives on a <span class="marker gold m-c2-s1">white horse</span>. The couple walks around a sacred fire <span class="marker gold m-c2-s1">seven times</span>.
             </div>
-            <button class="magic-btn" onclick="toggleReason('r-c2-s1', 'm-c2-s1')">✨ Identify Terms</button>
+            <button class="magic-btn" onclick="toggleReason('r-c2-s1', 'm-c2-s1')">✨ Identify Customs</button>
             <div id="r-c2-s1" class="reason-box">
                 <span class="reason-title">💡 Why highlight this?</span>
-                Ini adalah <strong>Istilah Asing (Terminologi)</strong>. Kata-kata dalam bahasa asli (Sanskerta/Arab/Latin) hampir selalu penting untuk diingat definisinya.
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2>Step 2: Symbols & Rituals</h2>
-            <div class="magic-text">
-                The bride wears <span class="marker gold m-c2-s2">red and gold</span>; the groom arrives on a <span class="marker gold m-c2-s2">white horse</span>. The couple walks around a sacred fire <span class="marker gold m-c2-s2">seven times</span>.
-            </div>
-            <button class="magic-btn" onclick="toggleReason('r-c2-s2', 'm-c2-s2')">✨ Identify Customs</button>
-            <div id="r-c2-s2" class="reason-box">
-                <span class="reason-title">💡 Why highlight this?</span>
-                Ini adalah <strong>Simbol Budaya</strong>. Warna (Merah/Emas), Hewan (Kuda Putih), dan Angka Ritual (7 kali) adalah ciri khas unik yang membedakan budaya ini dengan lainnya.
+                <strong>Terminologi & Simbol:</strong> Fokus pada nama asli ("Mangal Sutra"), warna khas (Merah/Emas), dan angka ritual (7 kali). Ini yang membedakan satu budaya dengan lainnya.
             </div>
         </div>
 
@@ -296,13 +301,6 @@
             </div>
             <div id="c3-id" class="magic-text lang-text">
                 "Nabi ﷺ bersabda: 'Tidak sah nikah tanpa wali.' Ayah adalah yang pertama. Jika tidak ada, beralih ke Kakek lalu Saudara Laki-laki. Seorang wanita tidak bisa menikahkan dirinya sendiri."
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2 class="danger-text">The Mistake</h2>
-            <div class="magic-text yellow-disease">
-                <span>Prophet ﷺ said: 'No marriage is valid without a wali.' The Father is first. If unavailable, it passes to Grandfather then Brother. A woman cannot marry herself off.</span>
             </div>
         </div>
 
@@ -321,9 +319,9 @@
             <div id="r-c3" class="reason-box">
                 <span class="reason-title">💡 Why these colors?</span>
                 <ul>
-                    <li><strong style="color:var(--success-color)">Hijau (Dalil):</strong> Ini landasan hukumnya (Hadits). Wajib hafal.</li>
-                    <li><strong style="color:var(--blue-accent)">Biru (Aturan):</strong> Ini urutan hierarki Wali. Salah urutan = Tidak sah.</li>
-                    <li><strong style="color:var(--danger-color)">Merah (Larangan):</strong> Peringatan keras. Jika dilanggar, pernikahan batal (Zina).</li>
+                    <li><strong style="color:var(--success-color)">Hijau (Dalil):</strong> Landasan hukum (Hadits). Wajib hafal.</li>
+                    <li><strong style="color:var(--blue-accent)">Biru (Aturan):</strong> Hierarki Wali. Salah urutan = Tidak sah.</li>
+                    <li><strong style="color:var(--danger-color)">Merah (Larangan):</strong> Peringatan keras. Jika dilanggar, pernikahan batal.</li>
                 </ul>
             </div>
         </div>
@@ -359,7 +357,7 @@
 
     <div class="nav-container">
         <button class="control-btn btn-prev" onclick="move(-1)">❮ Back</button>
-        <div class="slide-number" id="slideNum">1 / 17</div>
+        <div class="slide-number" id="slideNum">1 / 16</div>
         <button class="control-btn btn-next" onclick="move(1)">Next ❯</button>
     </div>
 
@@ -378,7 +376,6 @@
             numDisplay.innerText = (current + 1) + " / " + slides.length;
         }
 
-        // 1. TOGGLE BAHASA
         function toggleLang(idBase) {
             const en = document.getElementById(idBase + '-en');
             const id = document.getElementById(idBase + '-id');
@@ -389,13 +386,10 @@
             }
         }
 
-        // 2. HIGHLIGHT + REASONING
         function toggleReason(reasonId, markerClass) {
-            // Toggle Marker Warna
             const markers = document.querySelectorAll('.' + markerClass);
             markers.forEach(mark => mark.classList.toggle('active'));
             
-            // Toggle Kotak Penjelasan
             const box = document.getElementById(reasonId);
             if (box.classList.contains('show')) {
                 box.classList.remove('show');
@@ -406,7 +400,6 @@
             }
         }
 
-        // 3. JOURNAL HANDWRITING
         function revealJournal() {
             const notes = document.querySelectorAll('.h-note');
             notes.forEach((note, index) => {
