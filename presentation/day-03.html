@@ -41,7 +41,7 @@
         .slide.centered { justify-content: center; }
 
         /* Typography */
-        h1 { color: var(--accent-gold); font-size: 2.2rem; margin-top: 40px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { color: var(--accent-gold); font-size: 2.2rem; margin-top: 30px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
         h2 { color: var(--accent-gold); font-size: 1.6rem; margin-top: 20px; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; width: 100%; }
         
         p, li { font-size: 1.1rem; line-height: 1.5; max-width: 800px; margin-bottom: 10px; color: #EEE; }
@@ -63,20 +63,33 @@
             font-family: 'Georgia', serif; font-size: 1.1rem; line-height: 1.8;
             background-color: #222; padding: 20px; border-radius: 5px;
             border: 1px solid #555; text-align: left; margin-bottom: 15px; color: #CCC;
+            width: 100%; max-width: 800px;
         }
+
+        .lang-text { display: none; border-color: var(--blue-accent); color: var(--blue-accent); }
+
+        /* The Yellow Disease Style */
+        .yellow-disease span { background-color: yellow; color: black; }
         
         .marker {
             background-color: transparent; color: #CCC; transition: all 0.5s ease;
             padding: 2px 4px; border-radius: 3px;
         }
         
-        /* 1. Standard Gold (Untuk Teks Umum) */
         .marker.gold.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 10px var(--accent-gold); }
+        .marker.green.active { background-color: var(--success-color); color: #000; font-weight: bold; }
+        .marker.red.active { background-color: var(--danger-color); color: #FFF; font-weight: bold; }
+        .marker.blue.active { background-color: var(--blue-accent); color: #FFF; font-weight: bold; }
 
-        /* 2. Traffic Light System (Untuk Fiqih) */
-        .marker.green.active { background-color: var(--success-color); color: #000; font-weight: bold; box-shadow: 0 0 10px var(--success-color); } /* Dalil */
-        .marker.red.active { background-color: var(--danger-color); color: #FFF; font-weight: bold; box-shadow: 0 0 10px var(--danger-color); } /* Larangan */
-        .marker.blue.active { background-color: var(--blue-accent); color: #FFF; font-weight: bold; box-shadow: 0 0 10px var(--blue-accent); } /* Aturan/Urutan */
+        /* REASONING BOX (NEW FEATURE) */
+        .reason-box {
+            background-color: #111; border: 1px dashed #666; padding: 15px;
+            border-radius: 8px; margin-top: 10px; text-align: left;
+            opacity: 0; transform: translateY(10px); transition: all 0.5s ease;
+            max-width: 800px; width: 100%; display: none; /* Hidden by default */
+        }
+        .reason-box.show { opacity: 1; transform: translateY(0); display: block; }
+        .reason-title { color: var(--accent-gold); font-weight: bold; margin-bottom: 5px; display: block; }
 
         .magic-btn {
             background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
@@ -85,32 +98,23 @@
         }
         .magic-btn:active { background-color: var(--accent-gold); color: #000; }
 
-        /* --- NOTEBOOK EFFECT (Slide Havasu) --- */
+        /* Toggle Button Language */
+        .lang-btn {
+            background-color: var(--blue-accent); color: #FFF; border: none;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 15px;
+        }
+
+        /* --- NOTEBOOK EFFECT --- */
         .notebook {
             display: flex; width: 100%; max-width: 800px;
             background-color: #1a1a1a; border: 1px solid #444;
             border-radius: 5px; margin-top: 10px; position: relative;
         }
-        .notebook::before { /* Garis tengah buku */
-            content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px;
-            width: 2px; background-color: #333;
-        }
-        .col-left, .col-right {
-            width: 50%; padding: 15px; text-align: left; font-size: 1rem;
-        }
-        .col-left {
-            font-family: 'Georgia', serif; color: #CCC; border-right: 1px solid #333;
-        }
-        .col-right {
-            font-family: 'Brush Script MT', 'Comic Sans MS', cursive; /* Font Tulis Tangan */
-            color: var(--blue-accent);
-        }
-        .handwriting {
-            opacity: 0; transform: translateY(10px); transition: all 0.8s ease;
-        }
-        .handwriting.visible {
-            opacity: 1; transform: translateY(0);
-        }
+        .col-left, .col-right { width: 50%; padding: 15px; text-align: left; font-size: 1rem; }
+        .col-left { font-family: 'Georgia', serif; color: #CCC; border-right: 1px solid #333; }
+        .col-right { font-family: 'Brush Script MT', 'Comic Sans MS', cursive; color: var(--blue-accent); }
+        .handwriting { opacity: 0; transition: all 0.8s ease; }
+        .handwriting.visible { opacity: 1; }
 
         /* --- NAVIGATION FIXED --- */
         .nav-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; z-index: 9999; pointer-events: none; }
@@ -132,7 +136,6 @@
             border-radius: 5px; z-index: 9999; background-color: #000;
         }
         
-        /* Table for Definition Slide */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; background-color: var(--highlight-bg); }
         th, td { border: 1px solid #555; padding: 8px; text-align: left; }
         th { background-color: #222; color: var(--accent-gold); font-size: 1rem; text-align: center; }
@@ -160,71 +163,174 @@
         </div>
 
         <div class="slide">
-            <h2>🛑 Checkpoint: Day 02 Review</h2>
-            <p>Before we start, do you remember these?</p>
+            <h2>🛑 Checkpoint: Day 02</h2>
             <div class="highlight-box checkpoint-box">
                 <ul>
-                    <li>✅ <strong>Prefix Trap:</strong> What is the difference between <em>Ante-</em> and <em>Anti-</em>?</li>
-                    <li>✅ <strong>Homophone Trap:</strong> <em>Accept</em> vs <em>Except</em>?</li>
-                    <li>✅ <strong>SQ3R:</strong> Can you name the 5 steps? (S-Q-R-R-R)</li>
+                    <li>✅ <strong>Prefix:</strong> Ante- (Before) vs Anti- (Against).</li>
+                    <li>✅ <strong>Homophone:</strong> Accept vs Except.</li>
+                    <li>✅ <strong>SQ3R:</strong> Survey, Question, Read, Recite, Review.</li>
                 </ul>
             </div>
         </div>
 
         <div class="slide">
-            <h2>What is Annotating?</h2>
-            <p>Don't confuse it with Note-taking!</p>
+            <h2>Annotating vs Note-Taking</h2>
             <table>
                 <tr>
                     <th style="width:50%;">Annotating 🖍️</th>
                     <th style="width:50%;">Note-Taking 📝</th>
                 </tr>
                 <tr>
-                    <td>Writing <strong>ON</strong> the text (Highlight, Underline).</td>
-                    <td>Writing <strong>OUTSIDE</strong> the text (Notebook).</td>
+                    <td>Writing <strong>ON</strong> the text.</td>
+                    <td>Writing <strong>OUTSIDE</strong> the text.</td>
                 </tr>
                 <tr>
-                    <td><strong>Goal:</strong> Interactive dialogue while reading.</td>
-                    <td><strong>Goal:</strong> Summarizing after reading.</td>
+                    <td>Interactive dialogue.</td>
+                    <td>Summarizing / Synthesizing.</td>
                 </tr>
             </table>
         </div>
 
         <div class="slide">
-            <h2 class="danger-text">The "Yellow Disease"</h2>
-            <p><strong>Critique of Over-Highlighting:</strong></p>
-            <div class="highlight-box">
-                <p>Many students highlight <strong>entire sentences</strong>. This is wrong!</p>
+            <h2>Case 1: Academic Text</h2>
+            <button class="lang-btn" onclick="toggleLang('c1')">🔄 Translate (EN / ID)</button>
+            <div id="c1-en" class="magic-text">
+                "The International Masters Program for Managers (IMPM) is a unique degree program that focuses on experienced managers. The program structure consists of five on-site modules that are held in different countries. Each of these modules lasts for exactly 2 weeks. The total duration of the program is 16 months. Participants are usually practice managers who are sponsored by their companies."
+            </div>
+            <div id="c1-id" class="magic-text lang-text">
+                "Program Magister Internasional untuk Manajer (IMPM) adalah program gelar unik yang berfokus pada manajer berpengalaman. Struktur program terdiri dari lima modul di tempat yang diadakan di berbagai negara. Masing-masing modul ini berlangsung selama tepat 2 minggu. Total durasi program adalah 16 bulan. Peserta biasanya adalah manajer praktik yang disponsori oleh perusahaan mereka."
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="danger-text">The Mistake (Yellow Disease)</h2>
+            <p>Highlighting everything = Highlighting nothing.</p>
+            <div class="magic-text yellow-disease">
+                <span>The International Masters Program for Managers (IMPM) is a unique degree program that focuses on experienced managers. The program structure consists of five on-site modules that are held in different countries. Each of these modules lasts for exactly 2 weeks. The total duration of the program is 16 months. Participants are usually practice managers who are sponsored by their companies.</span>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Step 1: Who is the Target?</h2>
+            <div class="magic-text">
+                The International Masters Program for Managers (IMPM) is a unique degree program that focuses on <span class="marker gold m-c1-s1">experienced managers</span>.
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c1-s1', 'm-c1-s1')">✨ Identify Subject</button>
+            <div id="r-c1-s1" class="reason-box">
+                <span class="reason-title">💡 Why highlight this?</span>
+                Ini adalah <strong>Subjek Utama</strong>. Kita harus tahu untuk siapa program ini (bukan untuk fresh graduate, tapi manajer berpengalaman). Abaikan kata sifat umum lainnya.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Step 2: The Structure</h2>
+            <div class="magic-text">
+                The program structure consists of <span class="marker gold m-c1-s2">5 on-site modules</span> that are held in different countries. Each of these modules lasts for <span class="marker gold m-c1-s2">2 weeks</span>.
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c1-s2', 'm-c1-s2')">✨ Identify Numbers</button>
+            <div id="r-c1-s2" class="reason-box">
+                <span class="reason-title">💡 Why highlight this?</span>
+                Ini adalah <strong>Fakta & Angka</strong>. Dalam ujian pilihan ganda, detail spesifik seperti jumlah modul dan durasi per modul adalah pertanyaan favorit.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Step 3: Duration & Cost</h2>
+            <div class="magic-text">
+                The total duration of the program is <span class="marker gold m-c1-s3">16 months</span>. Participants are usually practice managers who are <span class="marker gold m-c1-s3">sponsored by companies</span>.
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c1-s3', 'm-c1-s3')">✨ Identify Details</button>
+            <div id="r-c1-s3" class="reason-box">
+                <span class="reason-title">💡 Why highlight this?</span>
+                Ini adalah <strong>Logistik & Syarat</strong>. "16 bulan" adalah total waktu. "Sponsored" adalah syarat krusial (biasanya biaya tidak ditanggung sendiri).
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Case 2: Cultural Text</h2>
+            <button class="lang-btn" onclick="toggleLang('c2')">🔄 Translate (EN / ID)</button>
+            <div id="c2-en" class="magic-text">
+                "The groom gives the bride a necklace called 'Mangal Sutra' (blessed thread). The bride wears red and gold; the groom arrives on a white horse. The couple walks around a sacred fire seven times while making 7 promises."
+            </div>
+            <div id="c2-id" class="magic-text lang-text">
+                "Pengantin pria memberi pengantin wanita kalung yang disebut 'Mangal Sutra' (benang suci). Pengantin wanita memakai merah dan emas; pengantin pria datang dengan kuda putih. Pasangan itu berjalan mengelilingi api suci tujuh kali sambil membuat 7 janji."
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="danger-text">The Mistake</h2>
+            <div class="magic-text yellow-disease">
+                <span>The groom gives the bride a necklace called 'Mangal Sutra' (blessed thread). The bride wears red and gold; the groom arrives on a white horse. The couple walks around a sacred fire seven times while making 7 promises.</span>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Step 1: Terminology</h2>
+            <div class="magic-text">
+                The groom gives the bride a necklace called <span class="marker gold m-c2-s1">"Mangal Sutra"</span> (blessed thread).
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c2-s1', 'm-c2-s1')">✨ Identify Terms</button>
+            <div id="r-c2-s1" class="reason-box">
+                <span class="reason-title">💡 Why highlight this?</span>
+                Ini adalah <strong>Istilah Asing (Terminologi)</strong>. Kata-kata dalam bahasa asli (Sanskerta/Arab/Latin) hampir selalu penting untuk diingat definisinya.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Step 2: Symbols & Rituals</h2>
+            <div class="magic-text">
+                The bride wears <span class="marker gold m-c2-s2">red and gold</span>; the groom arrives on a <span class="marker gold m-c2-s2">white horse</span>. The couple walks around a sacred fire <span class="marker gold m-c2-s2">seven times</span>.
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c2-s2', 'm-c2-s2')">✨ Identify Customs</button>
+            <div id="r-c2-s2" class="reason-box">
+                <span class="reason-title">💡 Why highlight this?</span>
+                Ini adalah <strong>Simbol Budaya</strong>. Warna (Merah/Emas), Hewan (Kuda Putih), dan Angka Ritual (7 kali) adalah ciri khas unik yang membedakan budaya ini dengan lainnya.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Case 3: Fiqh Text</h2>
+            <button class="lang-btn" onclick="toggleLang('c3')">🔄 Translate (EN / ID)</button>
+            <div id="c3-en" class="magic-text">
+                "Prophet ﷺ said: 'No marriage is valid without a wali.' The Father is first. If unavailable, it passes to Grandfather then Brother. A woman cannot marry herself off."
+            </div>
+            <div id="c3-id" class="magic-text lang-text">
+                "Nabi ﷺ bersabda: 'Tidak sah nikah tanpa wali.' Ayah adalah yang pertama. Jika tidak ada, beralih ke Kakek lalu Saudara Laki-laki. Seorang wanita tidak bisa menikahkan dirinya sendiri."
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2 class="danger-text">The Mistake</h2>
+            <div class="magic-text yellow-disease">
+                <span>Prophet ﷺ said: 'No marriage is valid without a wali.' The Father is first. If unavailable, it passes to Grandfather then Brother. A woman cannot marry herself off.</span>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Analysis: Traffic Light Method</h2>
+            <div style="font-size:0.9rem; margin-bottom:10px;">
+                <span style="color:var(--success-color)">● Evidence</span> &nbsp; 
+                <span style="color:var(--danger-color)">● Warning</span> &nbsp; 
+                <span style="color:var(--blue-accent)">● Rules</span>
+            </div>
+            <div class="magic-text">
+                Prophet ﷺ said: <span class="marker green m-c3">"No marriage is valid without a wali."</span><br><br>
+                The <span class="marker blue m-c3">Father</span> is first. If unavailable, it passes to <span class="marker blue m-c3">Grandfather ➔ Brother</span>.<br><br> A woman <span class="marker red m-c3">cannot marry herself off</span>.
+            </div>
+            <button class="magic-btn" onclick="toggleReason('r-c3', 'm-c3')">🚥 Analyze Rulings</button>
+            <div id="r-c3" class="reason-box">
+                <span class="reason-title">💡 Why these colors?</span>
                 <ul>
-                    <li>❌ If everything is highlighted, nothing is important.</li>
-                    <li>❌ It clutters the page and makes review difficult.</li>
-                    <li>✅ <strong>Golden Rule:</strong> Only highlight <strong>NEW</strong> & <strong>CRITICAL</strong> info.</li>
+                    <li><strong style="color:var(--success-color)">Hijau (Dalil):</strong> Ini landasan hukumnya (Hadits). Wajib hafal.</li>
+                    <li><strong style="color:var(--blue-accent)">Biru (Aturan):</strong> Ini urutan hierarki Wali. Salah urutan = Tidak sah.</li>
+                    <li><strong style="color:var(--danger-color)">Merah (Larangan):</strong> Peringatan keras. Jika dilanggar, pernikahan batal (Zina).</li>
                 </ul>
             </div>
         </div>
 
         <div class="slide">
-            <h2>Case 1: Academic Text</h2>
-            <p>Topic: <em>The IMPM Program</em></p>
-            <div class="magic-text">
-                The International Masters Program for Managers (IMPM) is a unique degree program that focuses on <span class="marker gold m1">experienced managers</span>. The program structure consists of <span class="marker gold m1">5 on-site modules</span> that are held in different countries. Each of these modules lasts for <span class="marker gold m1">2 weeks</span>. The total duration of the program is <span class="marker gold m1">16 months</span>. Participants are usually practice managers who are <span class="marker gold m1">sponsored by companies</span>.
-            </div>
-            <button class="magic-btn" onclick="toggleMagic('m1')">✨ Reveal Keywords</button>
-        </div>
-
-        <div class="slide">
-            <h2>Case 2: Cultural Text</h2>
-            <p>Topic: <em>Traditional Hindu Weddings</em></p>
-            <div class="magic-text">
-                The groom gives the bride a necklace called <span class="marker gold m_hindu">"Mangal Sutra"</span> (blessed thread). The bride wears <span class="marker gold m_hindu">red and gold</span>; the groom arrives on a <span class="marker gold m_hindu">white horse</span> (or elephant). The couple walks around a sacred fire <span class="marker gold m_hindu">seven times</span> while making 7 promises.
-            </div>
-            <button class="magic-btn" onclick="toggleMagic('m_hindu')">✨ Reveal Details</button>
-        </div>
-
-        <div class="slide">
             <h2>Strategy 2: Double-Entry Journal</h2>
             <p>Topic: <em>Havasu Canyon (Descriptive)</em></p>
-            
             <div class="notebook">
                 <div class="col-left">
                     <strong>From The Text:</strong><br><br>
@@ -237,27 +343,7 @@
                     <div class="handwriting h-note">2. Sounds magical! I want to swim there.</div>
                 </div>
             </div>
-            
             <button class="magic-btn" onclick="revealJournal()">✍️ Write Reaction</button>
-            <p style="font-size:0.9rem; color:#888;">(Turns Passive Reading -> Active Dialogue)</p>
-        </div>
-
-        <div class="slide">
-            <h2>Case 3: Fiqh Text</h2>
-            <p>Topic: <em>The Wali (Guardian)</em></p>
-            <div style="font-size:0.9rem; margin-bottom:10px;">
-                <span style="color:var(--success-color)">● Evidence</span> &nbsp; 
-                <span style="color:var(--danger-color)">● Warning</span> &nbsp; 
-                <span style="color:var(--blue-accent)">● Rules</span>
-            </div>
-            
-            <div class="magic-text">
-                Marriage is a sacred bond... However, for a marriage to be <span class="marker blue m2">valid</span>, there are conditions. One of the most important is the <span class="marker blue m2">Wali</span> (Guardian).<br><br>
-                Prophet ﷺ said: <span class="marker green m2">"No marriage is valid without a wali."</span><br><br>
-                The <span class="marker blue m2">Father</span> is first. If unavailable, it passes to <span class="marker blue m2">Grandfather ➔ Brother</span>. A woman <span class="marker red m2">cannot marry herself off</span>.
-            </div>
-
-            <button class="magic-btn" onclick="toggleMagic('m2')">🚥 Analyze Rulings</button>
         </div>
 
         <div class="slide centered">
@@ -265,7 +351,7 @@
             <p>You are now an "Active Reader".</p>
             <div class="highlight-box" style="text-align: center;">
                 <h3>Your Task:</h3>
-                <p>1. Get a Highlighter (Physical or Digital).<br>2. Practice annotating <strong>Module 5</strong>.<br>3. Don't paint the whole page!</p>
+                <p>1. Get a Highlighter (Physical or Digital).<br>2. Practice annotating <strong>Module 5</strong>.<br>3. Use the "Traffic Light" for Fiqh.</p>
             </div>
         </div>
 
@@ -273,7 +359,7 @@
 
     <div class="nav-container">
         <button class="control-btn btn-prev" onclick="move(-1)">❮ Back</button>
-        <div class="slide-number" id="slideNum">1 / 9</div>
+        <div class="slide-number" id="slideNum">1 / 17</div>
         <button class="control-btn btn-next" onclick="move(1)">Next ❯</button>
     </div>
 
@@ -292,21 +378,41 @@
             numDisplay.innerText = (current + 1) + " / " + slides.length;
         }
 
-        // FUNGSI 1: MAGIC HIGHLIGHTER (Untuk Slide Teks)
-        function toggleMagic(className) {
-            const markers = document.querySelectorAll('.' + className);
-            markers.forEach(mark => {
-                mark.classList.toggle('active');
-            });
+        // 1. TOGGLE BAHASA
+        function toggleLang(idBase) {
+            const en = document.getElementById(idBase + '-en');
+            const id = document.getElementById(idBase + '-id');
+            if (en.style.display === 'none') {
+                en.style.display = 'block'; id.style.display = 'none';
+            } else {
+                en.style.display = 'none'; id.style.display = 'block';
+            }
         }
 
-        // FUNGSI 2: REVEAL JOURNAL (Untuk Slide Notebook)
+        // 2. HIGHLIGHT + REASONING
+        function toggleReason(reasonId, markerClass) {
+            // Toggle Marker Warna
+            const markers = document.querySelectorAll('.' + markerClass);
+            markers.forEach(mark => mark.classList.toggle('active'));
+            
+            // Toggle Kotak Penjelasan
+            const box = document.getElementById(reasonId);
+            if (box.classList.contains('show')) {
+                box.classList.remove('show');
+                setTimeout(() => box.style.display = 'none', 500);
+            } else {
+                box.style.display = 'block';
+                setTimeout(() => box.classList.add('show'), 10);
+            }
+        }
+
+        // 3. JOURNAL HANDWRITING
         function revealJournal() {
             const notes = document.querySelectorAll('.h-note');
             notes.forEach((note, index) => {
                 setTimeout(() => {
                     note.classList.add('visible');
-                }, index * 300); // Muncul berurutan (delay 300ms)
+                }, index * 300);
             });
         }
 
