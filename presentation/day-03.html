@@ -15,7 +15,6 @@
             --success-color: #00FF7F;
             --blue-accent: #3399FF;
             --purple-accent: #B026FF; 
-            --highlighter-color: rgba(255, 215, 0, 0.4); /* Warna Stabilo Transparan */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,14 +23,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            height: 100vh; width: 100vw; overflow: hidden;
         }
 
-        .presentation-container {
-            width: 100%; height: 100%; position: relative;
-        }
+        .presentation-container { width: 100%; height: 100%; position: relative; }
 
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -49,17 +44,12 @@
         h1 { color: var(--accent-gold); font-size: 2.2rem; margin-top: 40px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
         h2 { color: var(--accent-gold); font-size: 1.6rem; margin-top: 20px; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 5px; width: 100%; }
         
-        .module-title { font-size: 3rem; color: var(--purple-accent); font-weight: bold; border-bottom: none; margin-bottom: 10px; margin-top: 30%;}
-        .module-subtitle { font-size: 1.2rem; color: #FFF; letter-spacing: 3px; text-transform: uppercase; }
-
         p, li { font-size: 1.1rem; line-height: 1.5; max-width: 800px; margin-bottom: 10px; color: #EEE; }
         ul, ol { text-align: left; margin-left: 20px; display: inline-block; width: 95%; }
         li { margin-bottom: 8px; }
-        
         strong { color: var(--success-color); font-weight: 700; }
         .danger-text { color: var(--danger-color); font-weight: bold; }
-        .blue-text { color: var(--blue-accent); font-weight: bold; }
-        
+
         /* Boxes */
         .highlight-box {
             background-color: var(--highlight-bg); border: 1px solid #444;
@@ -68,50 +58,61 @@
         }
         .checkpoint-box { border-left-color: var(--danger-color); }
 
-        /* --- MAGIC TEXT HIGHLIGHTER --- */
+        /* --- MAGIC HIGHLIGHTER SYSTEM --- */
         .magic-text {
-            font-family: 'Georgia', serif; /* Font beda biar kayak buku */
-            font-size: 1.2rem;
-            line-height: 1.8;
-            background-color: #222;
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid #555;
-            text-align: left;
-            margin-bottom: 15px;
-            color: #CCC;
+            font-family: 'Georgia', serif; font-size: 1.1rem; line-height: 1.8;
+            background-color: #222; padding: 20px; border-radius: 5px;
+            border: 1px solid #555; text-align: left; margin-bottom: 15px; color: #CCC;
         }
         
-        /* Class ini akan ditambahkan lewat JavaScript */
         .marker {
-            background-color: transparent;
-            color: #CCC;
-            transition: all 0.5s ease;
-            padding: 0 2px;
-            border-radius: 3px;
+            background-color: transparent; color: #CCC; transition: all 0.5s ease;
+            padding: 2px 4px; border-radius: 3px;
         }
         
-        .marker.active {
-            background-color: var(--accent-gold);
-            color: #000; /* Teks jadi hitam biar kontras */
-            font-weight: bold;
-            box-shadow: 0 0 10px var(--accent-gold);
-        }
+        /* 1. Standard Gold (Untuk Teks Umum) */
+        .marker.gold.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 10px var(--accent-gold); }
+
+        /* 2. Traffic Light System (Untuk Fiqih) */
+        .marker.green.active { background-color: var(--success-color); color: #000; font-weight: bold; box-shadow: 0 0 10px var(--success-color); } /* Dalil */
+        .marker.red.active { background-color: var(--danger-color); color: #FFF; font-weight: bold; box-shadow: 0 0 10px var(--danger-color); } /* Larangan */
+        .marker.blue.active { background-color: var(--blue-accent); color: #FFF; font-weight: bold; box-shadow: 0 0 10px var(--blue-accent); } /* Aturan/Urutan */
 
         .magic-btn {
-            background-color: var(--blue-accent); color: white; border: none;
+            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
             padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
-            margin-top: 10px; box-shadow: 0 4px 10px rgba(51, 153, 255, 0.4);
-            animation: pulse 2s infinite;
+            margin-top: 10px; margin-bottom: 20px;
         }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .magic-btn:active { background-color: var(--accent-gold); color: #000; }
 
-        /* Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; background-color: var(--highlight-bg); }
-        th, td { border: 1px solid #555; padding: 8px; text-align: left; }
-        th { background-color: #222; color: var(--accent-gold); font-size: 1rem; text-align: center; }
+        /* --- NOTEBOOK EFFECT (Slide Havasu) --- */
+        .notebook {
+            display: flex; width: 100%; max-width: 800px;
+            background-color: #1a1a1a; border: 1px solid #444;
+            border-radius: 5px; margin-top: 10px; position: relative;
+        }
+        .notebook::before { /* Garis tengah buku */
+            content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px;
+            width: 2px; background-color: #333;
+        }
+        .col-left, .col-right {
+            width: 50%; padding: 15px; text-align: left; font-size: 1rem;
+        }
+        .col-left {
+            font-family: 'Georgia', serif; color: #CCC; border-right: 1px solid #333;
+        }
+        .col-right {
+            font-family: 'Brush Script MT', 'Comic Sans MS', cursive; /* Font Tulis Tangan */
+            color: var(--blue-accent);
+        }
+        .handwriting {
+            opacity: 0; transform: translateY(10px); transition: all 0.8s ease;
+        }
+        .handwriting.visible {
+            opacity: 1; transform: translateY(0);
+        }
 
-        /* --- NAVIGATION BUTTONS (FIXED) --- */
+        /* --- NAVIGATION FIXED --- */
         .nav-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; z-index: 9999; pointer-events: none; }
         .control-btn { 
             pointer-events: auto; position: absolute; bottom: 20px; 
@@ -119,7 +120,6 @@
             padding: 12px 20px; border-radius: 8px; cursor: pointer; 
             font-size: 1rem; font-weight: bold; box-shadow: 0 0 15px rgba(0,0,0,0.8);
         }
-        .control-btn:active { background-color: var(--accent-gold); color: #000; }
         .btn-prev { left: 20px; }
         .btn-next { right: 20px; background-color: #222; border-color: var(--accent-gold); color: var(--accent-gold); }
         .slide-number { 
@@ -131,6 +131,11 @@
             text-decoration: none; border: 1px solid #333; padding: 8px 12px; 
             border-radius: 5px; z-index: 9999; background-color: #000;
         }
+        
+        /* Table for Definition Slide */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; background-color: var(--highlight-bg); }
+        th, td { border: 1px solid #555; padding: 8px; text-align: left; }
+        th { background-color: #222; color: var(--accent-gold); font-size: 1rem; text-align: center; }
 
         @media (min-width: 768px) {
             h1 { font-size: 3.5rem; } h2 { font-size: 2.2rem; } 
@@ -175,8 +180,8 @@
                     <th style="width:50%;">Note-Taking 📝</th>
                 </tr>
                 <tr>
-                    <td>Writing <strong>ON</strong> the text (Highlight, Underline, Margin).</td>
-                    <td>Writing <strong>OUTSIDE</strong> the text (Notebook, Laptop).</td>
+                    <td>Writing <strong>ON</strong> the text (Highlight, Underline).</td>
+                    <td>Writing <strong>OUTSIDE</strong> the text (Notebook).</td>
                 </tr>
                 <tr>
                     <td><strong>Goal:</strong> Interactive dialogue while reading.</td>
@@ -199,49 +204,60 @@
         </div>
 
         <div class="slide">
-            <h2>Case Study 1: Academic Text</h2>
+            <h2>Case 1: Academic Text</h2>
             <p>Topic: <em>The IMPM Program</em></p>
-            
             <div class="magic-text">
-                The International Masters Program for Managers (IMPM) is a unique degree program that focuses on <span class="marker m1">experienced managers</span>. The program structure consists of <span class="marker m1">5 on-site modules</span> that are held in different countries. Each of these modules lasts for <span class="marker m1">2 weeks</span>. The total duration of the program is <span class="marker m1">16 months</span>. Participants are usually practice managers who are <span class="marker m1">sponsored by companies</span>.
+                The International Masters Program for Managers (IMPM) is a unique degree program that focuses on <span class="marker gold m1">experienced managers</span>. The program structure consists of <span class="marker gold m1">5 on-site modules</span> that are held in different countries. Each of these modules lasts for <span class="marker gold m1">2 weeks</span>. The total duration of the program is <span class="marker gold m1">16 months</span>. Participants are usually practice managers who are <span class="marker gold m1">sponsored by companies</span>.
             </div>
-
-            <button class="magic-btn" onclick="toggleMagic('m1')">✨ Show Smart Highlight</button>
-            <p style="font-size: 0.9rem; margin-top: 10px; color: #888;">(Click the button to see what to highlight)</p>
+            <button class="magic-btn" onclick="toggleMagic('m1')">✨ Reveal Keywords</button>
         </div>
 
         <div class="slide">
-            <h2>Case Study 2: Fiqh Text</h2>
-            <p>Topic: <em>The Wali (Guardian)</em></p>
-            
+            <h2>Case 2: Cultural Text</h2>
+            <p>Topic: <em>Traditional Hindu Weddings</em></p>
             <div class="magic-text">
-                Marriage is a sacred bond in Islam... However, for a marriage to be <span class="marker m2">valid</span>, there are conditions. One of the most important is the <span class="marker m2">Wali</span> (Guardian).<br><br>
-                Prophet ﷺ said: <span class="marker m2">"No marriage is valid without a wali."</span><br><br>
-                The <span class="marker m2">Father</span> is first. If unavailable, it passes to the closest <span class="marker m2">Muslim male relative</span> (Grandfather ➔ Brother). A woman <span class="marker m2">cannot marry herself off</span>.
+                The groom gives the bride a necklace called <span class="marker gold m_hindu">"Mangal Sutra"</span> (blessed thread). The bride wears <span class="marker gold m_hindu">red and gold</span>; the groom arrives on a <span class="marker gold m_hindu">white horse</span> (or elephant). The couple walks around a sacred fire <span class="marker gold m_hindu">seven times</span> while making 7 promises.
             </div>
-
-            <button class="magic-btn" onclick="toggleMagic('m2')">✨ Show Smart Highlight</button>
+            <button class="magic-btn" onclick="toggleMagic('m_hindu')">✨ Reveal Details</button>
         </div>
 
         <div class="slide">
             <h2>Strategy 2: Double-Entry Journal</h2>
-            <p>Used for Descriptive Texts (e.g., Havasu Canyon).</p>
-            <p><em>Split your paper into two columns:</em></p>
-            <table>
-                <tr>
-                    <th>From the Text (Facts)</th>
-                    <th>From Your Mind (Reaction)</th>
-                </tr>
-                <tr>
-                    <td>"Villagers stare without smiling."</td>
-                    <td>"They seem unfriendly/scary."</td>
-                </tr>
-                <tr>
-                    <td>"Waterfalls drop into pools."</td>
-                    <td>"Sounds magical/beautiful."</td>
-                </tr>
-            </table>
-            <p style="margin-top:20px;"><strong>Benefit:</strong> Turns passive reading into active dialogue.</p>
+            <p>Topic: <em>Havasu Canyon (Descriptive)</em></p>
+            
+            <div class="notebook">
+                <div class="col-left">
+                    <strong>From The Text:</strong><br><br>
+                    1. "Villagers stare without smiling."<br><br><br>
+                    2. "Waterfalls drop into blue-green pools."
+                </div>
+                <div class="col-right">
+                    <strong>My Reaction:</strong><br><br>
+                    <div class="handwriting h-note">1. They seem unfriendly. Are they dangerous?</div><br>
+                    <div class="handwriting h-note">2. Sounds magical! I want to swim there.</div>
+                </div>
+            </div>
+            
+            <button class="magic-btn" onclick="revealJournal()">✍️ Write Reaction</button>
+            <p style="font-size:0.9rem; color:#888;">(Turns Passive Reading -> Active Dialogue)</p>
+        </div>
+
+        <div class="slide">
+            <h2>Case 3: Fiqh Text</h2>
+            <p>Topic: <em>The Wali (Guardian)</em></p>
+            <div style="font-size:0.9rem; margin-bottom:10px;">
+                <span style="color:var(--success-color)">● Evidence</span> &nbsp; 
+                <span style="color:var(--danger-color)">● Warning</span> &nbsp; 
+                <span style="color:var(--blue-accent)">● Rules</span>
+            </div>
+            
+            <div class="magic-text">
+                Marriage is a sacred bond... However, for a marriage to be <span class="marker blue m2">valid</span>, there are conditions. One of the most important is the <span class="marker blue m2">Wali</span> (Guardian).<br><br>
+                Prophet ﷺ said: <span class="marker green m2">"No marriage is valid without a wali."</span><br><br>
+                The <span class="marker blue m2">Father</span> is first. If unavailable, it passes to <span class="marker blue m2">Grandfather ➔ Brother</span>. A woman <span class="marker red m2">cannot marry herself off</span>.
+            </div>
+
+            <button class="magic-btn" onclick="toggleMagic('m2')">🚥 Analyze Rulings</button>
         </div>
 
         <div class="slide centered">
@@ -257,7 +273,7 @@
 
     <div class="nav-container">
         <button class="control-btn btn-prev" onclick="move(-1)">❮ Back</button>
-        <div class="slide-number" id="slideNum">1 / 8</div>
+        <div class="slide-number" id="slideNum">1 / 9</div>
         <button class="control-btn btn-next" onclick="move(1)">Next ❯</button>
     </div>
 
@@ -276,11 +292,21 @@
             numDisplay.innerText = (current + 1) + " / " + slides.length;
         }
 
-        // FUNGSI MAGIC HIGHLIGHTER
+        // FUNGSI 1: MAGIC HIGHLIGHTER (Untuk Slide Teks)
         function toggleMagic(className) {
             const markers = document.querySelectorAll('.' + className);
             markers.forEach(mark => {
                 mark.classList.toggle('active');
+            });
+        }
+
+        // FUNGSI 2: REVEAL JOURNAL (Untuk Slide Notebook)
+        function revealJournal() {
+            const notes = document.querySelectorAll('.h-note');
+            notes.forEach((note, index) => {
+                setTimeout(() => {
+                    note.classList.add('visible');
+                }, index * 300); // Muncul berurutan (delay 300ms)
             });
         }
 
@@ -292,4 +318,3 @@
 
 </body>
 </html>
-
