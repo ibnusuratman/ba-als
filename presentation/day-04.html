@@ -12,6 +12,7 @@
             --accent-gold: #FFD700;
             --success-color: #00FF7F;
             --blue-accent: #3399FF;
+            --danger-color: #FF4444;
             --gray-text: #888888;
         }
 
@@ -30,19 +31,19 @@
         .container { width: 100%; max-width: 800px; }
 
         /* HEADER */
-        header { text-align: center; margin-bottom: 50px; }
+        header { text-align: center; margin-bottom: 40px; }
         h1 { font-size: 3rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
         .subtitle { font-size: 1.2rem; color: var(--blue-accent); font-weight: 300; }
 
-        /* RECAP SECTION */
         .section-title { 
-            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;
+            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px;
             font-size: 1.2rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px;
         }
 
+        /* --- MASTERY CHECKLIST (MODUL 1-3) --- */
         .mastery-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px; margin-bottom: 50px;
+            gap: 15px;
         }
 
         .mastery-card {
@@ -56,7 +57,29 @@
         .mastery-info h3 { font-size: 1rem; margin-bottom: 5px; color: #EEE; }
         .mastery-info p { font-size: 0.85rem; color: #AAA; line-height: 1.4; }
 
-        /* MODULES ACTION SECTION */
+        /* --- MODUL 4 REFRESHER (SPECIAL CARDS) --- */
+        .refresher-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+        
+        .theory-card {
+            background: #1a1a1a; border-left: 4px solid var(--accent-gold);
+            padding: 20px; border-radius: 8px; position: relative;
+        }
+
+        .theory-tag {
+            position: absolute; top: -10px; left: 10px;
+            background: var(--accent-gold); color: #000;
+            font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .theory-card h3 { color: #FFF; font-size: 1.1rem; margin-bottom: 10px; margin-top: 5px; }
+        .theory-card ul { list-style: none; }
+        .theory-card li { font-size: 0.9rem; color: #CCC; margin-bottom: 5px; padding-left: 15px; position: relative; }
+        .theory-card li::before { content: "•"; color: var(--blue-accent); position: absolute; left: 0; }
+
+        /* --- MODULES ACTION SECTION --- */
         .modules-grid { display: flex; flex-direction: column; gap: 20px; }
 
         .module-card {
@@ -96,6 +119,7 @@
 
         @media (max-width: 600px) {
             h1 { font-size: 2rem; }
+            .refresher-grid { grid-template-columns: 1fr; }
             .module-card { flex-direction: column; text-align: center; gap: 20px; }
         }
     </style>
@@ -111,22 +135,22 @@
             <p class="subtitle">Managing Information: Input & Output</p>
         </header>
 
-        <h2 class="section-title">✅ Mastery Checklist (Modules 1-4)</h2>
+        <h2 class="section-title">✅ Mastery Checklist (Foundations)</h2>
         <div class="mastery-grid">
             
             <div class="mastery-card">
                 <div class="check-icon">✓</div>
                 <div class="mastery-info">
-                    <h3>Module 1: Vocabulary</h3>
-                    <p>Using the Dictionary, Root Words, & Identifying Parts of Speech.</p>
+                    <h3>Module 1: Study Skills</h3>
+                    <p>Learning Styles (Visual, Auditory, Kinesthetic) & Career Planning.</p>
                 </div>
             </div>
 
             <div class="mastery-card">
                 <div class="check-icon">✓</div>
                 <div class="mastery-info">
-                    <h3>Module 2: Word Attack</h3>
-                    <p>Prefixes (Ante vs Anti), Suffixes, & Handling Homophones.</p>
+                    <h3>Module 2: Vocabulary</h3>
+                    <p>Prefixes (Ante/Anti), Suffixes, Homophones (Accept/Except).</p>
                 </div>
             </div>
 
@@ -134,16 +158,33 @@
                 <div class="check-icon">✓</div>
                 <div class="mastery-info">
                     <h3>Module 3: Active Reading</h3>
-                    <p>SQ3R Method (Survey, Question, Read...) & Skimming vs Scanning.</p>
+                    <p>SQ3R Method, Scanning (Specific) vs Skimming (General).</p>
                 </div>
             </div>
 
-            <div class="mastery-card">
-                <div class="check-icon">✓</div>
-                <div class="mastery-info">
-                    <h3>Module 4: Annotating</h3>
-                    <p>Highlighting Keywords only. The "Yellow Disease" cure.</p>
-                </div>
+        </div>
+
+        <h2 class="section-title" style="color:var(--accent-gold); border-color:var(--accent-gold);">⚠️ Module 4 Refresher: Annotation Theory</h2>
+        <div class="refresher-grid">
+            
+            <div class="theory-card">
+                <span class="theory-tag">Concept</span>
+                <h3>The "Yellow Disease"</h3>
+                <ul>
+                    <li><strong>Problem:</strong> Highlighting entire sentences = clutter.</li>
+                    <li><strong>Solution:</strong> Only highlight <em>Keywords</em> & <em>New Info</em>.</li>
+                    <li><strong>Goal:</strong> "Stop Painting, Start Thinking."</li>
+                </ul>
+            </div>
+
+            <div class="theory-card">
+                <span class="theory-tag">Strategy</span>
+                <h3>The 3-Step Process</h3>
+                <ul>
+                    <li>1. <strong>Read Silently:</strong> Get the overview.</li>
+                    <li>2. <strong>Read Aloud:</strong> Engage auditory learning.</li>
+                    <li>3. <strong>Annotate:</strong> Mark key points (Last step!).</li>
+                </ul>
             </div>
 
         </div>
@@ -154,8 +195,8 @@
             <a href="day-04-m05.html" class="module-card active">
                 <div class="mod-content">
                     <span class="status-badge status-open">Open Now</span>
-                    <h2>Module 5: Note-Taking</h2>
-                    <p>From Book to Brain. The art of filtering and rewriting.</p>
+                    <h2>Module 5: Note-Taking Basics</h2>
+                    <p>Filter & Rephrase. Convert annotations into organized notes.</p>
                 </div>
                 <div class="icon">📝</div>
             </a>
@@ -164,7 +205,7 @@
                 <div class="mod-content">
                     <span class="status-badge status-locked">Locked</span>
                     <h2>Module 6: Mind Mapping</h2>
-                    <p>Linear Notes vs Pattern Notes. Organizing ideas visually.</p>
+                    <p>Visual Note-Taking. Organizing ideas with patterns.</p>
                 </div>
                 <div class="icon">🔒</div>
             </div>
