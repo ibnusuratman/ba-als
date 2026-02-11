@@ -52,8 +52,8 @@
         }
         .col-left { 
             width: 50%; background: #222; padding: 20px; overflow-y: auto; 
-            border: 1px solid #444; color: #AAA; font-family: 'Georgia', serif; 
-            line-height: 1.8; position: relative;
+            border: 1px solid #444; color: #CCC; font-family: 'Georgia', serif; 
+            line-height: 1.8; position: relative; text-align: justify;
         }
         .col-right { 
             width: 50%; background: #fffde7; color: #000; padding: 20px; 
@@ -63,7 +63,7 @@
         }
 
         /* HIGHLIGHT LOGIC */
-        .hl-target { transition: all 0.5s; padding: 2px 0; border-radius: 3px; color: #AAA; }
+        .hl-target { transition: all 0.5s; padding: 2px 0; border-radius: 3px; color: #CCC; } /* Default warna teks */
         .hl-target.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 5px var(--accent-gold); }
         .hl-target.green.active { background-color: var(--success-color); color: #000; }
         .hl-target.red.active { background-color: var(--danger-color); color: #FFF; }
@@ -136,8 +136,8 @@
         <h2>Case 1: River Rafting (Input)</h2>
         <div class="text-container">
             <button class="trans-btn" onclick="toggleID('c1')">Translate 🇮🇩</button>
-            <p id="c1-en">"River rafting is a challenging sport with important requirements... The river rafting company you choose should have a good safety record. You can choose trips from level 1 with no experience to level 6 for the most experienced... At level 1, the river moves slowly... At each level up, there is an increase in waves and dangerous rocks."</p>
-            <p id="c1-id" class="id-text">"Arung jeram adalah olahraga menantang dengan syarat penting... Perusahaan harus punya rekor keamanan baik. Anda bisa pilih level 1 (tanpa pengalaman) sampai level 6 (sangat berpengalaman)... Di level 1 sungai lambat... Tiap naik level, ombak dan batu berbahaya bertambah."</p>
+            <p id="c1-en">"River rafting is a challenging sport with important requirements. First, plan your trip carefully... Therefore, the river rafting company you choose should have a good safety record. You can choose river rafting trips from level 1 with no experience to level 6 for the most experienced... At level 1, the river moves slowly... At each level up, there is an increase in the number of powerful waves and dangerous rocks. In addition, river rafting requires special equipment. You ride an inflatable rubber boat with an expertly trained guide and a group of six to eight people. [span_0](start_span)[span_1](start_span)[span_2](start_span)Everyone must wear a life jacket and a helmet."[span_0](end_span)[span_1](end_span)[span_2](end_span)</p>
+            <p id="c1-id" class="id-text">"Arung jeram adalah olahraga menantang dengan syarat penting... Perusahaan harus punya rekor keamanan baik. Anda bisa pilih level 1 (tanpa pengalaman) sampai level 6 (sangat berpengalaman)... Di level 1 sungai lambat... Tiap naik level, ombak dan batu berbahaya bertambah. Selain itu butuh alat khusus: Perahu karet, pemandu terlatih, grup 6-8 orang, jaket pelampung, helm."</p>
         </div>
     </div>
 
@@ -160,10 +160,10 @@
     </div>
 
     <div class="slide">
-        <h2>Case 1: Final Notes</h2>
+        <h2>Case 1: Final Simulation</h2>
         <div class="split-view">
             <div class="col-left">
-                ...<span class="hl-target c1">challenging sport</span>... <span class="hl-target c1">important requirements</span>... good <span class="hl-target c1">safety record</span>... from <span class="hl-target c1">level 1</span> with <span class="hl-target c1">no experience</span> to <span class="hl-target c1">level 6</span>... dangerous rocks.
+                River rafting is a <span class="hl-target c1">challenging sport</span> with <span class="hl-target c1">important requirements</span>. First, plan your trip carefully... Therefore, the river rafting company you choose should have a <span class="hl-target c1">good safety record</span>. You can choose river rafting trips from <span class="hl-target c1">level 1</span> with <span class="hl-target c1">no experience</span> to <span class="hl-target c1">level 6</span> for the <span class="hl-target c1">most experienced</span>... At level 1, the river moves slowly... At each level up, there is an increase in the number of <span class="hl-target c1">powerful waves</span> and <span class="hl-target c1">dangerous rocks</span>. In addition, river rafting requires special equipment. You ride an <span class="hl-target c1">inflatable rubber boat</span> with an <span class="hl-target c1">expertly trained guide</span> and a <span class="hl-target c1">group of six to eight</span> people. Everyone must wear a <span class="hl-target c1">life jacket</span> and a <span class="hl-target c1">helmet</span> and be able to use a paddle at the more difficult levels.
             </div>
             <div class="col-right">
                 <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
@@ -181,8 +181,8 @@
         <h2>Case 2: Mountain Climbing (Input)</h2>
         <div class="text-container">
             <button class="trans-btn" onclick="toggleID('c2')">Translate 🇮🇩</button>
-            <p id="c2-en">"Mountain climbing is dangerous... You need a certified course... Clothing depends on the season: Helmet, Boots. Equipment: Spikes, Rope. Team rules: Rope must be tied to waist."</p>
-            <p id="c2-id" class="id-text">"Mendaki gunung berbahaya... Butuh kursus bersertifikat... Pakaian tergantung musim: Helm, Sepatu Bot. Alat: Paku, Tali. Aturan tim: Tali harus diikat di pinggang."</p>
+            [span_3](start_span)[span_4](start_span)<p id="c2-en">"Mountain climbing is a very dangerous sport with special requirements and strict climbing rules. The first requirement is to complete a course at a certified climbing school... where you learn about mountain conditions and safe climbing. Another requirement is to wear special clothing suitable for the season. A helmet and climbing boots complete your outfit. You must also carry special equipment: metal spikes... and special climbing ropes."[span_3](end_span)[span_4](end_span)</p>
+            <p id="c2-id" class="id-text">"Mendaki gunung olahraga berbahaya dengan syarat khusus dan aturan ketat. Syarat pertama: selesaikan kursus sekolah bersertifikat. Syarat lain: pakaian khusus musim (helm, sepatu bot). Juga bawa alat khusus: paku besi dan tali panjat."</p>
         </div>
     </div>
 
@@ -207,10 +207,10 @@
     </div>
 
     <div class="slide">
-        <h2>Case 2: Final Notes</h2>
+        <h2>Case 2: Final Simulation</h2>
         <div class="split-view">
             <div class="col-left">
-                ...<span class="hl-target c2">dangerous</span>... <span class="hl-target c2">certified course</span>... Clothing: <span class="hl-target c2">Helmet</span>, <span class="hl-target c2">Boots</span>... Equipment: <span class="hl-target c2">Spikes</span>, <span class="hl-target c2">Rope</span>... <span class="hl-target c2">tied to waist</span>.
+                Mountain climbing is a <span class="hl-target c2">very dangerous sport</span> with <span class="hl-target c2">special requirements</span> and <span class="hl-target c2">strict climbing rules</span>. The first requirement is to complete a course at a <span class="hl-target c2">certified climbing school</span>... where you learn about mountain conditions and safe climbing. Another requirement is to wear <span class="hl-target c2">special clothing</span> suitable for the season. A <span class="hl-target c2">helmet</span> and <span class="hl-target c2">climbing boots</span> complete your outfit. You must also carry <span class="hl-target c2">special equipment</span>: <span class="hl-target c2">metal spikes</span>... and <span class="hl-target c2">special climbing ropes</span>.
             </div>
             <div class="col-right">
                 <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
@@ -228,7 +228,7 @@
         <h2>Case 3: Animals in Captivity</h2>
         <div class="text-container">
             <button class="trans-btn" onclick="toggleID('c3')">Translate 🇮🇩</button>
-            <p id="c3-en">"Advantages: Protected from predators, Fed regularly (balanced diet), Medical checkups... Disadvantages: Bored, dissatisfied, nervous. Visitors endanger lives: Airborne diseases, Throwing trash."</p>
+            [span_5](start_span)<p id="c3-en">"Animals living in modern zoos enjoy several advantages over animals in the wild... One advantage... is that they are separated from their predators... Another advantage is that they are fed regularly (balanced diet)... On the other hand, zoo animals face several distinct disadvantages... some animals become bored, dissatisfied, and nervous. Zoo visitors can endanger their lives. Airborne diseases from humans can make them sick... throwing trash."[span_5](end_span)</p>
             <p id="c3-id" class="id-text">"Keuntungan: Terlindung dari predator, Makan teratur, Cek medis... Kerugian: Bosan, tidak puas, gugup. Pengunjung membahayakan: Penyakit udara, Buang sampah."</p>
         </div>
     </div>
@@ -244,10 +244,10 @@
     </div>
 
     <div class="slide">
-        <h2>Case 3: Final Notes</h2>
+        <h2>Case 3: Final Simulation</h2>
         <div class="split-view">
             <div class="col-left">
-                ...<span class="hl-target c3 green">Protected</span>... <span class="hl-target c3 green">Fed regularly</span>... <span class="hl-target c3 green">Medical checkups</span>... <span class="hl-target c3 red">Bored</span>... <span class="hl-target c3 red">Airborne diseases</span>... <span class="hl-target c3 red">Throwing trash</span>.
+                Animals living in modern zoos enjoy several advantages... One advantage... is that they are <span class="hl-target c3 green">separated from their predators</span>... Another advantage is that they are <span class="hl-target c3 green">fed regularly</span>... <span class="hl-target c3 green">Medical checkups</span>... On the other hand, zoo animals face several distinct disadvantages... some animals become <span class="hl-target c3 red">bored</span>, <span class="hl-target c3 red">dissatisfied</span>, and <span class="hl-target c3 red">nervous</span>. Zoo visitors can <span class="hl-target c3 red">endanger their lives</span>. <span class="hl-target c3 red">Airborne diseases</span> from humans can make them sick... <span class="hl-target c3 red">throwing trash</span>.
             </div>
             <div class="col-right">
                 <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
@@ -281,9 +281,9 @@
         const slides = document.querySelectorAll('.slide');
         const numDisplay = document.getElementById('slideNum');
 
-        // DATABASE CATATAN
+        // DATABASE CATATAN (FINAL OUTPUT)
         const notesDB = {
-            c1: ["<strong>TITLE: River Rafting</strong>", "• Overview: Challenging + Requirements + Safety Record", "• Levels: 1 (No Exp) - 6 (Expert)", "• Hazards: Waves & Rocks"],
+            c1: ["<strong>TITLE: River Rafting</strong>", "• Overview: Challenging + Requirements + Safety Record", "• Levels: 1 (No Exp) - 6 (Expert)", "• Hazards: Waves & Rocks", "• Team: Guide + 6-8 People", "• Gear: Boat, Life Jacket, Helmet"],
             c2: ["<strong>TITLE: Mountain Climbing</strong>", "• Req: Certified Course", "• Clothing:", "&nbsp;&nbsp;- Helmet, Boots", "• Equipment:", "&nbsp;&nbsp;- Spikes, Rope (Waist)"],
             c3: ["<div class='pc-col pc-pros'><strong>PROS</strong><br>• Protected<br>• Fed Regular<br>• Medical Checks</div><div class='pc-col pc-cons'><strong>CONS</strong><br>• Bored/Nervous<br>• Disease (Visitors)<br>• Trash Risks</div>"]
         };
