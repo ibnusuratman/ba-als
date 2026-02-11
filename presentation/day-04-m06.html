@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6: Practice - Abu Ismail Mannix</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #FFFFFF;
+            --accent-gold: #FFD700;
+            --highlight-bg: #1A1A1A;
+            --danger-color: #FF4444;
+            --success-color: #00FF7F;
+            --blue-accent: #3399FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 100px;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { justify-content: center; text-align: center; }
+
+        /* Typography */
+        h1 { color: var(--accent-gold); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p, li { font-size: 1.2rem; line-height: 1.6; max-width: 900px; color: #EEE; }
+        
+        /* Containers */
+        .text-container {
+            background: #111; border: 1px solid #333; padding: 20px; border-radius: 10px;
+            width: 100%; max-width: 900px; margin-bottom: 20px; text-align: left;
+        }
+        
+        /* SPLIT VIEW FOR SIMULATION */
+        .split-view {
+            display: flex; width: 100%; max-width: 1100px; height: 50vh; gap: 15px;
+        }
+        .col-left { 
+            width: 50%; background: #222; padding: 20px; overflow-y: auto; 
+            border: 1px solid #444; color: #AAA; font-family: 'Georgia', serif; 
+            line-height: 1.8; position: relative;
+        }
+        .col-right { 
+            width: 50%; background: #fffde7; color: #000; padding: 20px; 
+            overflow-y: auto; border: 1px solid #d4af37; font-family: 'Courier New', monospace; 
+            position: relative; background-image: linear-gradient(#999 1px, transparent 1px);
+            background-size: 100% 1.5rem; line-height: 1.5rem;
+        }
+
+        /* HIGHLIGHT LOGIC */
+        .hl-target { transition: all 0.5s; padding: 2px 0; border-radius: 3px; color: #AAA; }
+        .hl-target.active { background-color: var(--accent-gold); color: #000; font-weight: bold; box-shadow: 0 0 5px var(--accent-gold); }
+        .hl-target.green.active { background-color: var(--success-color); color: #000; }
+        .hl-target.red.active { background-color: var(--danger-color); color: #FFF; }
+
+        /* NOTE ITEMS ANIMATION */
+        .note-item { 
+            opacity: 0; transform: translateX(-20px); transition: all 0.5s ease; 
+            margin-bottom: 5px; font-weight: bold; 
+        }
+        .note-item.show { opacity: 1; transform: translateX(0); }
+
+        /* Buttons */
+        .quiz-btn {
+            background: #222; color: #FFF; border: 1px solid #555; padding: 15px;
+            width: 100%; max-width: 600px; margin: 10px 0; cursor: pointer; text-align: left;
+            border-radius: 8px; font-size: 1.1rem; transition: all 0.2s;
+        }
+        .quiz-btn:hover { background: #333; border-color: var(--accent-gold); }
+        .quiz-btn.correct { background: rgba(0,255,127,0.2); border-color: var(--success-color); color: var(--success-color); }
+        .quiz-btn.wrong { background: rgba(255, 68, 68, 0.2); border-color: var(--danger-color); color: var(--danger-color); }
+
+        .action-btn {
+            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
+            padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; margin: 0 10px;
+        }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #111; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn {
+            background: #333; color: var(--accent-gold); border: 1px solid var(--accent-gold);
+            padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;
+        }
+        .slide-num { color: #888; font-size: 0.9rem; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; }
+
+        /* Translation Toggle */
+        .trans-btn { 
+            background: transparent; border: 1px solid var(--blue-accent); color: var(--blue-accent);
+            padding: 5px 10px; cursor: pointer; font-size: 0.9rem; margin-bottom: 10px; border-radius: 4px;
+        }
+        .id-text { display: none; color: var(--blue-accent); border-top: 1px solid #444; margin-top: 10px; padding-top: 10px; }
+
+        /* Visual Layout Special (Pros Cons) */
+        .pros-cons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 100%; }
+        .pc-col { padding: 10px; border-radius: 5px; }
+        .pc-pros { background: rgba(0,255,127,0.1); border: 1px solid var(--success-color); }
+        .pc-cons { background: rgba(255,68,68,0.1); border: 1px solid var(--danger-color); }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-04.html" class="home-btn">⬅️ Dashboard</a>
+
+    <div class="slide active centered">
+        <h1>Module 6: Practice</h1>
+        <p style="color:var(--blue-accent)">Advanced Note-Taking</p>
+        <div style="margin-top:20px; border:1px solid #333; padding:20px; border-radius:10px;">
+            <p>"The Gym for your Brain."</p>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 1: River Rafting (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c1')">Translate 🇮🇩</button>
+            <p id="c1-en">"River rafting is a challenging sport with important requirements... The river rafting company you choose should have a good safety record. You can choose trips from level 1 with no experience to level 6 for the most experienced... At level 1, the river moves slowly... At each level up, there is an increase in waves and dangerous rocks."</p>
+            <p id="c1-id" class="id-text">"Arung jeram adalah olahraga menantang dengan syarat penting... Perusahaan harus punya rekor keamanan baik. Anda bisa pilih level 1 (tanpa pengalaman) sampai level 6 (sangat berpengalaman)... Di level 1 sungai lambat... Tiap naik level, ombak dan batu berbahaya bertambah."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Strategy: Capture Context</h2>
+        <p>Don't just say "It's challenging". Capture ALL 3 elements.</p>
+        <div class="text-container">
+            1. Challenging Sport.<br>
+            2. Important Requirements.<br>
+            3. Good Safety Record.
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Strategy: Use Ranges</h2>
+        <p>How to write "Level 1 to Level 6"?</p>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "L1, L2, L3, L4, L5, L6"</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "Level 1 - 6"</button>
+        <p style="margin-top:10px;">Use a dash (-) for ranges!</p>
+    </div>
+
+    <div class="slide">
+        <h2>Case 1: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">
+                ...<span class="hl-target c1">challenging sport</span>... <span class="hl-target c1">important requirements</span>... good <span class="hl-target c1">safety record</span>... from <span class="hl-target c1">level 1</span> with <span class="hl-target c1">no experience</span> to <span class="hl-target c1">level 6</span>... dangerous rocks.
+            </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c1"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c1-1" onclick="annotate('c1', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c1-2" onclick="extract('c1', this)" disabled>2. 📝 Extract</button>
+        </div>
+    </div>
+
+
+    <div class="slide">
+        <h2>Case 2: Mountain Climbing (Input)</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c2')">Translate 🇮🇩</button>
+            <p id="c2-en">"Mountain climbing is dangerous... You need a certified course... Clothing depends on the season: Helmet, Boots. Equipment: Spikes, Rope. Team rules: Rope must be tied to waist."</p>
+            <p id="c2-id" class="id-text">"Mendaki gunung berbahaya... Butuh kursus bersertifikat... Pakaian tergantung musim: Helm, Sepatu Bot. Alat: Paku, Tali. Aturan tim: Tali harus diikat di pinggang."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Strategy: Avoid Vague Notes</h2>
+        <p>Which note is better?</p>
+        <button class="quiz-btn" onclick="checkQuiz(this, false)">A. "Climbing is dangerous."</button>
+        <button class="quiz-btn" onclick="checkQuiz(this, true)">B. "Dangerous + Strict Rules"</button>
+    </div>
+
+    <div class="slide centered">
+        <h2>Strategy: Grouping</h2>
+        <p>Don't mix items. Use Indentation.</p>
+        <div class="text-container" style="font-family:'Courier New';">
+            Clothing:<br>
+            &nbsp;&nbsp;- Helmet<br>
+            &nbsp;&nbsp;- Boots<br>
+            Equipment:<br>
+            &nbsp;&nbsp;- Spikes<br>
+            &nbsp;&nbsp;- Rope
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 2: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">
+                ...<span class="hl-target c2">dangerous</span>... <span class="hl-target c2">certified course</span>... Clothing: <span class="hl-target c2">Helmet</span>, <span class="hl-target c2">Boots</span>... Equipment: <span class="hl-target c2">Spikes</span>, <span class="hl-target c2">Rope</span>... <span class="hl-target c2">tied to waist</span>.
+            </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c2"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c2-1" onclick="annotate('c2', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c2-2" onclick="extract('c2', this)" disabled>2. 📝 Grouping</button>
+        </div>
+    </div>
+
+
+    <div class="slide">
+        <h2>Case 3: Animals in Captivity</h2>
+        <div class="text-container">
+            <button class="trans-btn" onclick="toggleID('c3')">Translate 🇮🇩</button>
+            <p id="c3-en">"Advantages: Protected from predators, Fed regularly (balanced diet), Medical checkups... Disadvantages: Bored, dissatisfied, nervous. Visitors endanger lives: Airborne diseases, Throwing trash."</p>
+            <p id="c3-id" class="id-text">"Keuntungan: Terlindung dari predator, Makan teratur, Cek medis... Kerugian: Bosan, tidak puas, gugup. Pengunjung membahayakan: Penyakit udara, Buang sampah."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Strategy: Visual Layout</h2>
+        <p>For "Pros vs Cons", split your page!</p>
+        <div style="display:flex; gap:20px; justify-content:center; margin-top:20px;">
+            <div style="border:2px solid var(--success-color); padding:20px; color:var(--success-color);">PROS</div>
+            <div style="font-size:2rem;">VS</div>
+            <div style="border:2px solid var(--danger-color); padding:20px; color:var(--danger-color);">CONS</div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 3: Final Notes</h2>
+        <div class="split-view">
+            <div class="col-left">
+                ...<span class="hl-target c3 green">Protected</span>... <span class="hl-target c3 green">Fed regularly</span>... <span class="hl-target c3 green">Medical checkups</span>... <span class="hl-target c3 red">Bored</span>... <span class="hl-target c3 red">Airborne diseases</span>... <span class="hl-target c3 red">Throwing trash</span>.
+            </div>
+            <div class="col-right">
+                <span style="position:absolute; top:0; right:0; background:#d4af37; color:#000; padding:2px 5px; font-size:0.8rem;">NOTEBOOK</span>
+                <div id="list-c3" class="pros-cons-grid"></div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <button class="action-btn" id="btn-c3-1" onclick="annotate('c3', this)">1. 🖍️ Color Code</button>
+            <button class="action-btn" id="btn-c3-2" onclick="extract('c3', this)" disabled>2. 📝 Visual Split</button>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>All Modules Complete!</h1>
+        <p>You have finished Day 04.</p>
+        <div style="margin-top:40px;">
+            <a href="day-04.html" style="text-decoration:none;">
+                <button class="nav-btn">🏠 Back to Dashboard</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span class="slide-num" id="slideNum">1 / 13</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const numDisplay = document.getElementById('slideNum');
+
+        // DATABASE CATATAN
+        const notesDB = {
+            c1: ["<strong>TITLE: River Rafting</strong>", "• Overview: Challenging + Requirements + Safety Record", "• Levels: 1 (No Exp) - 6 (Expert)", "• Hazards: Waves & Rocks"],
+            c2: ["<strong>TITLE: Mountain Climbing</strong>", "• Req: Certified Course", "• Clothing:", "&nbsp;&nbsp;- Helmet, Boots", "• Equipment:", "&nbsp;&nbsp;- Spikes, Rope (Waist)"],
+            c3: ["<div class='pc-col pc-pros'><strong>PROS</strong><br>• Protected<br>• Fed Regular<br>• Medical Checks</div><div class='pc-col pc-cons'><strong>CONS</strong><br>• Bored/Nervous<br>• Disease (Visitors)<br>• Trash Risks</div>"]
+        };
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+            numDisplay.innerText = (current + 1) + " / " + slides.length;
+        }
+
+        function toggleID(id) {
+            const el = document.getElementById(id + '-id');
+            const en = document.getElementById(id + '-en');
+            if(el.style.display === 'block') {
+                el.style.display = 'none'; en.style.display = 'block';
+            } else {
+                el.style.display = 'block'; en.style.display = 'none';
+            }
+        }
+
+        function checkQuiz(btn, isCorrect) {
+            if(isCorrect) {
+                btn.classList.add('correct');
+                btn.innerText += " ✅";
+            } else {
+                btn.classList.add('wrong');
+                btn.innerText += " ❌";
+            }
+        }
+
+        function annotate(id, btn) {
+            const targets = document.querySelectorAll('.hl-target.' + id);
+            targets.forEach(t => t.classList.add('active'));
+            btn.disabled = true;
+            btn.innerText = "Done ✓";
+            document.getElementById('btn-' + id + '-2').disabled = false;
+        }
+
+        function extract(id, btn) {
+            const list = document.getElementById('list-' + id);
+            list.innerHTML = ""; 
+            
+            const data = notesDB[id];
+            
+            // Khusus Case 3 (Visual Layout) langsung render HTML
+            if(id === 'c3') {
+                list.innerHTML = data[0];
+            } else {
+                data.forEach((text, i) => {
+                    setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = 'note-item';
+                        div.innerHTML = text;
+                        list.appendChild(div);
+                        setTimeout(() => div.classList.add('show'), 50);
+                    }, i * 400);
+                });
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Extracted ✓";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
