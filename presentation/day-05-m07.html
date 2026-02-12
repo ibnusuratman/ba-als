@@ -3,102 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAY 05: Visual Thinking</title>
+    <title>Module 7: Mind Mapping</title>
     <style>
         :root {
             --bg-color: #000000;
-            --card-bg: #111111;
             --text-color: #FFFFFF;
             --accent-gold: #FFD700;
+            --success-color: #00FF7F;
+            --danger-color: #FF4444;
+            --blue-accent: #3399FF;
             --purple-accent: #B026FF;
-            --gray-text: #888888;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            height: 100vh; width: 100vw; overflow: hidden;
         }
 
-        .container { width: 100%; max-width: 800px; }
-
-        header { text-align: center; margin-bottom: 50px; }
-        h1 { font-size: 3rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .subtitle { font-size: 1.2rem; color: var(--purple-accent); font-weight: 300; }
-
-        .section-title { 
-            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;
-            font-size: 1.2rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px;
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 100px;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
         }
 
-        .module-card {
-            background: linear-gradient(145deg, #1a1a1a, #111);
-            border: 1px solid #333; border-radius: 15px; padding: 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            text-decoration: none; color: white; transition: all 0.3s ease;
-            position: relative; overflow: hidden; margin-bottom: 30px;
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { justify-content: center; text-align: center; }
+
+        h1 { color: var(--purple-accent); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p, li { font-size: 1.2rem; line-height: 1.6; max-width: 900px; color: #EEE; }
+
+        /* --- CHECKPOINT QUIZ STYLES --- */
+        .quiz-container { display: grid; gap: 15px; width: 100%; max-width: 700px; margin-top: 20px; }
+        .quiz-item { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; text-align: left; }
+        .quiz-question { font-weight: bold; margin-bottom: 10px; color: #FFF; }
+        .quiz-options { display: flex; gap: 10px; }
+        .option-btn { 
+            background: #222; border: 1px solid #555; color: #AAA; padding: 5px 15px; 
+            border-radius: 5px; cursor: pointer; flex: 1; transition: 0.2s;
+        }
+        .option-btn:hover { background: #333; color: #FFF; }
+        .option-btn.correct { background: rgba(0,255,127,0.2); border-color: var(--success-color); color: var(--success-color); }
+        .option-btn.wrong { background: rgba(255,68,68,0.2); border-color: var(--danger-color); color: var(--danger-color); }
+
+        /* --- CONTENT WRAPPER (LAYER SYSTEM) --- */
+        .content-wrapper {
+            width: 100%; max-width: 1000px; height: 60vh;
+            position: relative; margin-top: 20px;
+            border: 1px solid #333; border-radius: 10px; overflow: hidden;
+            background: #111;
         }
 
-        .module-card.active { border-left: 5px solid var(--purple-accent); box-shadow: 0 4px 20px rgba(176, 38, 255, 0.2); }
-        .module-card.active:hover { background: #222; border-color: var(--purple-accent); transform: scale(1.02); }
-        .module-card.active .icon { font-size: 4rem; }
+        .text-view {
+            width: 100%; height: 100%; padding: 40px;
+            overflow-y: auto; position: absolute; top: 0; left: 0;
+            transition: opacity 0.5s ease;
+            font-family: 'Georgia', serif; font-size: 1.3rem; line-height: 1.8; color: #CCC;
+            text-align: justify;
+        }
+
+        .map-view {
+            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0;
+            background: #000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+            z-index: 10;
+        }
+
+        .map-view.visible { opacity: 1; pointer-events: auto; }
+        .text-view.hidden { opacity: 0.1; }
+
+        /* --- SVG MIND MAP STYLES --- */
+        svg { width: 100%; height: 100%; }
+        text { font-family: 'Segoe UI', sans-serif; font-weight: bold; text-anchor: middle; dominant-baseline: middle; fill: white; }
+        .branch-path { fill: none; stroke-width: 3; stroke-linecap: round; opacity: 0; transition: opacity 1s; }
+        .branch-text { opacity: 0; transition: opacity 1s 0.5s; font-size: 14px; }
         
-        .mod-content h2 { font-size: 2rem; margin-bottom: 10px; color: var(--purple-accent); }
-        .mod-content p { color: #AAA; font-size: 1.1rem; line-height: 1.5; }
-        .status-badge { 
-            font-size: 0.8rem; padding: 5px 10px; border-radius: 5px; 
-            text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 10px;
-            background: rgba(176, 38, 255, 0.2); color: var(--purple-accent);
-        }
+        .visible .branch-path { opacity: 1; }
+        .visible .branch-text { opacity: 1; }
 
-        .home-btn { 
-            position: fixed; top: 20px; left: 20px; 
-            background: #222; color: #FFF; padding: 10px 15px; border-radius: 8px; 
-            text-decoration: none; border: 1px solid #444; font-size: 0.9rem;
+        /* BOX MAPPING STYLES */
+        .box-node { border: 2px solid var(--text-color); padding: 10px; margin: 5px; width: 150px; text-align: center; }
+        .box-level-1 { border-color: var(--accent-gold); color: var(--accent-gold); font-size: 1.2rem; }
+        .box-level-2 { border-color: var(--blue-accent); color: var(--blue-accent); }
+
+        /* Highlight Logic */
+        .hl-target { transition: all 0.5s; border-radius: 3px; }
+        .hl-target.active { background-color: var(--purple-accent); color: #FFF; font-weight: bold; padding: 0 5px; }
+
+        .action-container { margin-top: 20px; display: flex; gap: 20px; }
+        .action-btn {
+            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
+            padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            font-size: 1.1rem; transition: 0.3s;
         }
+        .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .action-btn:hover:not(:disabled) { background: var(--accent-gold); color: #000; }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #111; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #333; color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; }
 
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-btn">🏠 Main Menu</a>
+    <a href="day-05.html" class="home-btn">⬅️ Dashboard</a>
 
-    <div class="container">
-        
-        <header>
-            <h1>DAY 05</h1>
-            <p class="subtitle">Visual Thinking & Creativity</p>
-        </header>
-
-        <h2 class="section-title">Yesterday's Mastery (Linear)</h2>
-        <div style="background:#111; padding:20px; border-radius:10px; border:1px solid #333; margin-bottom:40px; color:#888;">
-            <p>✅ <strong>Module 5:</strong> Filtering & Keywords</p>
-            <p>✅ <strong>Module 6:</strong> Hierarchy & Formatting</p>
+    <div class="slide active centered">
+        <h1>Module 7: Mind Mapping</h1>
+        <p style="color:var(--accent-gold)">The Origin</p>
+        <div style="margin-top:30px; border:1px solid #333; padding:20px; border-radius:10px; max-width:700px;">
+            <h2>Tony Buzan</h2>
+            <p>The Creator of Mind Maps. He discovered that our brain does not work in lists (Linear Thinking), but explodes with ideas (Radiant Thinking).</p>
         </div>
-
-        <h2 class="section-title">🚀 Today's Mission (Radiant)</h2>
-        
-        <a href="day-05-m07.html" class="module-card active">
-            <div class="mod-content">
-                <span class="status-badge">Open Now</span>
-                <h2>Module 7: Mind Mapping</h2>
-                <p>Unlock your brain's potential. Transform linear texts into organic, colorful maps.</p>
-                <ul style="margin-top:15px; list-style:none; color:#CCC; font-size:0.95rem;">
-                    <li>• The Tony Buzan Method</li>
-                    <li>• Organic Branches (BOIs)</li>
-                    <li>• One Word Rule</li>
-                </ul>
-            </div>
-            <div class="icon">🧠</div>
-        </a>
-
     </div>
+
+    <div class="slide centered">
+        <h2>The Toolkit</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; width:100%; max-width:800px;">
+            <div style="background:#111; padding:20px; border:1px solid var(--blue-accent);">
+                <h3 style="color:var(--blue-accent)">Center Image</h3>
+                <p>Worth 1000 words. Anchors your memory.</p>
+            </div>
+            <div style="background:#111; padding:20px; border:1px solid var(--purple-accent);">
+                <h3 style="color:var(--purple-accent)">Color</h3>
+                <p>"Color is a thinking tool, not a childish thing."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>The Golden Rule</h2>
+        <div style="margin-top:20px; padding:30px; border:2px solid var(--accent-gold); border-radius:10px;">
+            <h1 style="font-size:4rem; margin:0;">1 WORD</h1>
+            <p style="margin-top:10px;">PER BRANCH</p>
+            <p style="color:#888; margin-top:20px; font-size:1rem;">Phrases lock the brain. Keywords open it.</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>Checkpoint: Understanding Basics</h2>
+        <div class="quiz-container">
+            
+            <div class="quiz-item">
+                <div class="quiz-question">1. Who invented Mind Mapping?</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="check(this, true)">Tony Buzan</button>
+                    <button class="option-btn" onclick="check(this, false)">Albert Einstein</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-question">2. What does BOI stand for?</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="check(this, false)">Big Original Idea</button>
+                    <button class="option-btn" onclick="check(this, true)">Basic Ordering Idea</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-question">3. How many words per branch?</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="check(this, true)">One Word</button>
+                    <button class="option-btn" onclick="check(this, false)">Short Phrase</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-question">4. How do you start a map?</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="check(this, false)">List of Titles</button>
+                    <button class="option-btn" onclick="check(this, true)">Center Image</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-question">5. Is color important?</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="check(this, true)">Yes, Thinking Tool</button>
+                    <button class="option-btn" onclick="check(this, false)">No, Childish</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 1: Manager Training (Organic)</h2>
+        <div class="content-wrapper">
+            <div id="text-c1" class="text-view">
+                We ask companies to send <span class="hl-target c1">four or five participants</span>. These participants must have strong <span class="hl-target c1">intellectual abilities</span> and <span class="hl-target c1">proven records</span>. Although managers cannot be created in a classroom, we accept only <span class="hl-target c1">practicing managers</span>. The program structure consists of <span class="hl-target c1">5 modules</span>, each lasting <span class="hl-target c1">2 weeks</span>.
+            </div>
+            <div id="map-c1" class="map-view">
+                <svg viewBox="0 0 400 300">
+                    <circle cx="200" cy="150" r="30" fill="none" stroke="#FFD700" stroke-width="3" />
+                    <text x="200" y="150" fill="#FFD700" font-size="12">IMPM</text>
+
+                    <path class="branch-path" d="M200 120 Q200 80 250 50" stroke="#3399FF" />
+                    <text class="branch-text" x="260" y="50" fill="#3399FF">Participants</text>
+                    <path class="branch-path" d="M250 50 Q280 40 300 30" stroke="#3399FF" />
+                    <text class="branch-text" x="320" y="30" fill="#3399FF">Managers</text>
+
+                    <path class="branch-path" d="M170 150 Q100 150 50 100" stroke="#00FF7F" />
+                    <text class="branch-text" x="50" y="90" fill="#00FF7F">Criteria</text>
+                    <path class="branch-path" d="M50 100 Q40 80 30 60" stroke="#00FF7F" />
+                    <text class="branch-text" x="30" y="50" fill="#00FF7F">Intellect</text>
+
+                    <path class="branch-path" d="M200 180 Q200 250 250 250" stroke="#B026FF" />
+                    <text class="branch-text" x="260" y="260" fill="#B026FF">Structure</text>
+                    <path class="branch-path" d="M250 250 Q280 260 310 270" stroke="#B026FF" />
+                    <text class="branch-text" x="330" y="275" fill="#B026FF">5 Modules</text>
+                </svg>
+            </div>
+        </div>
+        <div class="action-container">
+            <button class="action-btn" id="btn-c1-1" onclick="annotate('c1', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c1-2" onclick="showMap('c1', this)" disabled>2. 🧠 Show Organic Map</button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 2: Hindu Wedding (Timeline)</h2>
+        <div class="content-wrapper">
+            <div id="text-c2" class="text-view">
+                <span class="hl-target c2">Months before</span> the wedding, the engagement takes place and the groom gives a ring. The <span class="hl-target c2">night before</span>, the bride has her hands and feet painted with <span class="hl-target c2">Henna</span>. During the <span class="hl-target c2">ceremony</span>, the couple sits in front of a <span class="hl-target c2">sacred fire</span>. The bride's sari is tied to the groom's scarf.
+            </div>
+            <div id="map-c2" class="map-view">
+                <svg viewBox="0 0 400 300">
+                    <circle cx="200" cy="150" r="35" fill="none" stroke="#FFD700" stroke-width="3" />
+                    <text x="200" y="150" fill="#FFD700" font-size="12">WEDDING</text>
+
+                    <path class="branch-path" d="M165 150 Q100 150 80 180" stroke="#3399FF" />
+                    <text class="branch-text" x="60" y="200" fill="#3399FF">Months B4</text>
+                    
+                    <path class="branch-path" d="M200 115 Q200 50 180 30" stroke="#00FF7F" />
+                    <text class="branch-text" x="160" y="20" fill="#00FF7F">Night B4</text>
+
+                    <path class="branch-path" d="M235 150 Q300 150 320 180" stroke="#B026FF" />
+                    <text class="branch-text" x="320" y="200" fill="#B026FF">Ceremony</text>
+                    <path class="branch-path" d="M320 180 Q330 200 340 220" stroke="#B026FF" />
+                    <text class="branch-text" x="350" y="230" fill="#B026FF">Fire</text>
+                </svg>
+            </div>
+        </div>
+        <div class="action-container">
+            <button class="action-btn" id="btn-c2-1" onclick="annotate('c2', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c2-2" onclick="showMap('c2', this)" disabled>2. 🧠 Show Timeline</button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 3: River Rafting (Box)</h2>
+        <div class="content-wrapper">
+            <div id="text-c3" class="text-view">
+                River rafting has levels ranging from <span class="hl-target c3">Level 1 to 6</span>. You must choose a company with a <span class="hl-target c3">Good Safety Record</span>. The sport requires specific equipment such as an <span class="hl-target c3">Inflatable Boat</span> and a <span class="hl-target c3">Helmet</span>.
+            </div>
+            <div id="map-c3" class="map-view">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:20px; width:100%; height:100%; justify-content:center;">
+                    <div class="box-node box-level-1">RIVER RAFTING</div>
+                    
+                    <div style="display:flex; gap:20px;">
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="box-node box-level-2">Levels</div>
+                            <div style="font-size:0.8rem; color:#CCC;">1 - 6</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="box-node box-level-2">Company</div>
+                            <div style="font-size:0.8rem; color:#CCC;">Safety Record</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="box-node box-level-2">Equipment</div>
+                            <div style="font-size:0.8rem; color:#CCC;">Boat, Helmet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="action-container">
+            <button class="action-btn" id="btn-c3-1" onclick="annotate('c3', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c3-2" onclick="showMap('c3', this)" disabled>2. 🧠 Show Box Map</button>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Day 05 Complete!</h1>
+        <p>You have mastered Visual Thinking.</p>
+        <div style="margin-top:40px;">
+            <a href="day-05.html" style="text-decoration:none;">
+                <button class="nav-btn">🏠 Back to Dashboard</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#888;">Module 7</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        function annotate(id, btn) {
+            const targets = document.querySelectorAll('.hl-target.' + id);
+            targets.forEach(t => t.classList.add('active'));
+            btn.disabled = true;
+            btn.innerText = "Done ✓";
+            document.getElementById('btn-' + id + '-2').disabled = false;
+        }
+
+        function showMap(id, btn) {
+            const textView = document.getElementById('text-' + id);
+            const mapView = document.getElementById('map-' + id);
+            
+            textView.classList.add('hidden');
+            mapView.classList.add('visible');
+            btn.disabled = true;
+            btn.innerText = "Map Active ✓";
+        }
+
+        function check(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            if(isCorrect) {
+                btn.classList.add('correct');
+                btn.innerText += " ✅";
+            } else {
+                btn.classList.add('wrong');
+                btn.innerText += " ❌";
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
 
 </body>
 </html>
