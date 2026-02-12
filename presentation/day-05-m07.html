@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAY 05: Visual Thinking</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --text-color: #FFFFFF;
+            --accent-gold: #FFD700;
+            --purple-accent: #B026FF;
+            --gray-text: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 800px; }
+
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 3rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; color: var(--purple-accent); font-weight: 300; }
+
+        .section-title { 
+            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;
+            font-size: 1.2rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .module-card {
+            background: linear-gradient(145deg, #1a1a1a, #111);
+            border: 1px solid #333; border-radius: 15px; padding: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: white; transition: all 0.3s ease;
+            position: relative; overflow: hidden; margin-bottom: 30px;
+        }
+
+        .module-card.active { border-left: 5px solid var(--purple-accent); box-shadow: 0 4px 20px rgba(176, 38, 255, 0.2); }
+        .module-card.active:hover { background: #222; border-color: var(--purple-accent); transform: scale(1.02); }
+        .module-card.active .icon { font-size: 4rem; }
+        
+        .mod-content h2 { font-size: 2rem; margin-bottom: 10px; color: var(--purple-accent); }
+        .mod-content p { color: #AAA; font-size: 1.1rem; line-height: 1.5; }
+        .status-badge { 
+            font-size: 0.8rem; padding: 5px 10px; border-radius: 5px; 
+            text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 10px;
+            background: rgba(176, 38, 255, 0.2); color: var(--purple-accent);
+        }
+
+        .home-btn { 
+            position: fixed; top: 20px; left: 20px; 
+            background: #222; color: #FFF; padding: 10px 15px; border-radius: 8px; 
+            text-decoration: none; border: 1px solid #444; font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠 Main Menu</a>
+
+    <div class="container">
+        
+        <header>
+            <h1>DAY 05</h1>
+            <p class="subtitle">Visual Thinking & Creativity</p>
+        </header>
+
+        <h2 class="section-title">Yesterday's Mastery (Linear)</h2>
+        <div style="background:#111; padding:20px; border-radius:10px; border:1px solid #333; margin-bottom:40px; color:#888;">
+            <p>✅ <strong>Module 5:</strong> Filtering & Keywords</p>
+            <p>✅ <strong>Module 6:</strong> Hierarchy & Formatting</p>
+        </div>
+
+        <h2 class="section-title">🚀 Today's Mission (Radiant)</h2>
+        
+        <a href="day-05-m07.html" class="module-card active">
+            <div class="mod-content">
+                <span class="status-badge">Open Now</span>
+                <h2>Module 7: Mind Mapping</h2>
+                <p>Unlock your brain's potential. Transform linear texts into organic, colorful maps.</p>
+                <ul style="margin-top:15px; list-style:none; color:#CCC; font-size:0.95rem;">
+                    <li>• The Tony Buzan Method</li>
+                    <li>• Organic Branches (BOIs)</li>
+                    <li>• One Word Rule</li>
+                </ul>
+            </div>
+            <div class="icon">🧠</div>
+        </a>
+
+    </div>
+
+</body>
+</html>
