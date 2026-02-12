@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 7 Simulation</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .video-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        /* Tombol Navigasi Khusus */
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 4px solid var(--accent-color);
+        }
+
+        .review-item {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 10px; 
+            margin-top: 10px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.9rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Navigation Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 7 Simulation</h1>
+        <p class="subtitle">Mind Mapping Strategies</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container"></div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL (Module 7a - 7f)
+    const quizData = [
+        {
+            video: "Video 7a: The Rules of Mind Mapping",
+            questions: [
+                {
+                    id: 1,
+                    text: "What does the term 'BOI' stand for in the context of Mind Mapping?",
+                    options: [
+                        "Basic Organizing Instructions",
+                        "Basic Ordering Ideas",
+                        "Best Original Images",
+                        "Brain Output Ideas"
+                    ],
+                    correct: 1, 
+                    [span_0](start_span)explanation: "BOI singkatan dari 'Basic Ordering Ideas'[span_0](end_span). Ini adalah cabang-cabang utama yang keluar langsung dari gambar pusat dan mewakili bab-bab dasar."
+                },
+                {
+                    id: 2,
+                    text: "According to the 'One Word Rule', why should you use only one key word per branch?",
+                    options: [
+                        "Because phrases are too difficult to write on curved lines.",
+                        "Because single words allow for 'explosive creativity', whereas phrases trap thoughts.",
+                        "To save ink when drawing the map.",
+                        "It is not a rule; you can write full sentences if you want."
+                    ],
+                    correct: 1, 
+                    explanation: "Aturan satu kata bertujuan untuk memicu 'explosive creativity' (kreativitas eksplosif). [span_1](start_span)[span_2](start_span)Frasa atau kalimat cenderung membatasi atau 'menjebak' pikiran[span_1](end_span)[span_2](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Video 7b: Examples & Topics",
+            questions: [
+                {
+                    id: 3,
+                    text: "When organizing a group of words like 'Circuit', 'Electric Power', 'Magnetism', and 'Ohm's Law', what is the correct central topic?",
+                    options: [
+                        "Ohm's Law",
+                        "Physics",
+                        "Electricity",
+                        "Light Bulb"
+                    ],
+                    correct: 2, 
+                    [span_3](start_span)[span_4](start_span)explanation: "'Electricity' (Listrik) adalah topik utama yang benar karena mencakup semua istilah lain (sirkuit, daya, magnetisme) sebagai sub-bagiannya[span_3](end_span)[span_4](end_span)."
+                },
+                {
+                    id: 4,
+                    text: "How is 'Color' viewed in Mind Mapping according to the module?",
+                    options: [
+                        "It is a thinking tool to code and group information, not just for decoration.",
+                        "It is childish and should be avoided in professional maps.",
+                        "It is only used for the central image.",
+                        "It is optional and does not affect memory."
+                    ],
+                    correct: 0, 
+                    [span_5](start_span)[span_6](start_span)explanation: "Warna adalah 'thinking tool' (alat berpikir) untuk memberi kode dan mengelompokkan informasi, bukan sekadar hiasan atau hal yang kekanak-kanakan[span_5](end_span)[span_6](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Video 7c: Manager Training Map",
+            questions: [
+                {
+                    id: 5,
+                    text: "In the Manager Training mind map, how should numerical facts like '5 modules', '2 weeks', and '16 months' be organized?",
+                    options: [
+                        "They should be scattered randomly around the center.",
+                        "They should be grouped under a single 'Structure' branch.",
+                        "They should be omitted to keep the map simple.",
+                        "They should be written as a long sentence in the center."
+                    ],
+                    correct: 1, 
+                    [span_7](start_span)[span_8](start_span)explanation: "Fakta numerik sebaiknya dikelompokkan di bawah satu cabang 'Structure' (Struktur) agar peta tetap teratur dan informasinya mudah diingat[span_7](end_span)[span_8](end_span)."
+                },
+                {
+                    id: 6,
+                    text: "What are the 'hard criteria' for selecting participants that should be extracted for the map?",
+                    options: [
+                        "Must be nice people.",
+                        "Strong Intellectual Abilities & Proven Record.",
+                        "Must have a university degree.",
+                        "Must be willing to travel."
+                    ],
+                    correct: 1, 
+                    [span_9](start_span)[span_10](start_span)explanation: "Kriteria keras yang harus diekstrak ke dalam peta adalah 'Strong Intellectual Abilities' (Intelektual Kuat) dan 'Proven Record' (Rekam Jejak Terbukti)[span_9](end_span)[span_10](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Video 7d: Hindu Weddings (Prep)",
+            questions: [
+                {
+                    id: 7,
+                    text: "For events with a sequence like Hindu Weddings, what is the recommended strategy for BOIs?",
+                    options: [
+                        "Branching by Location (e.g., House, Temple).",
+                        "Branching by Timeline (e.g., Months Before, Night Before).",
+                        "Branching by Cost (e.g., Expensive, Cheap).",
+                        "Branching by People (e.g., Bride, Groom)."
+                    ],
+                    correct: 1, 
+                    explanation: "Untuk acara berurutan, gunakan kerangka waktu (Timeline) sebagai BOI. [span_11](start_span)Contohnya memisahkan 'Months Before' (Bulan Sebelumnya) dan 'Night Before' (Malam Sebelumnya)[span_11](end_span)."
+                },
+                {
+                    id: 8,
+                    text: "Which items are listed under the 'Months Before' preparation phase?",
+                    options: [
+                        "Henna ritual.",
+                        "The wedding ceremony itself.",
+                        "Buying jewelry (Mangal Sutra) and clothes.",
+                        "Walking around the fire."
+                    ],
+                    correct: 2, 
+                    [span_12](start_span)explanation: "Fase 'Months Before' mencakup belanja barang jangka panjang seperti perhiasan (Mangal Sutra) dan pakaian pengantin[span_12](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Video 7e: Hindu Weddings (Ceremony)",
+            questions: [
+                {
+                    id: 9,
+                    text: "To keep the map clean, what strategy is suggested for repeated actions like 'walking around the fire seven times'?",
+                    options: [
+                        "Draw seven separate circles.",
+                        "Write the sentence 'They walk seven times'.",
+                        "Use symbols and numbers (e.g., '7x').",
+                        "Ignore the number."
+                    ],
+                    correct: 2, 
+                    [span_13](start_span)[span_14](start_span)explanation: "Gunakan simbol dan angka (misalnya '7x') untuk tindakan berulang agar peta tetap bersih dan tidak penuh tulisan[span_13](end_span)[span_14](end_span)."
+                },
+                {
+                    id: 10,
+                    text: "In the ceremony map, the connection 'Bride's Dress tied to Groom's Scarf' can be represented simply using which symbol?",
+                    options: [
+                        "A question mark (?)",
+                        "An equals sign (=)",
+                        "A minus sign (-)",
+                        "A dollar sign ($)"
+                    ],
+                    correct: 1, 
+                    [span_15](start_span)[span_16](start_span)explanation: "Modul menyarankan penggunaan simbol '=' untuk menunjukkan koneksi atau kesetaraan, seperti 'Dress = Scarf'[span_15](end_span)[span_16](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Video 7f: River Rafting Map",
+            questions: [
+                {
+                    id: 11,
+                    text: "For hierarchical data like River Rafting levels and requirements, what alternative mapping style is suggested?",
+                    options: [
+                        "Organic Mind Map with curved lines.",
+                        "Box Mapping (using rectangles).",
+                        "Linear list.",
+                        "Pie Chart."
+                    ],
+                    correct: 1, 
+                    [span_17](start_span)explanation: "Untuk data hierarkis, 'Box Mapping' (Pemetaan Kotak) disarankan sebagai alternatif struktur selain kurva organik[span_17](end_span)."
+                },
+                {
+                    id: 12,
+                    text: "In the River Rafting Box Map, where should 'Good Safety Record' be placed?",
+                    options: [
+                        "Under 'Equipment'.",
+                        "Under 'Company'.",
+                        "Under 'Levels'.",
+                        "Under 'Overview'."
+                    ],
+                    correct: 1, 
+                    [span_18](start_span)explanation: "Dalam struktur peta, 'Good Safety Record' adalah sub-poin dari cabang/kotak 'Company' (Perusahaan)[span_18](end_span)."
+                }
+            ]
+        }
+    ];
+
+    let currentVideoIndex = 0;
+    const userAnswers = {};
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        
+        quizData.forEach((section, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${index === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${index}`;
+
+            let html = `<div class="card">
+                <span class="video-label">${section.video}</span>`;
+
+            section.questions.forEach(q => {
+                html += `
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top:20px;">
+                    <p class="question-text"><strong>${q.id}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`; 
+
+            if (index < quizData.length - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${index})">Next Video</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        });
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentIndex) {
+        const currentQuestions = quizData[currentIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        document.getElementById(`step-${currentIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const lastIndex = quizData.length - 1;
+        const currentQuestions = quizData[lastIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let score = 0;
+        let total = 0;
+        let reviewHTML = '';
+
+        quizData.forEach(section => {
+            section.questions.forEach(q => {
+                total++;
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusIcon = isCorrect ? '✅ Benar' : '❌ Salah';
+                
+                reviewHTML += `
+                <div class="review-item ${statusClass}">
+                    <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">${section.video}</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">${q.id}. ${q.text}</div>
+                    <div style="margin-bottom: 5px; color: ${isCorrect ? '#4caf50' : '#f44336'}">
+                        ${statusIcon} (You answered: ${q.options[userAnswer]})
+                    </div>
+                    ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.9rem;">Correct Answer: ${q.options[q.correct]}</div>` : ''}
+                    
+                    <div class="review-explanation">
+                        <span class="indonesian-flag">🇮🇩 PENJELASAN BAHASA INDONESIA:</span>
+                        <p class="explanation-text">${q.explanation}</p>
+                    </div>
+                </div>`;
+            });
+        });
+
+        const finalScore = Math.round((score / total) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">${finalScore}</div>
+                <p>You got ${score} out of ${total} correct.</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang</button>
+            
+            <h3 style="margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 10px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:20px;">⬆ Kembali ke Atas</button>
+        `;
+
+        document.getElementById(`step-${quizData.length - 1}`).classList.remove('active');
+        resultContainer.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    initQuiz();
+
+</script>
+
+</body>
+</html>
