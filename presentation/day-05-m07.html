@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 7: Mind Mapping</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #FFFFFF;
+            --accent-gold: #FFD700;
+            --highlight-bg: #1A1A1A;
+            --danger-color: #FF4444;
+            --success-color: #00FF7F;
+            --blue-accent: #3399FF;
+            --purple-accent: #B026FF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 100px;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { justify-content: center; text-align: center; }
+
+        /* Typography */
+        h1 { color: var(--purple-accent); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        h2 { color: var(--accent-gold); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p, li { font-size: 1.2rem; line-height: 1.6; max-width: 900px; color: #EEE; }
+
+        /* === SINGLE LAYER CONTAINER === */
+        .content-wrapper {
+            width: 100%; max-width: 1000px; height: 60vh;
+            position: relative; margin-top: 20px;
+            border: 1px solid #333; border-radius: 10px; overflow: hidden;
+            background: #111;
+        }
+
+        /* TEXT VIEW (DEFAULT) */
+        .text-view {
+            width: 100%; height: 100%; padding: 40px;
+            overflow-y: auto; position: absolute; top: 0; left: 0;
+            transition: opacity 0.5s ease;
+            font-family: 'Georgia', serif; font-size: 1.3rem; line-height: 1.8; color: #CCC;
+            text-align: justify;
+        }
+
+        /* MAP VIEW (HIDDEN INITIALLY) */
+        .map-view {
+            width: 100%; height: 100%; padding: 20px;
+            overflow-y: auto; position: absolute; top: 0; left: 0;
+            background: #000; /* Black canvas for map */
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+            z-index: 10;
+        }
+
+        .map-view.visible { opacity: 1; pointer-events: auto; }
+        .text-view.hidden { opacity: 0.1; }
+
+        /* --- MIND MAP STYLES (CSS ONLY) --- */
+        
+        /* GENERAL NODE */
+        .node { border-radius: 50px; padding: 10px 20px; font-weight: bold; text-align: center; border: 2px solid; background: #000; }
+        .center-node { font-size: 1.5rem; padding: 20px 30px; border: 3px solid var(--accent-gold); color: var(--accent-gold); border-radius: 50%; }
+        
+        /* ORGANIC TREE STRUCTURE (FLEX) */
+        .tree-container { display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%; }
+        .branches-row { display: flex; justify-content: space-around; width: 100%; gap: 20px; }
+        .branch-group { display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        /* Lines (Simulated with borders) */
+        .branch-line { width: 2px; height: 20px; background: #555; margin: 5px 0; }
+        
+        /* Colors for Branches */
+        .b-blue { color: var(--blue-accent); border-color: var(--blue-accent); }
+        .b-green { color: var(--success-color); border-color: var(--success-color); }
+        .b-pink { color: var(--purple-accent); border-color: var(--purple-accent); }
+        
+        /* BOX MAPPING (HIERARCHY) */
+        .box-node { border: 2px solid var(--text-color); padding: 10px; margin: 5px; width: 150px; }
+        .box-level-1 { border-color: var(--accent-gold); color: var(--accent-gold); font-size: 1.2rem; }
+        .box-level-2 { border-color: var(--blue-accent); color: var(--blue-accent); }
+
+        /* Highlight Logic */
+        .hl-target { transition: all 0.5s; border-radius: 3px; }
+        .hl-target.active { background-color: var(--purple-accent); color: #FFF; font-weight: bold; padding: 0 5px; }
+
+        /* Buttons */
+        .action-container { margin-top: 20px; display: flex; gap: 20px; }
+        .action-btn {
+            background-color: #333; color: var(--accent-gold); border: 2px solid var(--accent-gold);
+            padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            font-size: 1.1rem; transition: 0.3s;
+        }
+        .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .action-btn:hover:not(:disabled) { background: var(--accent-gold); color: #000; }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #111; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #333; color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-05.html" class="home-btn">⬅️ Dashboard</a>
+
+    <div class="slide active centered">
+        <h1>Module 7: Mind Mapping</h1>
+        <p style="color:var(--accent-gold)">From Linear to Radiant</p>
+        <div style="margin-top:30px; border:1px solid #333; padding:20px; border-radius:10px;">
+            <p>"Unlock the Supernova of Meaning."</p>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>The Golden Rules</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; width:100%; max-width:900px;">
+            <div style="background:#111; padding:20px; border:1px solid var(--danger-color);">
+                <h3 style="color:var(--danger-color)">❌ The Trap</h3>
+                <p>Writing Phrases.</p>
+                <p><em>"It limits your brain."</em></p>
+            </div>
+            <div style="background:#111; padding:20px; border:1px solid var(--success-color);">
+                <h3 style="color:var(--success-color)">✅ The Solution</h3>
+                <p>One Word Per Branch.</p>
+                <p><em>"It opens up infinite associations."</em></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 1: Manager Training</h2>
+        <p style="text-align:center; margin-bottom:10px;">Goal: Summarize the Structure.</p>
+        
+        <div class="content-wrapper">
+            <div id="text-c1" class="text-view">
+                We ask companies to send <span class="hl-target c1">four or five participants</span>. These participants must have strong <span class="hl-target c1">intellectual abilities</span> and <span class="hl-target c1">proven records</span>. Although managers cannot be created in a classroom, we accept only <span class="hl-target c1">practicing managers</span>. The program structure consists of <span class="hl-target c1">5 modules</span>, each lasting <span class="hl-target c1">2 weeks</span>.
+            </div>
+
+            <div id="map-c1" class="map-view">
+                <div class="tree-container">
+                    <div class="node center-node">IMPM</div>
+                    <div class="branches-row">
+                        <div class="branch-group">
+                            <div class="node b-blue">Participants</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-blue" style="font-size:0.8rem">Managers</div>
+                            <div class="node b-blue" style="font-size:0.8rem">Practice</div>
+                        </div>
+                        <div class="branch-group">
+                            <div class="node b-green">Criteria</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-green" style="font-size:0.8rem">Intellect</div>
+                            <div class="node b-green" style="font-size:0.8rem">Record</div>
+                        </div>
+                        <div class="branch-group">
+                            <div class="node b-pink">Structure</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-pink" style="font-size:0.8rem">5 Modules</div>
+                            <div class="node b-pink" style="font-size:0.8rem">2 Weeks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-container">
+            <button class="action-btn" id="btn-c1-1" onclick="annotate('c1', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c1-2" onclick="showMap('c1', this)" disabled>2. 🧠 Show Map</button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 2: Hindu Wedding</h2>
+        <p style="text-align:center; margin-bottom:10px;">Goal: Map the Timeline.</p>
+        
+        <div class="content-wrapper">
+            <div id="text-c2" class="text-view">
+                <span class="hl-target c2">Months before</span> the wedding, the engagement takes place and the groom gives a ring. The <span class="hl-target c2">night before</span>, the bride has her hands and feet painted with <span class="hl-target c2">Henna</span>. During the <span class="hl-target c2">ceremony</span>, the couple sits in front of a <span class="hl-target c2">sacred fire</span>. The bride's sari is tied to the groom's scarf to symbolize their union.
+            </div>
+
+            <div id="map-c2" class="map-view">
+                <div class="tree-container">
+                    <div class="node center-node">WEDDING</div>
+                    <div class="branches-row">
+                        <div class="branch-group">
+                            <div class="node b-blue">Months B4</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-blue" style="font-size:0.9rem">Ring</div>
+                        </div>
+                        <div class="branch-group">
+                            <div class="node b-green">Night B4</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-green" style="font-size:0.9rem">Henna</div>
+                        </div>
+                        <div class="branch-group">
+                            <div class="node b-pink">Ceremony</div>
+                            <div class="branch-line"></div>
+                            <div class="node b-pink" style="font-size:0.9rem">Fire</div>
+                            <div class="node b-pink" style="font-size:0.9rem">Tied</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-container">
+            <button class="action-btn" id="btn-c2-1" onclick="annotate('c2', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c2-2" onclick="showMap('c2', this)" disabled>2. 🧠 Show Map</button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>Case 3: River Rafting</h2>
+        <p style="text-align:center; margin-bottom:10px;">Goal: Box Mapping (Hierarchy).</p>
+        
+        <div class="content-wrapper">
+            <div id="text-c3" class="text-view">
+                River rafting has levels ranging from <span class="hl-target c3">Level 1 to 6</span>. You must choose a company with a <span class="hl-target c3">Good Safety Record</span>. The sport requires specific equipment such as an <span class="hl-target c3">Inflatable Boat</span> and a <span class="hl-target c3">Helmet</span>.
+            </div>
+
+            <div id="map-c3" class="map-view">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+                    <div class="node box-node box-level-1">RIVER RAFTING</div>
+                    
+                    <div style="display:flex; gap:20px;">
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="node box-node box-level-2">Levels</div>
+                            <div style="font-size:0.8rem; color:#CCC;">1 - 6</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="node box-node box-level-2">Company</div>
+                            <div style="font-size:0.8rem; color:#CCC;">Safety Record</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="node box-node box-level-2">Equipment</div>
+                            <div style="font-size:0.8rem; color:#CCC;">Boat, Helmet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-container">
+            <button class="action-btn" id="btn-c3-1" onclick="annotate('c3', this)">1. 🖍️ Annotate</button>
+            <button class="action-btn" id="btn-c3-2" onclick="showMap('c3', this)" disabled>2. 🧠 Show Box Map</button>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Day 05 Complete!</h1>
+        <p>You have mastered the art of Visual Thinking.</p>
+        <div style="margin-top:40px;">
+            <a href="day-05.html" style="text-decoration:none;">
+                <button class="nav-btn">🏠 Back to Dashboard</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#888;">Module 7</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        function annotate(id, btn) {
+            const targets = document.querySelectorAll('.hl-target.' + id);
+            targets.forEach(t => t.classList.add('active'));
+            btn.disabled = true;
+            btn.innerText = "Done ✓";
+            document.getElementById('btn-' + id + '-2').disabled = false;
+        }
+
+        function showMap(id, btn) {
+            const textView = document.getElementById('text-' + id);
+            const mapView = document.getElementById('map-' + id);
+            
+            // FADE OUT TEXT, FADE IN MAP
+            textView.classList.add('hidden');
+            mapView.classList.add('visible');
+
+            btn.disabled = true;
+            btn.innerText = "Map Active ✓";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
