@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAY 06: Structural Logic</title>
+    <title>DAY 06: Logic & Arguments</title>
     <style>
         :root {
             --bg-color: #050505;
             --card-bg: #151515;
             --text-color: #E0E0E0;
             --accent-cyan: #00E5FF;
-            --accent-red: #FF2E63;
+            --accent-purple: #BB86FC;
+            --accent-green: #00E676;
             --gray-text: #888888;
         }
 
@@ -19,86 +20,184 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 40px 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        .container { width: 100%; max-width: 800px; }
+        .container { width: 100%; max-width: 600px; } /* Max width ideal buat HP */
 
-        header { text-align: center; margin-bottom: 50px; }
-        h1 { font-size: 3rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .subtitle { font-size: 1.2rem; color: var(--accent-red); font-weight: 300; }
+        /* HEADER */
+        header { text-align: center; margin-bottom: 30px; margin-top: 10px; }
+        h1 { font-size: 2.5rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-size: 1rem; color: var(--gray-text); }
 
-        .section-title { 
-            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;
-            font-size: 1.2rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px;
+        /* SECTION TITLES */
+        .section-label {
+            color: var(--accent-purple); font-weight: bold; margin-bottom: 15px; 
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; border-left: 3px solid var(--accent-purple); padding-left: 10px;
         }
 
+        /* CHECKLIST CARD (MODULE 1-7) */
+        .checklist-card {
+            background: #1a1a1a; border: 1px solid #333; border-radius: 12px;
+            padding: 20px; margin-bottom: 40px;
+        }
+
+        .progress-container {
+            background: #333; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: var(--accent-green); width: 0%; transition: width 0.5s ease;
+        }
+        .progress-text { text-align: right; font-size: 0.8rem; color: var(--accent-green); margin-top: -15px; margin-bottom: 15px; }
+
+        .check-item {
+            display: flex; align-items: center; margin-bottom: 12px;
+            padding: 10px; background: #222; border-radius: 8px; border: 1px solid transparent; transition: 0.2s;
+        }
+        .check-item:hover { border-color: #444; }
+        
+        /* Custom Checkbox */
+        input[type="checkbox"] {
+            appearance: none; width: 20px; height: 20px; border: 2px solid #555; border-radius: 4px;
+            margin-right: 15px; cursor: pointer; position: relative; flex-shrink: 0;
+        }
+        input[type="checkbox"]:checked { background: var(--accent-green); border-color: var(--accent-green); }
+        input[type="checkbox"]:checked::after {
+            content: '✔'; color: black; font-size: 14px; position: absolute; top: -1px; left: 3px; font-weight: bold;
+        }
+        
+        .check-label { font-size: 0.95rem; color: #CCC; cursor: pointer; }
+        input[type="checkbox"]:checked + .check-label { text-decoration: line-through; color: #666; }
+
+
+        /* MODULE CARDS (8 & 9) */
         .module-card {
-            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
-            border: 1px solid #333; border-radius: 15px; padding: 30px;
+            background: linear-gradient(145deg, #1e1e1e, #0f0f0f);
+            border: 1px solid #333; border-radius: 12px; padding: 25px;
             display: flex; justify-content: space-between; align-items: center;
             text-decoration: none; color: white; transition: all 0.3s ease;
-            position: relative; overflow: hidden; margin-bottom: 25px;
+            margin-bottom: 20px; position: relative; overflow: hidden;
         }
 
-        .module-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); box-shadow: 0 5px 20px rgba(0, 229, 255, 0.2); }
-        .module-card .icon { font-size: 3rem; opacity: 0.8; }
+        .module-card:hover { transform: translateY(-3px); border-color: var(--accent-cyan); box-shadow: 0 5px 15px rgba(0, 229, 255, 0.15); }
         
-        .mod-content h2 { font-size: 1.8rem; margin-bottom: 8px; color: var(--accent-cyan); }
-        .mod-content p { color: #AAA; font-size: 1rem; line-height: 1.4; }
-        
-        .status-badge { 
-            font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; 
+        .mod-info h2 { font-size: 1.5rem; margin-bottom: 5px; color: var(--accent-cyan); }
+        .mod-info p { color: #999; font-size: 0.9rem; line-height: 1.4; }
+        .mod-icon { font-size: 2.5rem; opacity: 0.8; }
+
+        .tag {
+            font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; 
             text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 8px;
-            background: rgba(0, 229, 255, 0.1); color: var(--accent-cyan); border: 1px solid var(--accent-cyan);
         }
+        .tag-blue { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .tag-purple { background: rgba(187, 134, 252, 0.15); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
 
-        .locked { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
-        .locked .status-badge { border-color: #555; color: #555; background: #222; }
-
+        /* HOME BUTTON */
         .home-btn { 
-            position: fixed; top: 20px; left: 20px; 
-            background: #222; color: #FFF; padding: 10px 15px; border-radius: 8px; 
-            text-decoration: none; border: 1px solid #444; font-size: 0.9rem;
+            position: absolute; top: 20px; left: 20px; 
+            text-decoration: none; color: #666; font-size: 1.5rem;
         }
+
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-btn">🏠 Main Menu</a>
+    <a href="index.html" class="home-btn">🏠</a>
 
     <div class="container">
         
         <header>
             <h1>DAY 06</h1>
-            <p class="subtitle">From Collector to Architect</p>
+            <p class="subtitle">Structural Logic & Arguments</p>
         </header>
 
-        <h2 class="section-title">🚀 Today's Modules</h2>
+        <div class="section-label">✅ Review Progress (Modul 1-7)</div>
         
-        <a href="day-06-m08.html" class="module-card">
-            <div class="mod-content">
-                <span class="status-badge">Open Now</span>
-                <h2>Module 8: Formal Outlines</h2>
-                <p>Stop collecting words. Start building structures. Learn the logic of I, A, 1, a.</p>
+        <div class="checklist-card">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
             </div>
-            <div class="icon">📐</div>
-        </a>
+            <div class="progress-text" id="progressText">0% Selesai</div>
 
-        <div class="module-card locked">
-            <div class="mod-content">
-                <span class="status-badge">Locked</span>
-                <h2>Module 9: Academic Arguments</h2>
-                <p>Analyze claims, evidence, and counter-arguments.</p>
-            </div>
-            <div class="icon">⚖️</div>
+            <div class="check-item"><input type="checkbox" id="c1" onclick="updateProgress()"><label for="c1" class="check-label">Paham Gaya Belajar (VARK)</label></div>
+            <div class="check-item"><input type="checkbox" id="c2" onclick="updateProgress()"><label for="c2" class="check-label">Menguasai Prefix & Suffix Dasar</label></div>
+            <div class="check-item"><input type="checkbox" id="c3" onclick="updateProgress()"><label for="c3" class="check-label">Teknik Membaca SQ3R</label></div>
+            <div class="check-item"><input type="checkbox" id="c4" onclick="updateProgress()"><label for="c4" class="check-label">Bisa Membedakan Highlight vs Anotasi</label></div>
+            <div class="check-item"><input type="checkbox" id="c5" onclick="updateProgress()"><label for="c5" class="check-label">Mencatat dengan Cornell Method</label></div>
+            <div class="check-item"><input type="checkbox" id="c6" onclick="updateProgress()"><label for="c6" class="check-label">Membuat Mind Mapping Sederhana</label></div>
+            <div class="check-item"><input type="checkbox" id="c7" onclick="updateProgress()"><label for="c7" class="check-label">Manajemen Kamus (Inggris-Inggris)</label></div>
+            <div class="check-item"><input type="checkbox" id="c8" onclick="updateProgress()"><label for="c8" class="check-label">Paham Konsep Plagiarisme Dasar</label></div>
+            <div class="check-item"><input type="checkbox" id="c9" onclick="updateProgress()"><label for="c9" class="check-label">Manajemen Waktu Studi Mandiri</label></div>
+            <div class="check-item"><input type="checkbox" id="c10" onclick="updateProgress()"><label for="c10" class="check-label">Siap Masuk ke Logika Akademik</label></div>
         </div>
 
+
+        <div class="section-label">🚀 Materi Hari Ini</div>
+
+        <a href="day-06-m08.html" class="module-card">
+            <div class="mod-info">
+                <span class="tag tag-blue">Structure</span>
+                <h2>Modul 8: Formal Outlines</h2>
+                <p>Berhenti menimbun data. Mulailah menjadi Arsitek Ide. Pelajari logika struktur (I, A, 1, a).</p>
+            </div>
+            <div class="mod-icon">📐</div>
+        </a>
+
+        <a href="day-06-m09.html" class="module-card">
+            <div class="mod-info">
+                <span class="tag tag-purple">Logic</span>
+                <h2>Modul 9: Academic Arguments</h2>
+                <p>Rekayasa Argumen Anti-Peluru. Bedakan fakta vs klaim dan patahkan argumen lawan.</p>
+            </div>
+            <div class="mod-icon">⚖️</div>
+        </a>
+
     </div>
+
+    <script>
+        // Script Sederhana untuk Progress Bar
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checked = 0;
+
+            checkboxes.forEach(box => {
+                if (box.checked) checked++;
+            });
+
+            const percent = (checked / total) * 100;
+            document.getElementById('progressBar').style.width = percent + "%";
+            document.getElementById('progressText').innerText = Math.round(percent) + "% Selesai";
+            
+            // Simpan status ke LocalStorage biar kalau di-refresh gak hilang (Opsional)
+            saveProgress();
+        }
+
+        function saveProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let status = [];
+            checkboxes.forEach(box => status.push(box.checked));
+            localStorage.setItem('day06_progress', JSON.stringify(status));
+        }
+
+        function loadProgress() {
+            const saved = JSON.parse(localStorage.getItem('day06_progress'));
+            if (saved) {
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((box, index) => {
+                    if (saved[index]) box.checked = true;
+                });
+                updateProgress();
+            }
+        }
+
+        // Load saat halaman dibuka
+        window.onload = loadProgress;
+    </script>
 
 </body>
 </html>
