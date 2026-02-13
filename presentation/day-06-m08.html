@@ -127,9 +127,12 @@
         .capstone-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 10px; }
         .text-panel {
             background: #111; color: #BBB; padding: 20px; border-radius: 8px; border: 1px solid #333;
-            text-align: justify; font-size: 1rem; line-height: 1.6; width: 100%;
+            text-align: justify; font-size: 0.95rem; line-height: 1.6; width: 100%;
             transition: all 0.5s ease;
+            max-height: 300px; overflow-y: auto; /* Scroll if too long */
         }
+        .text-panel p { text-align: justify; margin-bottom: 15px; color: #BBB; max-width: 100%; font-size: 0.95rem; }
+
         /* Highlight Classes */
         .h-main { background-color: transparent; color: inherit; transition: 0.5s; padding: 2px 0; border-radius: 3px; }
         .h-sub { background-color: transparent; color: inherit; transition: 0.5s; padding: 2px 0; border-radius: 3px; }
@@ -273,11 +276,16 @@
 
     <div class="slide centered">
         <h2>6. Capstone: Full Simulation</h2>
-        <p>Case: Mountaineering Prep. <br>Dari Paragraf menjadi Struktur.</p>
+        <p>Case: Mountaineering Prep & Rules</p>
         
         <div class="capstone-container">
             <div id="cap-text" class="text-panel">
-                <span class="h-main">Mountaineering requires strict preparation.</span> Primarily, <span class="h-sub">physical training</span> is essential, specifically <span class="h-det">cardio (running, swimming)</span> and <span class="h-det">strength training</span> for heavy loads. Secondly, <span class="h-sub">equipment selection</span> is crucial, especially <span class="h-det">navigation tools (GPS)</span> and <span class="h-det">safety gear (ropes)</span>.
+                <p>
+                    <span class="h-main">Mountaineering requires strict preparation.</span> Primarily, <span class="h-sub">physical training</span> is essential, specifically <span class="h-det">cardio (running, swimming)</span> and <span class="h-det">strength training</span> for heavy loads. Secondly, <span class="h-sub">equipment selection</span> is crucial, especially <span class="h-det">navigation tools (GPS)</span> and <span class="h-det">safety gear (ropes)</span>.
+                </p>
+                <p>
+                    <span class="h-main">Furthermore, climbing rules must be followed.</span> Climbers must choose their <span class="h-sub">team structure</span>, either <span class="h-det">climbing alone</span> or <span class="h-det">in a team</span>. If in a team, members must be <span class="h-det">tied at the waist</span>. Also, clear <span class="h-sub">communication</span> is vital, specifically giving <span class="h-det">commands</span> and waiting for <span class="h-det">responses</span>.
+                </p>
             </div>
 
             <button id="btn-scan" class="action-btn" onclick="scanText()">🔍 1. Scan & Highlight</button>
@@ -292,6 +300,16 @@
                 <div class="indent-2">B. Equipment Selection</div>
                 <div class="indent-3">1. Navigation (GPS)</div>
                 <div class="indent-3">2. Safety Gear (Ropes)</div>
+                
+                <br>
+                
+                <div class="indent-1">II. CLIMBING RULES</div>
+                <div class="indent-2">A. Team Structure</div>
+                <div class="indent-3">1. Alone vs Team</div>
+                <div class="indent-3">2. Tied at waist</div>
+                <div class="indent-2">B. Communication</div>
+                <div class="indent-3">1. Commands</div>
+                <div class="indent-3">2. Responses</div>
             </div>
         </div>
     </div>
