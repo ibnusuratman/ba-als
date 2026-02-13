@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 8: Formal Outlines</title>
+    <style>
+        :root {
+            --bg-color: #101010;
+            --text-color: #F0F0F0;
+            --accent-blue: #00A8FF;
+            --accent-yellow: #FFD700;
+            --accent-green: #00FF7F;
+            --danger: #FF4444;
+            --card-bg: #1E1E1E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 40px; padding-bottom: 100px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { justify-content: center; text-align: center; }
+
+        h1 { color: var(--accent-blue); font-size: 3rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        h2 { color: var(--accent-yellow); font-size: 2rem; margin-bottom: 30px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p { font-size: 1.3rem; line-height: 1.6; color: #CCC; max-width: 900px; text-align: center; }
+
+        /* --- OVERVIEW LIST (SLIDE 1) --- */
+        .overview-list { list-style: none; text-align: left; margin-top: 30px; }
+        .overview-list li { 
+            font-size: 1.5rem; margin-bottom: 20px; display: flex; align-items: center; 
+            opacity: 0; transform: translateX(-20px); transition: all 0.5s ease;
+        }
+        .overview-list li span { 
+            background: var(--accent-blue); color: black; font-weight: bold; 
+            width: 40px; height: 40px; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; margin-right: 15px; 
+        }
+        .slide.active .overview-list li { opacity: 1; transform: translateX(0); }
+        .slide.active .overview-list li:nth-child(1) { transition-delay: 0.2s; }
+        .slide.active .overview-list li:nth-child(2) { transition-delay: 0.4s; }
+        .slide.active .overview-list li:nth-child(3) { transition-delay: 0.6s; }
+        .slide.active .overview-list li:nth-child(4) { transition-delay: 0.8s; }
+        .slide.active .overview-list li:nth-child(5) { transition-delay: 1.0s; }
+
+        /* --- ANIMATION BOXES --- */
+        .chaos-box { 
+            border: 1px dashed #555; padding: 20px; width: 600px; height: 300px; 
+            position: relative; overflow: hidden; background: #111; margin-top: 20px;
+        }
+        .chaos-text { position: absolute; font-size: 0.9rem; color: #666; transition: 1s; }
+        
+        .structure-box {
+            border: 2px solid var(--accent-blue); padding: 30px; width: 600px; min-height: 300px;
+            background: #151515; display: none; text-align: left;
+        }
+        .indent-1 { margin-left: 0px; color: var(--accent-blue); font-weight: bold; font-size: 1.2rem; }
+        .indent-2 { margin-left: 40px; color: var(--accent-yellow); }
+        .indent-3 { margin-left: 80px; color: #FFF; }
+        .indent-4 { margin-left: 120px; color: #AAA; font-style: italic; }
+
+        /* --- INTERACTIVE HIERARCHY --- */
+        .hier-btn {
+            padding: 15px 30px; background: #222; border: 1px solid var(--accent-blue);
+            color: var(--accent-blue); font-size: 1.2rem; cursor: pointer; margin-top: 20px;
+            border-radius: 8px; transition: 0.3s;
+        }
+        .hier-btn:hover { background: var(--accent-blue); color: black; }
+
+        /* --- EDITORIAL VETO GAME --- */
+        .veto-container { display: flex; flex-wrap: wrap; gap: 10px; max-width: 800px; justify-content: center; margin-top: 30px; }
+        .word-token {
+            padding: 10px 15px; background: #333; border-radius: 5px; cursor: pointer; user-select: none;
+            transition: 0.2s; border: 1px solid #444;
+        }
+        .word-token:hover { background: #444; }
+        .word-token.deleted { background: #220000; color: #550000; text-decoration: line-through; border-color: transparent; }
+        .word-token.kept { background: var(--accent-green); color: black; font-weight: bold; border-color: var(--accent-green); }
+
+        /* --- NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #000; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-06.html" class="home-btn">⬅️ Dashboard</a>
+
+    <div class="slide active centered">
+        <h1>Formal Outlines</h1>
+        <p style="color:var(--accent-blue); font-weight:bold;">From Data Collector to Idea Architect</p>
+        
+        <ul class="overview-list">
+            <li><span>1</span> The Mindset: Stop collecting, start building.</li>
+            <li><span>2</span> The Visual Logic: Hierarchy (I, A, 1, a).</li>
+            <li><span>3</span> The Rule of Pairs: No A without B.</li>
+            <li><span>4</span> The Art of Brevity: Keywords only (Editorial Veto).</li>
+            <li><span>5</span> The Logic Loop: Structuring reality (Case Studies).</li>
+        </ul>
+    </div>
+
+    <div class="slide centered">
+        <h2>1. The Mindset Shift</h2>
+        <p>Are you a "Detective" with messy notes, or an "Architect" with a blueprint?</p>
+        
+        <div id="chaos" class="chaos-box">
+            </div>
+        
+        <div id="structure" class="structure-box">
+            <div class="indent-1">I. MAIN CONCEPT</div>
+            <div class="indent-2">A. Supporting Idea</div>
+            <div class="indent-3">1. Specific Detail</div>
+            <div class="indent-3">2. Specific Detail</div>
+            <div class="indent-2">B. Supporting Idea</div>
+        </div>
+
+        <button class="hier-btn" onclick="transformToArchitect()">✨ Transform to Architect</button>
+    </div>
+
+    <div class="slide centered">
+        <h2>2. The Visual Logic</h2>
+        <p>Indentations are not decoration. They are a topographical map of importance.</p>
+        
+        <div style="margin-top:40px; text-align:left; background:#111; padding:30px; border-radius:10px; border:1px solid #333; width: 100%; max-width: 600px;">
+            <div id="h-level-1" style="opacity:0.3; transition:0.5s;">I. ROMAN NUMERAL (Main Topic)</div>
+            <div id="h-level-2" style="margin-left:40px; opacity:0.3; transition:0.5s;">A. Capital Letter (Sub-topic)</div>
+            <div id="h-level-3" style="margin-left:80px; opacity:0.3; transition:0.5s;">1. Arabic Numeral (Detail)</div>
+            <div id="h-level-4" style="margin-left:120px; opacity:0.3; transition:0.5s;">a. Lowercase Letter (Specifics)</div>
+        </div>
+
+        <button class="hier-btn" onclick="revealHierarchy()">👇 Drill Down Level</button>
+    </div>
+
+    <div class="slide centered">
+        <h2>3. The Rule of Pairs</h2>
+        <div style="font-size:4rem; margin:20px;">🍰</div>
+        <p>"If you cut a cake, you have a slice (A) and the rest (B)."</p>
+        <p style="color:var(--danger); margin-top:20px; font-weight:bold;">NEVER have an 'A' without a 'B'.</p>
+        <p style="color:var(--danger);">NEVER have a '1' without a '2'.</p>
+        
+        <div style="margin-top:30px; background:#220000; padding:15px; border:1px solid var(--danger); border-radius:5px;">
+            <strong>Example Error:</strong><br>
+            I. Preparation<br>
+            &nbsp;&nbsp;&nbsp;A. Henna Night (❌ Wrong! Henna IS the preparation)
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h2>4. The Editorial Veto</h2>
+        <p>Rule: <strong>1-3 Words Only.</strong> Remove opinion. Keep facts.</p>
+        <p style="font-size:1rem; color:#888;">Instruction: Click words to KEEP them (Green). Others will be DELETED.</p>
+
+        <div style="margin:20px 0; font-style:italic; color:#AAA;">"Managers cannot be created in a classroom... we accept only practicing managers."</div>
+
+        <div class="veto-container" id="veto-box">
+            <div class="word-token" onclick="toggleWord(this)">Managers</div>
+            <div class="word-token" onclick="toggleWord(this)">cannot</div>
+            <div class="word-token" onclick="toggleWord(this)">be</div>
+            <div class="word-token" onclick="toggleWord(this)">created</div>
+            <div class="word-token" onclick="toggleWord(this)">in</div>
+            <div class="word-token" onclick="toggleWord(this)">classroom</div>
+            <div class="word-token" onclick="toggleWord(this)">we</div>
+            <div class="word-token" onclick="toggleWord(this)">accept</div>
+            <div class="word-token" onclick="toggleWord(this)">only</div>
+            <div class="word-token" onclick="toggleWord(this)">practicing</div>
+            <div class="word-token" onclick="toggleWord(this)">managers</div>
+        </div>
+        
+        <div id="veto-result" style="margin-top:20px; font-weight:bold; color:var(--accent-green); height:30px;"></div>
+    </div>
+
+    <div class="slide centered">
+        <h2>5. The Logic Loop</h2>
+        <p>Structuring Reality: Marriage Contract</p>
+        
+        <div style="display:flex; gap:20px; margin-top:30px;">
+            <div style="text-align:left; background:#111; padding:20px; width:300px; border:1px solid #333;">
+                <h3 style="color:#888; border-bottom:1px solid #333; margin-bottom:10px;">Raw Data</h3>
+                <ul style="list-style:none; line-height:2;">
+                    <li>- Wali (Guardian)</li>
+                    <li>- Ijab (Proposal)</li>
+                    <li>- Qabul (Acceptance)</li>
+                    <li>- 2 Witnesses</li>
+                </ul>
+            </div>
+
+            <div style="text-align:left; background:#1E1E1E; padding:20px; width:300px; border:1px solid var(--accent-yellow);">
+                <h3 style="color:var(--accent-yellow); border-bottom:1px solid var(--accent-yellow); margin-bottom:10px;">Architect's Outline</h3>
+                <div class="indent-1">I. CONDITIONS (Syarat)</div>
+                <div class="indent-2">A. Wali</div>
+                <div class="indent-2">B. 2 Witnesses</div>
+                <br>
+                <div class="indent-1">II. PILLARS (Rukun)</div>
+                <div class="indent-2">A. Ijab</div>
+                <div class="indent-2">B. Qabul</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#888;">Module 8</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+        }
+
+        // --- CHAOS ANIMATION ---
+        const words = ["Data", "Arrow ->", "Circle O", "Random", "Meeting", "Text", "Note", "Important!", "Underline"];
+        const chaosBox = document.getElementById('chaos');
+        
+        words.forEach(w => {
+            const el = document.createElement('div');
+            el.innerText = w;
+            el.className = 'chaos-text';
+            el.style.left = Math.random() * 500 + 'px';
+            el.style.top = Math.random() * 250 + 'px';
+            el.style.transform = `rotate(${Math.random() * 90 - 45}deg)`;
+            chaosBox.appendChild(el);
+        });
+
+        function transformToArchitect() {
+            document.getElementById('chaos').style.display = 'none';
+            document.getElementById('structure').style.display = 'block';
+        }
+
+        // --- HIERARCHY REVEAL ---
+        let hLevel = 0;
+        function revealHierarchy() {
+            hLevel++;
+            if(hLevel > 4) hLevel = 1;
+            
+            for(let i=1; i<=4; i++) {
+                document.getElementById('h-level-'+i).style.opacity = (i <= hLevel) ? '1' : '0.3';
+                document.getElementById('h-level-'+i).style.color = (i === hLevel) ? '#FFF' : '#555';
+            }
+        }
+
+        // --- VETO GAME ---
+        function toggleWord(el) {
+            if (el.classList.contains('kept')) {
+                el.classList.remove('kept');
+                el.classList.add('deleted');
+            } else if (el.classList.contains('deleted')) {
+                el.classList.remove('deleted'); // Reset
+            } else {
+                el.classList.add('kept');
+            }
+            updateResult();
+        }
+
+        function updateResult() {
+            const kept = document.querySelectorAll('.kept');
+            let text = "";
+            kept.forEach(k => text += k.innerText + " ");
+            document.getElementById('veto-result').innerText = "Result: " + text;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
