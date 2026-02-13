@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAY 06: Structural Logic</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #151515;
+            --text-color: #E0E0E0;
+            --accent-cyan: #00E5FF;
+            --accent-red: #FF2E63;
+            --gray-text: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 800px; }
+
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 3rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; color: var(--accent-red); font-weight: 300; }
+
+        .section-title { 
+            border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;
+            font-size: 1.2rem; color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .module-card {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border: 1px solid #333; border-radius: 15px; padding: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: white; transition: all 0.3s ease;
+            position: relative; overflow: hidden; margin-bottom: 25px;
+        }
+
+        .module-card:hover { transform: translateY(-5px); border-color: var(--accent-cyan); box-shadow: 0 5px 20px rgba(0, 229, 255, 0.2); }
+        .module-card .icon { font-size: 3rem; opacity: 0.8; }
+        
+        .mod-content h2 { font-size: 1.8rem; margin-bottom: 8px; color: var(--accent-cyan); }
+        .mod-content p { color: #AAA; font-size: 1rem; line-height: 1.4; }
+        
+        .status-badge { 
+            font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; 
+            text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 8px;
+            background: rgba(0, 229, 255, 0.1); color: var(--accent-cyan); border: 1px solid var(--accent-cyan);
+        }
+
+        .locked { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+        .locked .status-badge { border-color: #555; color: #555; background: #222; }
+
+        .home-btn { 
+            position: fixed; top: 20px; left: 20px; 
+            background: #222; color: #FFF; padding: 10px 15px; border-radius: 8px; 
+            text-decoration: none; border: 1px solid #444; font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠 Main Menu</a>
+
+    <div class="container">
+        
+        <header>
+            <h1>DAY 06</h1>
+            <p class="subtitle">From Collector to Architect</p>
+        </header>
+
+        <h2 class="section-title">🚀 Today's Modules</h2>
+        
+        <a href="day-06-m08.html" class="module-card">
+            <div class="mod-content">
+                <span class="status-badge">Open Now</span>
+                <h2>Module 8: Formal Outlines</h2>
+                <p>Stop collecting words. Start building structures. Learn the logic of I, A, 1, a.</p>
+            </div>
+            <div class="icon">📐</div>
+        </a>
+
+        <div class="module-card locked">
+            <div class="mod-content">
+                <span class="status-badge">Locked</span>
+                <h2>Module 9: Academic Arguments</h2>
+                <p>Analyze claims, evidence, and counter-arguments.</p>
+            </div>
+            <div class="icon">⚖️</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
