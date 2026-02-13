@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 9: Academic Arguments</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #E0E0E0;
+            --accent-purple: #BB86FC; /* Warna Logika/Argumen */
+            --accent-cyan: #03DAC6;
+            --accent-red: #CF6679;
+            --card-bg: #121212;
+            --success: #00E676;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 80px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-color); z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { justify-content: flex-start; text-align: center; padding-top: 40px; }
+
+        /* TYPOGRAPHY */
+        h1 { color: var(--accent-purple); font-size: 2rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; letter-spacing: 2px; }
+        h2 { color: var(--accent-cyan); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        p { font-size: 1rem; line-height: 1.6; color: #CCC; max-width: 800px; text-align: center; margin-bottom: 20px; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 12px 25px; border: none; border-radius: 50px;
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+            margin: 5px; transition: transform 0.2s;
+            color: #000;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-purple { background: var(--accent-purple); box-shadow: 0 4px 15px rgba(187, 134, 252, 0.3); }
+        .btn-red { background: var(--accent-red); color: white; }
+        .btn-green { background: var(--success); color: black; }
+
+        /* --- SLIDE 1: OVERVIEW --- */
+        .overview-list { list-style: none; text-align: left; margin-top: 20px; width: 100%; max-width: 500px; }
+        .overview-list li { 
+            font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; 
+            background: #1a1a1a; padding: 12px; border-radius: 8px; border: 1px solid #333;
+        }
+        .overview-list li span { 
+            background: var(--accent-purple); color: black; font-weight: bold; 
+            width: 30px; height: 30px; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; margin-right: 15px; flex-shrink: 0;
+        }
+
+        /* --- SLIDE 2: FACT VS CLAIM --- */
+        .card-stack { width: 100%; max-width: 400px; height: 150px; position: relative; perspective: 1000px; margin-bottom: 20px; }
+        .card {
+            width: 100%; height: 100%; background: #1E1E1E; border: 2px solid var(--accent-purple);
+            border-radius: 15px; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; padding: 20px; position: absolute; top: 0; left: 0;
+            transition: 0.5s; box-shadow: 0 10px 20px rgba(0,0,0,0.5); font-weight: bold;
+        }
+        .feedback { height: 30px; font-weight: bold; margin-top: 10px; }
+
+        /* --- SLIDE 3: EVIDENCE DETECTOR --- */
+        .evidence-box {
+            background: #222; padding: 20px; border-radius: 10px; border: 1px solid #444;
+            margin-bottom: 20px; width: 100%; max-width: 400px; min-height: 100px;
+            display: flex; align-items: center; justify-content: center; font-style: italic;
+        }
+
+        /* --- SLIDE 4: COUNTER STRIKE --- */
+        .chat-bubble {
+            padding: 15px; border-radius: 15px; max-width: 80%; margin-bottom: 15px; position: relative;
+        }
+        .opponent { background: #333; align-self: flex-start; border-bottom-left-radius: 0; text-align: left; border: 1px solid var(--accent-red); color: var(--accent-red); }
+        .me { background: #1a1a1a; align-self: flex-end; border-bottom-right-radius: 0; text-align: right; border: 1px solid var(--accent-purple); color: var(--accent-purple); display: none; }
+        .chat-container { display: flex; flex-direction: column; width: 100%; max-width: 500px; }
+
+        /* --- SLIDE 5: BAD ARGUMENT --- */
+        .bad-text-container {
+            text-align: justify; background: #111; padding: 15px; border-radius: 10px; 
+            line-height: 1.8; color: #BBB; font-size: 1rem; width: 100%; max-width: 600px;
+        }
+        .trigger-word {
+            border-bottom: 1px dashed var(--accent-red); cursor: pointer; color: #FFF; transition: 0.2s;
+        }
+        .trigger-word:hover { background: rgba(207, 102, 121, 0.2); }
+        .exploded { text-decoration: line-through; color: #555; animation: shake 0.5s; }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+
+        /* --- SLIDE 6: CAPSTONE (FULL TEXT) --- */
+        .capstone-wrapper { width: 100%; max-width: 700px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .full-text-box {
+            background: #0a0a0a; border: 1px solid #333; padding: 20px; border-radius: 8px;
+            height: 300px; overflow-y: scroll; /* SCROLLABLE */
+            text-align: justify; font-size: 0.95rem; line-height: 1.8; color: #AAA;
+            box-shadow: inset 0 0 20px #000;
+        }
+        
+        /* Highlight Classes */
+        .hl-claim { background: transparent; transition: 0.5s; }
+        .hl-evid { background: transparent; transition: 0.5s; }
+        .hl-warr { background: transparent; transition: 0.5s; }
+
+        .scan-mode .hl-claim { background: rgba(187, 134, 252, 0.2); color: var(--accent-purple); font-weight: bold; border-bottom: 2px solid var(--accent-purple); }
+        .scan-mode .hl-evid { background: rgba(3, 218, 198, 0.2); color: var(--accent-cyan); font-weight: bold; border-bottom: 2px solid var(--accent-cyan); }
+        .scan-mode .hl-warr { background: rgba(255, 215, 0, 0.2); color: gold; font-weight: bold; border-bottom: 2px solid gold; }
+
+        .structure-result {
+            background: #151515; padding: 20px; border-radius: 10px; border: 1px solid var(--accent-purple);
+            display: none; text-align: left; animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .struct-item { margin-bottom: 15px; padding-left: 15px; border-left: 3px solid #555; }
+        .struct-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+        
+        /* --- NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: #000; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 15px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; font-size: 0.8rem; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-06.html" class="home-btn">⬅️ Dashboard</a>
+
+    <div class="slide active centered">
+        <h1>Academic Arguments</h1>
+        <p style="color:var(--accent-purple);">Engineering a Bulletproof Case</p>
+        
+        <ul class="overview-list">
+            <li><span>1</span> <strong>Mindset:</strong> Argument ≠ Fighting.</li>
+            <li><span>2</span> <strong>The Foundation:</strong> Fact vs. Claim.</li>
+            <li><span>3</span> <strong>Evidence Detector:</strong> Trash vs. Gold.</li>
+            <li><span>4</span> <strong>Secret Weapon:</strong> Counter-Arguments.</li>
+            <li><span>5</span> <strong>Capstone:</strong> The Coca-Cola 5by20 Case.</li>
+        </ul>
+        <div style="margin-top:30px; font-size:3rem;">🏗️ vs 🥊</div>
+    </div>
+
+    <div class="slide centered">
+        <h2>2. Fact or Claim?</h2>
+        <p>Rule: A Claim MUST be debatable. A Fact is just reality.</p>
+        
+        <div class="card-stack">
+            <div class="card" id="card-text">Loading...</div>
+        </div>
+
+        <div>
+            <button class="btn btn-green" onclick="guess('Fact')">It's a FACT 📘</button>
+            <button class="btn btn-purple" onclick="guess('Claim')">It's a CLAIM 🗣️</button>
+        </div>
+        <div id="fc-feedback" class="feedback"></div>
+    </div>
+
+    <div class="slide centered">
+        <h2>3. Evidence Detector</h2>
+        <p>Don't bring a plastic knife to a gunfight. Filter your evidence.</p>
+        
+        <div class="evidence-box" id="evid-text">Loading...</div>
+
+        <div>
+            <button class="btn btn-red" onclick="judgeEvidence('Trash')">🗑️ Trash (Weak)</button>
+            <button class="btn btn-green" onclick="judgeEvidence('Keep')">💾 Keep (Strong)</button>
+        </div>
+        <div id="evid-feedback" class="feedback"></div>
+    </div>
+
+    <div class="slide centered">
+        <h2>4. The Counter-Strike</h2>
+        <p>Don't hide from the opposition. Invite them in, then dismantle them.</p>
+
+        <div class="chat-container">
+            <div class="chat-bubble opponent">
+                <strong>Opponent:</strong><br>
+                "But social media helps lonely elderly people connect with family!"
+            </div>
+            
+            <div id="my-reply" class="chat-bubble me">
+                <strong>You (The Engineer):</strong><br>
+                "While that is true for some cases, <span style="color:white; font-weight:bold;">SYSTEMIC DATA shows</span> that the net effect is increased isolation and depression due to lack of physical contact."
+            </div>
+        </div>
+
+        <button id="btn-strike" class="btn btn-purple" onclick="counterStrike()">🔫 Launch Counter-Argument</button>
+    </div>
+
+    <div class="slide centered">
+        <h2>5. Emotional Traps</h2>
+        <p>Click on words that are <strong>Emotional/Weak</strong> (Bias). Make them explode.</p>
+
+        <div class="bad-text-container">
+            "The situation with single parents is absolutely <span class="trigger-word" onclick="explode(this)">horrifying</span>. I <span class="trigger-word" onclick="explode(this)">feel</span> that society has failed them. My <span class="trigger-word" onclick="explode(this)">Grandfather</span> said that in his day, families were stronger. It is <span class="trigger-word" onclick="explode(this)">disgusting</span> how the government ignores this."
+        </div>
+        <div id="explode-feedback" class="feedback" style="margin-top:20px; color:var(--accent-red);"></div>
+    </div>
+
+    <div class="slide centered">
+        <h2>6. Capstone: The 5by20 Case</h2>
+        <p>Analyze this full academic argument.</p>
+
+        <div class="capstone-wrapper">
+            <div id="full-text" class="full-text-box">
+                <p>
+                    <span class="hl-claim">The economic empowerment of women is arguably the single most effective tool for development in the modern world.</span> While traditionalists often argue that cultural barriers in developing nations make this goal impossible, <span class="hl-warr">systemic initiatives prove that corporate intervention can bridge this gap.</span>
+                </p>
+                <br>
+                <p>
+                    Consider the case of Coca-Cola. In 2010, the company launched the <span class="hl-evid">"5by20" initiative, with the specific goal of empowering 5 million women entrepreneurs across their global value chain by the year 2020.</span> This program did not just offer charity; it provided business skills training, financial services, and mentorship to women ranging from fruit farmers to artisans.
+                </p>
+                <br>
+                <p>
+                    The results challenge the skepticism of critics. <span class="hl-evid">Data from Banco do Brasil shows that women reinvest 90% of their income into their families and communities, compared to only 35-40% for men.</span> Therefore, investing in women is not merely a social justice imperative; it is an intelligent economic strategy that yields a higher return on investment for the entire society.
+                </p>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <button id="btn-scan" class="btn btn-purple" onclick="scanArgument()">🔍 1. X-Ray Scan</button>
+                <button id="btn-build" class="btn btn-green" style="display:none;" onclick="buildStructure()">🏗️ 2. Build Blueprint</button>
+            </div>
+
+            <div id="struct-res" class="structure-result">
+                <div class="struct-item" style="border-color:var(--accent-purple);">
+                    <span class="struct-label" style="color:var(--accent-purple);">I. MAIN CLAIM (Tesis)</span>
+                    "Economic empowerment of women is the most effective tool for development."
+                </div>
+                
+                <div class="struct-item" style="border-color:gold;">
+                    <span class="struct-label" style="color:gold;">II. REBUTTAL (Sanggahan)</span>
+                    "Corporate initiatives can bridge cultural gaps (vs Traditionalist view)."
+                </div>
+
+                <div class="struct-item" style="border-color:var(--accent-cyan);">
+                    <span class="struct-label" style="color:var(--accent-cyan);">III. EVIDENCE (Bukti Data)</span>
+                    1. Coca-Cola 5by20: Target 5 million women.<br>
+                    2. Banco do Brasil Data: Women reinvest 90% income vs Men 35%.
+                </div>
+                
+                <div class="struct-item" style="border-color:#FFF;">
+                    <span class="struct-label" style="color:#FFF;">IV. CONCLUSION</span>
+                    "Investing in women is smart economics (High ROI)."
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#888; font-size:0.8rem;">Modul 9</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        // --- GAME 1: FACT VS CLAIM ---
+        const fcData = [
+            { text: "Men cannot give birth.", type: "Fact" },
+            { text: "Social Media destroys relationships.", type: "Claim" },
+            { text: "Water boils at 100°C.", type: "Fact" },
+            { text: "Smoking is Haram.", type: "Claim" } // Needs dalil/argument
+        ];
+        let fcIndex = 0;
+        
+        function loadCard() {
+            if(fcIndex < fcData.length) {
+                document.getElementById('card-text').innerText = fcData[fcIndex].text;
+                document.getElementById('fc-feedback').innerText = "";
+            } else {
+                document.getElementById('card-text').innerText = "All Done! 🎉";
+            }
+        }
+        loadCard();
+
+        function guess(type) {
+            if(fcIndex >= fcData.length) return;
+            const correct = fcData[fcIndex].type;
+            const feedback = document.getElementById('fc-feedback');
+            
+            if(type === correct) {
+                feedback.innerText = "✅ Correct!";
+                feedback.style.color = "var(--success)";
+                fcIndex++;
+                setTimeout(loadCard, 800);
+            } else {
+                feedback.innerText = "❌ Try Again! (Hint: Is it debatable?)";
+                feedback.style.color = "var(--accent-red)";
+            }
+        }
+
+        // --- GAME 2: EVIDENCE DETECTOR ---
+        const evData = [
+            { text: "My Uncle Steve smoked and lived to 90.", type: "Trash", reason: "Anecdotal Evidence (Too small)" },
+            { text: "Report from Banco do Brasil (2020).", type: "Keep", reason: "Systemic Data (Strong)" },
+            { text: "I feel like this is true.", type: "Trash", reason: "Emotional Bias" },
+            { text: "Wikipedia says...", type: "Trash", reason: "Unreliable Source" }
+        ];
+        let evIndex = 0;
+
+        function loadEvid() {
+            if(evIndex < evData.length) {
+                document.getElementById('evid-text').innerText = evData[evIndex].text;
+                document.getElementById('evid-feedback').innerText = "";
+            } else {
+                document.getElementById('evid-text').innerText = "Evidence Filtered! 🛡️";
+            }
+        }
+        loadEvid();
+
+        function judgeEvidence(judgment) {
+            if(evIndex >= evData.length) return;
+            const data = evData[evIndex];
+            const feedback = document.getElementById('evid-feedback');
+            
+            if(judgment === data.type) {
+                feedback.innerText = "✅ Correct! " + data.reason;
+                feedback.style.color = "var(--success)";
+                evIndex++;
+                setTimeout(loadEvid, 1500);
+            } else {
+                feedback.innerText = "❌ Wrong judgment. " + data.reason;
+                feedback.style.color = "var(--accent-red)";
+            }
+        }
+
+        // --- GAME 3: COUNTER STRIKE ---
+        function counterStrike() {
+            document.getElementById('my-reply').style.display = 'block';
+            document.getElementById('btn-strike').style.display = 'none';
+        }
+
+        // --- GAME 4: EXPLODE WORDS ---
+        function explode(el) {
+            if(el.classList.contains('exploded')) return;
+            el.classList.add('exploded');
+            document.getElementById('explode-feedback').innerText = "💥 Boom! Emotional bias removed.";
+        }
+
+        // --- GAME 5: CAPSTONE ---
+        function scanArgument() {
+            document.getElementById('full-text').classList.add('scan-mode');
+            document.getElementById('btn-scan').style.display = 'none';
+            document.getElementById('btn-build').style.display = 'inline-block';
+        }
+
+        function buildStructure() {
+            document.getElementById('struct-res').style.display = 'block';
+            document.getElementById('btn-build').style.display = 'none';
+            // Auto scroll to bottom
+            document.getElementById('struct-res').scrollIntoView({behavior: "smooth"});
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+
+    </script>
+</body>
+</html>
