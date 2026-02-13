@@ -26,80 +26,125 @@
 
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 20px; padding-bottom: 100px; /* Space for nav */
+            padding: 20px; padding-bottom: 80px; /* Space for nav */
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
             display: flex; flex-direction: column; align-items: center;
             background-color: var(--bg-color); z-index: 1; overflow-y: auto;
         }
 
         .slide.active { opacity: 1; visibility: visible; z-index: 5; }
-        .slide.centered { justify-content: center; text-align: center; }
+        .slide.centered { justify-content: flex-start; text-align: center; padding-top: 40px; }
 
-        /* TYPOGRAPHY RESPONSIVE */
-        h1 { color: var(--accent-blue); font-size: 2.2rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
-        h2 { color: var(--accent-yellow); font-size: 1.5rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
+        /* TYPOGRAPHY */
+        h1 { color: var(--accent-blue); font-size: 2rem; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+        h2 { color: var(--accent-yellow); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; text-align: center; }
         p { font-size: 1rem; line-height: 1.5; color: #CCC; max-width: 900px; text-align: center; margin-bottom: 15px; }
 
-        /* --- OVERVIEW LIST (SLIDE 1) --- */
-        .overview-list { list-style: none; text-align: left; margin-top: 20px; width: 100%; max-width: 500px; }
+        /* --- BUTTON STYLES --- */
+        .action-btn {
+            margin-top: 15px; padding: 12px 25px; 
+            background: var(--accent-blue); color: #000; 
+            border: none; border-radius: 50px; 
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            display: inline-block;
+        }
+        .action-btn:active { transform: scale(0.95); }
+        .action-btn.green { background: var(--accent-green); box-shadow: 0 4px 15px rgba(0, 255, 127, 0.3); }
+
+        /* --- SLIDE 1: OVERVIEW --- */
+        .overview-list { list-style: none; text-align: left; margin-top: 10px; width: 100%; max-width: 500px; }
         .overview-list li { 
-            font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; 
+            font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center; 
             background: #1a1a1a; padding: 10px; border-radius: 8px; border: 1px solid #333;
         }
         .overview-list li span { 
             background: var(--accent-blue); color: black; font-weight: bold; 
-            width: 30px; height: 30px; border-radius: 50%; display: flex; 
-            justify-content: center; align-items: center; margin-right: 15px; flex-shrink: 0;
+            width: 25px; height: 25px; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; margin-right: 15px; flex-shrink: 0; font-size: 0.9rem;
         }
 
-        /* --- ANIMATION BOXES --- */
-        .anim-container {
-            width: 100%; max-width: 600px; height: 300px; position: relative;
-        }
+        /* --- SLIDE 2: MINDSET --- */
+        .anim-container { width: 100%; max-width: 600px; height: 250px; position: relative; margin-bottom: 10px; }
         .chaos-box { 
             border: 1px dashed #555; width: 100%; height: 100%; 
             position: relative; overflow: hidden; background: #111; border-radius: 10px;
         }
         .chaos-text { position: absolute; font-size: 0.8rem; color: #666; transition: 1s; }
-        
         .structure-box {
             border: 2px solid var(--accent-blue); padding: 20px; width: 100%; height: 100%;
-            background: #151515; display: none; text-align: left; border-radius: 10px;
-            overflow-y: auto;
+            background: #151515; display: none; text-align: left; border-radius: 10px; overflow-y: auto;
         }
         .indent-1 { margin-left: 0px; color: var(--accent-blue); font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
         .indent-2 { margin-left: 20px; color: var(--accent-yellow); margin-bottom: 5px; }
         .indent-3 { margin-left: 40px; color: #FFF; margin-bottom: 5px; }
 
-        /* --- RULE OF PAIRS --- */
+        /* --- SLIDE 3: HIERARCHY --- */
+        .hierarchy-box {
+            margin-top:10px; text-align:left; background:#111; padding:20px; 
+            border-radius:10px; border:1px solid #333; width: 100%; max-width: 500px;
+        }
+
+        /* --- SLIDE 4: RULE OF PAIRS (INTERACTIVE) --- */
+        .cake-box { font-size: 4rem; margin: 10px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        .example-container { width: 100%; max-width: 400px; margin-top: 20px; display: none; }
         .example-box {
-            background: #220000; padding: 15px; border: 1px solid var(--danger); border-radius: 10px; margin-top: 20px; width: 100%; max-width: 400px;
+            padding: 15px; border-radius: 10px; transition: all 0.5s ease;
+            border: 2px solid transparent;
         }
+        .example-box.wrong { background: rgba(255, 68, 68, 0.1); border-color: var(--danger); }
+        .example-box.correct { background: rgba(0, 255, 127, 0.1); border-color: var(--accent-green); }
 
-        /* --- LOGIC LOOP LAYOUT (MOBILE FIX) --- */
-        .logic-container {
-            display: flex; flex-direction: column; gap: 20px; margin-top: 20px; width: 100%; max-width: 800px;
-        }
-        /* Kalau layar lebar, bikin sebelahan. Kalau HP, tumpuk bawah */
-        @media (min-width: 768px) {
-            .logic-container { flex-direction: row; }
-        }
-
-        .logic-col {
-            flex: 1; padding: 15px; border-radius: 10px; text-align: left;
-        }
-        .logic-raw { background: #111; border: 1px dashed #555; }
-        .logic-archi { background: #1a1a1a; border: 1px solid var(--accent-yellow); }
-
-        /* --- VETO GAME --- */
+        /* --- SLIDE 5: VETO GAME --- */
         .veto-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
         .word-token {
             padding: 8px 12px; background: #333; border-radius: 5px; cursor: pointer; user-select: none;
             transition: 0.2s; border: 1px solid #444; font-size: 0.9rem;
         }
-        .word-token:hover { background: #444; }
-        .word-token.deleted { background: #220000; color: #550000; text-decoration: line-through; border-color: transparent; }
         .word-token.kept { background: var(--accent-green); color: black; font-weight: bold; border-color: var(--accent-green); }
+        .word-token.deleted { background: #220000; color: #550000; text-decoration: line-through; }
+
+        /* --- SLIDE 6: LOGIC LOOP --- */
+        .logic-container {
+            display: flex; flex-direction: column; gap: 15px; margin-top: 10px; width: 100%; max-width: 500px; align-items: center;
+        }
+        .logic-col {
+            width: 100%; padding: 15px; border-radius: 10px; text-align: left;
+        }
+        .logic-raw { background: #111; border: 1px dashed #555; }
+        .logic-archi { 
+            background: #1a1a1a; border: 1px solid var(--accent-yellow); 
+            display: none; opacity: 0; transform: translateY(-20px); transition: all 0.5s ease;
+        }
+        .logic-archi.show { display: block; opacity: 1; transform: translateY(0); }
+        .arrow-btn { font-size: 2rem; background: none; border: none; cursor: pointer; color: var(--accent-yellow); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+
+        /* --- SLIDE 7: CAPSTONE (FULL TEXT) --- */
+        .capstone-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 10px; }
+        .text-panel {
+            background: #111; color: #BBB; padding: 20px; border-radius: 8px; border: 1px solid #333;
+            text-align: justify; font-size: 1rem; line-height: 1.6; width: 100%;
+            transition: all 0.5s ease;
+        }
+        /* Highlight Classes */
+        .h-main { background-color: transparent; color: inherit; transition: 0.5s; padding: 2px 0; border-radius: 3px; }
+        .h-sub { background-color: transparent; color: inherit; transition: 0.5s; padding: 2px 0; border-radius: 3px; }
+        .h-det { background-color: transparent; color: inherit; transition: 0.5s; padding: 2px 0; border-radius: 3px; }
+
+        .active-scan .h-main { background-color: rgba(0, 168, 255, 0.2); color: var(--accent-blue); font-weight: bold; }
+        .active-scan .h-sub { background-color: rgba(255, 215, 0, 0.2); color: var(--accent-yellow); font-weight: bold; }
+        .active-scan .h-det { background-color: rgba(0, 255, 127, 0.2); color: var(--accent-green); font-weight: bold; }
+
+        .outline-panel {
+            background: #1a1a1a; border: 2px solid var(--accent-green); padding: 20px; border-radius: 8px;
+            width: 100%; display: none; opacity: 0; transform: translateY(20px); transition: all 0.5s ease;
+            text-align: left;
+        }
+        .outline-panel.show { display: block; opacity: 1; transform: translateY(0); }
 
         /* --- NAV --- */
         .nav-bar {
@@ -110,11 +155,6 @@
         .nav-btn { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
         .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; background: #000; padding: 5px 10px; border: 1px solid #444; color: #AAA; text-decoration: none; border-radius: 5px; font-size: 0.8rem; }
         
-        button.action-btn {
-            margin-top: 20px; padding: 10px 20px; background: var(--accent-blue); color: #000; 
-            border: none; border-radius: 50px; font-weight: bold; cursor: pointer;
-        }
-
     </style>
 </head>
 <body>
@@ -124,82 +164,75 @@
     <div class="slide active centered">
         <h1>Formal Outlines</h1>
         <p style="color:var(--accent-blue);">From Data Collector to Idea Architect</p>
-        
         <ul class="overview-list">
-            <li><span>1</span> Mindset: Jangan cuma "merekam", jadilah "arsitek".</li>
-            <li><span>2</span> Visual: Gunakan Hierarki (I, A, 1, a).</li>
-            <li><span>3</span> Rule of Pairs: Dilarang bikin A tanpa B.</li>
-            <li><span>4</span> Brevity: Ringkas! Jangan tulis kalimat panjang.</li>
-            <li><span>5</span> Logic Loop: Menyusun realitas (Studi Kasus).</li>
+            <li><span>1</span> Mindset: "Penimbun" vs "Arsitek".</li>
+            <li><span>2</span> Visual: Hierarki (I, A, 1, a).</li>
+            <li><span>3</span> Rule of Pairs: Pasangan A & B.</li>
+            <li><span>4</span> Brevity: Hapus kata sampah (Veto).</li>
+            <li><span>5</span> Logic Loop: Menyusun realitas.</li>
+            <li><span>6</span> <strong>Capstone:</strong> Simulasi Teks Penuh.</li>
         </ul>
     </div>
 
     <div class="slide centered">
         <h2>1. The Mindset Shift</h2>
-        <p>Apakah catatanmu berantakan seperti "Detektif Gila" atau rapi seperti "Cetak Biru"?</p>
-        
+        <p>Catatanmu "Hutan Rimba" atau "Bangunan"?</p>
         <div class="anim-container">
-            <div id="chaos" class="chaos-box">
-                </div>
-            
+            <div id="chaos" class="chaos-box"></div>
             <div id="structure" class="structure-box">
                 <div class="indent-1">I. MAIN CONCEPT</div>
-                <div class="indent-2">A. Supporting Idea</div>
-                <div class="indent-3">1. Detail</div>
-                <div class="indent-3">2. Detail</div>
-                <div class="indent-2">B. Supporting Idea</div>
+                <div class="indent-2">A. Idea 1</div>
+                <div class="indent-2">B. Idea 2</div>
             </div>
         </div>
-
         <button class="action-btn" onclick="transformToArchitect()">✨ Rapikan Catatan!</button>
     </div>
 
     <div class="slide centered">
         <h2>2. The Visual Logic</h2>
-        <p>Indentasi (menjorok ke dalam) adalah Peta Pentingnya sebuah ide.</p>
-        
-        <div style="margin-top:20px; text-align:left; background:#111; padding:20px; border-radius:10px; border:1px solid #333; width: 100%; max-width: 500px;">
+        <p>Indentasi adalah Peta Pentingnya Ide.</p>
+        <div class="hierarchy-box">
             <div id="h-level-1" style="opacity:0.3; transition:0.5s;">I. ROMAN NUMERAL (Topik Utama)</div>
             <div id="h-level-2" style="margin-left:20px; opacity:0.3; transition:0.5s;">A. Capital Letter (Sub-topik)</div>
             <div id="h-level-3" style="margin-left:40px; opacity:0.3; transition:0.5s;">1. Arabic Numeral (Detail)</div>
             <div id="h-level-4" style="margin-left:60px; opacity:0.3; transition:0.5s;">a. Lowercase (Sangat Rinci)</div>
         </div>
-
-        <button class="action-btn" onclick="revealHierarchy()">👇 Lihat Level Berikutnya</button>
+        <button class="action-btn" onclick="revealHierarchy()">👇 Lihat Level Bawah</button>
     </div>
 
     <div class="slide centered">
         <h2>3. The Rule of Pairs</h2>
-        <div style="font-size:3rem; margin:10px;">🍰</div>
-        <p><strong>Analogi Kue:</strong> Kalau antum memotong 1 irisan (A), pasti ada sisa kuenya (B).</p>
-        <p>Tidak mungkin memotong tapi sisanya hilang.</p>
+        <div class="cake-box">🍰</div>
+        <p><strong>Analogi Kue:</strong> Kalau potong 1 irisan (A), pasti ada sisa kuenya (B).</p>
         
-        <div class="example-box">
-            <strong style="color:var(--danger)">❌ CONTOH SALAH:</strong><br>
-            <div style="text-align:left; margin-top:10px; color:#CCC;">
-                I. Persiapan<br>
-                &nbsp;&nbsp;A. Malam Henna <span style="color:red">(Salah!)</span>
+        <button id="btn-show-trap" class="action-btn" onclick="showTrap()">⚠️ Lihat Contoh Salah</button>
+
+        <div id="trap-container" class="example-container">
+            <div id="trap-box" class="example-box wrong">
+                <strong id="trap-title" style="color:var(--danger)">❌ STRUKTUR SALAH:</strong>
+                <div id="trap-content" style="text-align:left; margin-top:10px; color:#CCC;">
+                    I. Persiapan<br>
+                    &nbsp;&nbsp;A. Malam Henna
+                </div>
+                <p id="trap-desc" style="font-size:0.8rem; margin-top:10px; color:#AAA;">
+                    <em>Error: Cuma ada A, tidak ada B.</em>
+                </p>
             </div>
-            <p style="font-size:0.8rem; margin-top:10px; color:#AAA;">
-                <em>Kenapa salah? Karena cuma ada A, tidak ada B. Seharusnya "Malam Henna" naik menjadi Poin I.</em>
-            </p>
+            <button id="btn-fix-trap" class="action-btn green" onclick="fixTrap()">🛠️ Perbaiki Struktur!</button>
         </div>
     </div>
 
     <div class="slide centered">
         <h2>4. The Editorial Veto</h2>
-        <p><strong>Tantangan:</strong> Teks di bawah ini terlalu panjang. Klik pada kata-kata KUNCI saja (cukup 2 kata) untuk disimpan.</p>
-
-        <div style="margin:20px 0; font-style:italic; color:#AAA; font-size:0.9rem;">
+        <p>Tantangan: Klik kata <strong>KUNCI</strong> saja (2-3 kata). Sisanya sampah.</p>
+        <div style="margin:15px 0; font-style:italic; color:#AAA; font-size:0.9rem;">
             "Managers cannot be created in a classroom... we accept only practicing managers."
         </div>
-
-        <div class="veto-container" id="veto-box">
+        <div class="veto-container">
             <div class="word-token" onclick="toggleWord(this)">Managers</div>
             <div class="word-token" onclick="toggleWord(this)">cannot</div>
             <div class="word-token" onclick="toggleWord(this)">be</div>
             <div class="word-token" onclick="toggleWord(this)">created</div>
-            <div class="word-token" onclick="toggleWord(this)">in</div>
             <div class="word-token" onclick="toggleWord(this)">classroom</div>
             <div class="word-token" onclick="toggleWord(this)">we</div>
             <div class="word-token" onclick="toggleWord(this)">accept</div>
@@ -207,30 +240,25 @@
             <div class="word-token" onclick="toggleWord(this)">practicing</div>
             <div class="word-token" onclick="toggleWord(this)">managers</div>
         </div>
-        
-        <div id="veto-result" style="margin-top:20px; font-weight:bold; color:var(--accent-green); min-height:30px; font-size:1.1rem;"></div>
-        <p style="font-size:0.8rem; color:#666;">(Tips: Jawaban benar adalah "Practicing Managers")</p>
+        <div id="veto-result" style="margin-top:20px; font-weight:bold; color:var(--accent-green); min-height:20px;"></div>
     </div>
 
     <div class="slide centered">
         <h2>5. The Logic Loop</h2>
         <p>Studi Kasus: Kontrak Nikah</p>
-        <p style="font-size:0.9rem; color:#888;">Lihat bedanya data mentah vs struktur.</p>
         
         <div class="logic-container">
             <div class="logic-col logic-raw">
-                <h3 style="color:#888; border-bottom:1px solid #333; margin-bottom:10px; font-size:1rem;">📝 Data Mentah (Acak)</h3>
-                <ul style="list-style:none; line-height:1.8; font-size:0.9rem;">
+                <h3 style="color:#888; border-bottom:1px solid #333; margin-bottom:10px; font-size:1rem;">📝 Data Mentah</h3>
+                <ul style="list-style:none; line-height:1.6; font-size:0.9rem;">
                     <li>- Wali</li>
                     <li>- Ijab (Proposal)</li>
                     <li>- Qabul (Terima)</li>
                     <li>- 2 Saksi</li>
                 </ul>
             </div>
-
-            <div style="font-size:2rem; color:var(--accent-yellow);">⬇️</div>
-
-            <div class="logic-col logic-archi">
+            <button id="logic-btn" class="arrow-btn" onclick="processLogic()">⬇️</button>
+            <div id="logic-result" class="logic-col logic-archi">
                 <h3 style="color:var(--accent-yellow); border-bottom:1px solid var(--accent-yellow); margin-bottom:10px; font-size:1rem;">🏛️ Architect's Outline</h3>
                 <div class="indent-1">I. SYARAT (Conditions)</div>
                 <div class="indent-2">A. Wali</div>
@@ -242,6 +270,32 @@
             </div>
         </div>
     </div>
+
+    <div class="slide centered">
+        <h2>6. Capstone: Full Simulation</h2>
+        <p>Case: Mountaineering Prep. <br>Dari Paragraf menjadi Struktur.</p>
+        
+        <div class="capstone-container">
+            <div id="cap-text" class="text-panel">
+                <span class="h-main">Mountaineering requires strict preparation.</span> Primarily, <span class="h-sub">physical training</span> is essential, specifically <span class="h-det">cardio (running, swimming)</span> and <span class="h-det">strength training</span> for heavy loads. Secondly, <span class="h-sub">equipment selection</span> is crucial, especially <span class="h-det">navigation tools (GPS)</span> and <span class="h-det">safety gear (ropes)</span>.
+            </div>
+
+            <button id="btn-scan" class="action-btn" onclick="scanText()">🔍 1. Scan & Highlight</button>
+
+            <button id="btn-build" class="action-btn green" style="display:none;" onclick="buildOutline()">🏗️ 2. Build Structure</button>
+
+            <div id="cap-outline" class="outline-panel">
+                <div class="indent-1">I. PREPARATION</div>
+                <div class="indent-2">A. Physical Training</div>
+                <div class="indent-3">1. Cardio (Run, Swim)</div>
+                <div class="indent-3">2. Strength Training</div>
+                <div class="indent-2">B. Equipment Selection</div>
+                <div class="indent-3">1. Navigation (GPS)</div>
+                <div class="indent-3">2. Safety Gear (Ropes)</div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="nav-bar">
         <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
@@ -259,29 +313,27 @@
             if (current >= slides.length) current = 0;
             if (current < 0) current = slides.length - 1;
             slides[current].classList.add('active');
-            slides[current].scrollTop = 0; // Auto scroll ke atas
+            slides[current].scrollTop = 0;
         }
 
-        // --- CHAOS ANIMATION ---
-        const words = ["Data", "Arrow ->", "Random", "Text", "Note", "Important!", "Underline"];
+        // --- SLIDE 2: CHAOS ---
+        const words = ["Data", "Arrow ->", "Random", "Text", "Note"];
         const chaosBox = document.getElementById('chaos');
-        
         words.forEach(w => {
             const el = document.createElement('div');
             el.innerText = w;
             el.className = 'chaos-text';
-            el.style.left = Math.random() * 80 + '%'; // Pakai persen biar responsif
+            el.style.left = Math.random() * 80 + '%';
             el.style.top = Math.random() * 80 + '%';
             el.style.transform = `rotate(${Math.random() * 90 - 45}deg)`;
             chaosBox.appendChild(el);
         });
-
         function transformToArchitect() {
             document.getElementById('chaos').style.display = 'none';
             document.getElementById('structure').style.display = 'block';
         }
 
-        // --- HIERARCHY REVEAL ---
+        // --- SLIDE 3: HIERARCHY ---
         let hLevel = 0;
         function revealHierarchy() {
             hLevel++;
@@ -292,24 +344,63 @@
             }
         }
 
-        // --- VETO GAME ---
-        function toggleWord(el) {
-            if (el.classList.contains('kept')) {
-                el.classList.remove('kept');
-                el.classList.add('deleted');
-            } else if (el.classList.contains('deleted')) {
-                el.classList.remove('deleted'); 
-            } else {
-                el.classList.add('kept');
-            }
-            updateResult();
+        // --- SLIDE 4: RULE OF PAIRS ---
+        function showTrap() {
+            document.getElementById('btn-show-trap').style.display = 'none';
+            document.getElementById('trap-container').style.display = 'block';
+        }
+        function fixTrap() {
+            const box = document.getElementById('trap-box');
+            box.className = "example-box correct";
+            document.getElementById('trap-title').innerText = "✅ STRUKTUR BENAR:";
+            document.getElementById('trap-title').style.color = "var(--accent-green)";
+            document.getElementById('trap-content').innerHTML = `I. Malam Henna<br><span style="color:#888; font-size:0.8rem;">(Naik menjadi Topik Utama)</span>`;
+            document.getElementById('trap-desc').innerText = "Solusi: Ratakan strukturnya.";
+            document.getElementById('btn-fix-trap').style.display = 'none';
         }
 
-        function updateResult() {
+        // --- SLIDE 5: VETO ---
+        function toggleWord(el) {
+            if (el.classList.contains('kept')) {
+                el.classList.remove('kept'); el.classList.add('deleted');
+            } else if (el.classList.contains('deleted')) {
+                el.classList.remove('deleted'); 
+            } else { el.classList.add('kept'); }
+            
             const kept = document.querySelectorAll('.kept');
             let text = "";
             kept.forEach(k => text += k.innerText + " ");
-            document.getElementById('veto-result').innerText = "Hasil: " + text;
+            document.getElementById('veto-result').innerText = text;
+        }
+
+        // --- SLIDE 6: LOGIC LOOP ---
+        function processLogic() {
+            const btn = document.getElementById('logic-btn');
+            btn.style.animation = 'none'; btn.style.transform = 'rotate(360deg)'; btn.style.opacity = '0.5'; btn.onclick = null;
+            setTimeout(() => {
+                const res = document.getElementById('logic-result');
+                res.classList.add('show');
+                res.scrollIntoView({behavior: "smooth", block: "end"});
+            }, 300);
+        }
+
+        // --- SLIDE 7: CAPSTONE (NEW) ---
+        function scanText() {
+            // 1. Add class to show colors
+            document.getElementById('cap-text').classList.add('active-scan');
+            // 2. Change button
+            document.getElementById('btn-scan').style.display = 'none';
+            document.getElementById('btn-build').style.display = 'inline-block';
+        }
+
+        function buildOutline() {
+            // 1. Show Outline
+            const outline = document.getElementById('cap-outline');
+            outline.classList.add('show');
+            // 2. Hide button
+            document.getElementById('btn-build').style.display = 'none';
+            // 3. Scroll to it
+            outline.scrollIntoView({behavior: "smooth", block: "end"});
         }
 
         document.addEventListener('keydown', (e) => {
