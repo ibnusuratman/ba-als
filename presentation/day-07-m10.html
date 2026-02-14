@@ -8,9 +8,10 @@
         :root {
             --bg-color: #0a0a0a;
             --text-color: #e0e0e0;
-            --accent-cyan: #00f3ff; /* Warna Detektif/Tech */
-            --accent-yellow: #ffd700; /* Warna Warning/Evidence */
-            --accent-red: #ff3333; /* Warna Danger/Plagiarism */
+            --accent-cyan: #00f3ff;
+            --accent-yellow: #ffd700;
+            --accent-red: #ff3333;
+            --accent-green: #00e676;
             --card-bg: #151515;
         }
 
@@ -36,23 +37,23 @@
         .slide.centered { text-align: center; }
 
         /* --- TYPOGRAPHY --- */
-        h1 { color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
-        h2 { color: var(--accent-yellow); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px dashed #333; width: 100%; padding-bottom: 10px; }
+        h1 { color: var(--accent-cyan); font-size: 1.6rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+        h2 { color: var(--accent-yellow); font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px dashed #333; width: 100%; padding-bottom: 10px; }
         
-        /* --- TEXT BOX (THE TOGGLE AREA) --- */
+        /* --- TEXT BOX --- */
         .evidence-file {
             background: #111; border: 1px solid #333; border-left: 4px solid var(--accent-cyan);
             padding: 20px; border-radius: 5px; width: 100%; max-width: 600px;
-            margin-bottom: 20px; text-align: justify; line-height: 1.6; font-size: 1rem;
+            margin-bottom: 20px; text-align: justify; line-height: 1.6; font-size: 0.95rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            min-height: 150px; position: relative;
+            min-height: 120px; position: relative;
         }
 
         /* LANGUAGE CLASSES */
         .txt-id { display: none; color: #aaddff; font-style: italic; }
         .txt-en { display: block; color: #e0e0e0; }
 
-        /* --- TOGGLE BUTTON (FLOATING) --- */
+        /* --- TOGGLE BUTTON --- */
         .lang-switch {
             position: fixed; top: 15px; right: 15px; z-index: 1000;
             background: #222; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
@@ -61,14 +62,14 @@
         }
         .lang-switch:active { transform: scale(0.95); }
 
-        /* --- INTERACTIVE ELEMENTS --- */
+        /* --- BUTTONS --- */
         .btn {
-            padding: 10px 20px; border: none; border-radius: 4px;
+            padding: 12px 20px; border: none; border-radius: 4px;
             font-weight: bold; cursor: pointer; font-family: sans-serif;
-            margin: 5px; transition: 0.2s;
+            margin: 5px; transition: 0.2s; font-size: 0.9rem;
         }
         .btn-action { background: var(--accent-cyan); color: #000; }
-        .btn-danger { background: var(--accent-red); color: #fff; }
+        .btn-reveal { background: var(--accent-yellow); color: #000; margin-top: 15px; width: 100%; max-width: 300px; }
 
         /* Slide 4 Animation */
         .machine-box {
@@ -81,13 +82,29 @@
         .compare-row {
             display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 600px;
         }
-        .compare-box { padding: 10px; border-radius: 4px; font-size: 0.9rem; }
+        .compare-box { padding: 15px; border-radius: 4px; font-size: 0.9rem; text-align: left; }
         .original { background: rgba(255, 51, 51, 0.1); border: 1px solid var(--accent-red); }
+        
+        /* Hidden Paraphrase Box */
+        .paraphrase-container {
+            display: none; /* Hidden initially */
+            animation: fadeIn 0.5s ease;
+        }
         .paraphrase { background: rgba(0, 255, 0, 0.1); border: 1px solid var(--accent-cyan); }
         
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
         .highlight { font-weight: bold; text-decoration: underline; }
-        .bad { color: var(--accent-red); }
-        .good { color: var(--accent-cyan); }
+        .bad { color: var(--accent-red); font-weight: bold; }
+        .good { color: var(--accent-cyan); font-weight: bold; }
+
+        /* Slide 6 Quiz Buttons */
+        .quiz-btn {
+            background: #222; color: #fff; text-align: left; border: 1px solid #444;
+            width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer;
+            transition: 0.3s;
+        }
+        .quiz-btn:hover { border-color: var(--accent-cyan); }
 
         /* --- NAV --- */
         .nav-bar {
@@ -105,22 +122,22 @@
     <a href="day-07.html" class="home-btn">🏠</a>
     
     <button class="lang-switch" onclick="toggleLanguage()">
-        <span id="lang-icon">🇬🇧</span> <span id="lang-text">EN</span>
+        <span id="lang-icon">🌐</span> <span id="lang-text">EN</span>
     </button>
 
     <div class="slide active centered">
         <h1>The Academic Detective</h1>
         <h2>Crime: Plagiarism</h2>
-        <div style="font-size:3rem; margin-bottom:10px;">🕵️‍♂️</div>
+        <div style="font-size:4rem; margin-bottom:20px;">🔍</div>
         
         <div class="evidence-file">
             <div class="txt-en">
-                Plagiarism is fundamentally the act of stealing someone else's work. It can happen intentionally or unintentionally. For example, copying a sentence word-for-word without quotation marks is an offense.<br><br>
-                <strong>Verdict:</strong> Whenever you copy exact words, you MUST use quotation marks. Otherwise, you are claiming them as your own.
+                Plagiarism is stealing someone else's work. It can be intentional or unintentional. For example, copying a sentence word-for-word without quotation marks is an offense.<br><br>
+                <strong>Verdict:</strong> Whenever you copy exact words, you MUST use quotation marks.
             </div>
             <div class="txt-id">
-                Plagiarisme pada dasarnya adalah tindakan mencuri karya orang lain. Hal ini dapat terjadi secara sengaja maupun tidak sengaja. Misalnya, menyalin kalimat kata demi kata tanpa tanda kutip adalah pelanggaran.<br><br>
-                <strong>Vonis:</strong> Kapan pun Anda menyalin kata-kata persis, Anda HARUS menggunakan tanda kutip. Jika tidak, Anda mengklaimnya sebagai milik sendiri.
+                Plagiarisme adalah mencuri karya orang lain. Bisa disengaja atau tidak. Contohnya, menyalin kalimat kata demi kata tanpa tanda kutip adalah pelanggaran.<br><br>
+                <strong>Vonis:</strong> Kapan pun Anda menyalin kata persis, Anda HARUS pakai tanda kutip.
             </div>
         </div>
     </div>
@@ -128,19 +145,18 @@
     <div class="slide centered">
         <h1>Defense Strategy</h1>
         <h2>Video 10b: Two Shields</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🛡️</div>
         
         <div class="evidence-file">
             <div class="txt-en">
-                To avoid this offense, rely on two methods:<br>
-                1. <strong>Direct Quoting:</strong> Using exact words inside quotation marks " ".<br>
-                2. <strong>Paraphrasing:</strong> Rewriting ideas using your own words and sentence structure.<br><br>
-                <em>Note: Too many quotes shows a lack of original thought. Paraphrasing is preferred.</em>
+                To avoid this offense, rely on two methods:<br><br>
+                1. <strong>Direct Quoting:</strong> Using exact words inside "quotation marks".<br>
+                2. <strong>Paraphrasing:</strong> Rewriting ideas using your own words and structure.
             </div>
             <div class="txt-id">
-                Untuk menghindari pelanggaran ini, andalkan dua metode:<br>
-                1. <strong>Mengutip Langsung:</strong> Menggunakan kata persis di dalam tanda kutip " ".<br>
-                2. <strong>Parafrasa:</strong> Menulis ulang ide menggunakan kata-kata dan struktur kalimat Anda sendiri.<br><br>
-                <em>Catatan: Terlalu banyak kutipan menunjukkan kurangnya pemikiran orisinal. Parafrasa lebih disukai.</em>
+                Untuk menghindari pelanggaran ini, gunakan dua metode:<br><br>
+                1. <strong>Kutipan Langsung:</strong> Gunakan kata persis di dalam "tanda kutip".<br>
+                2. <strong>Parafrasa:</strong> Tulis ulang ide menggunakan kata-kata dan struktur sendiri.
             </div>
         </div>
     </div>
@@ -148,19 +164,20 @@
     <div class="slide centered">
         <h1>The 3 Laws</h1>
         <h2>Video 10c: Strict Criteria</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">📜</div>
         
         <div class="evidence-file">
             <div class="txt-en">
                 A successful paraphrase must meet 3 criteria:<br><br>
-                1. <strong>New Vocabulary:</strong> Use accurate synonyms.<br>
-                2. <strong>New Structure:</strong> Change the grammar completely, not just 1-2 words.<br>
+                1. <strong>New Vocabulary:</strong> Use synonyms.<br>
+                2. <strong>New Structure:</strong> Change grammar completely.<br>
                 3. <strong>Same Meaning:</strong> No new opinions, no missing facts.
             </div>
             <div class="txt-id">
-                Parafrasa yang berhasil harus memenuhi 3 kriteria:<br><br>
-                1. <strong>Kosakata Baru:</strong> Gunakan sinonim yang akurat.<br>
-                2. <strong>Struktur Baru:</strong> Ubah tata bahasa sepenuhnya, bukan cuma 1-2 kata.<br>
-                3. <strong>Makna Sama:</strong> Jangan tambah opini, jangan hilangkan fakta.
+                Parafrasa sukses harus memenuhi 3 kriteria:<br><br>
+                1. <strong>Kosakata Baru:</strong> Gunakan sinonim.<br>
+                2. <strong>Struktur Baru:</strong> Ubah tata bahasa total.<br>
+                3. <strong>Makna Sama:</strong> Jangan tambah opini, jangan buang fakta.
             </div>
         </div>
     </div>
@@ -171,23 +188,23 @@
         
         <div class="evidence-file">
             <div class="txt-en">
-                How to change structure? Manipulate the grammar.<br>
+                Manipulate the grammar:<br>
                 - Change Active to Passive voice.<br>
                 - Change Parts of Speech (Noun → Verb).<br>
-                - Combine two short sentences into one complex sentence.
+                - Combine short sentences.
             </div>
             <div class="txt-id">
-                Bagaimana mengubah struktur? Manipulasi tata bahasa.<br>
-                - Ubah kalimat Aktif menjadi Pasif.<br>
+                Manipulasi tata bahasa:<br>
+                - Ubah Aktif ke Pasif.<br>
                 - Ubah Kelas Kata (Benda → Kerja).<br>
-                - Gabungkan dua kalimat pendek menjadi satu kalimat kompleks.
+                - Gabungkan kalimat pendek.
             </div>
         </div>
 
         <div class="machine-box" id="machine">
             <span id="mach-text">Input: "The police caught the thief."</span>
         </div>
-        <button class="btn btn-action" onclick="transformSentence()">🔧 Activate Machine</button>
+        <button class="btn btn-action" onclick="transformSentence()">⚙️ Activate Machine</button>
     </div>
 
     <div class="slide centered">
@@ -196,45 +213,44 @@
         
         <div class="compare-row">
             <div class="compare-box original">
-                <strong>ORIGINAL (Asli):</strong><br>
+                <strong style="color:var(--accent-red)">ORIGINAL (Asli):</strong><br><br>
                 <div class="txt-en">"Havasu Canyon is in a <span class="bad">remote area</span>. It is 10 or 15 miles from the nearest highway."</div>
                 <div class="txt-id">"Ngarai Havasu berada di <span class="bad">daerah terpencil</span>. Jaraknya 10 atau 15 mil dari jalan raya terdekat."</div>
             </div>
 
-            <div style="font-size:1.5rem; color:var(--accent-cyan);">⬇️ PARAPHRASE ⬇️</div>
+            <button id="btn-reveal-para" class="btn btn-reveal" onclick="revealParaphrase()">🔓 REVEAL PARAPHRASE</button>
 
-            <div class="compare-box paraphrase">
-                <strong>PARAPHRASE (Hasil):</strong><br>
+            <div id="para-box" class="compare-box paraphrase paraphrase-container">
+                <strong style="color:var(--accent-cyan)">PARAPHRASE (Hasil):</strong><br><br>
                 <div class="txt-en">"The location of Havasu Canyon is <span class="good">highly isolated</span>, situated approximately a dozen miles away from any major road."</div>
                 <div class="txt-id">"Lokasi Ngarai Havasu <span class="good">sangat terisolasi</span>, terletak sekitar belasan mil jauhnya dari jalan utama mana pun."</div>
             </div>
         </div>
-        <p style="font-size:0.8rem; margin-top:10px; color:#888;">Notice: Vocabulary changed, Structure combined.</p>
     </div>
 
     <div class="slide centered">
         <h1>Final Exam</h1>
         <h2>Detective Certification</h2>
         
-        <div class="evidence-file">
+        <div class="evidence-file" style="min-height:80px;">
             <div class="txt-en"><strong>Original:</strong> "Students must cite sources to avoid plagiarism."</div>
             <div class="txt-id"><strong>Asli:</strong> "Mahasiswa harus mengutip sumber untuk menghindari plagiarisme."</div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:500px;">
-            <button class="btn" style="background:#333; color:#fff; text-align:left;" onclick="checkAnswer(this, false)">
-                <span class="txt-en">A. Students have to cite sources to avoid plagiarism. (Too similar)</span>
-                <span class="txt-id">A. Mahasiswa wajib mengutip sumber untuk menghindari plagiarisme. (Terlalu mirip)</span>
+        <div style="width:100%; max-width:500px;">
+            <button class="quiz-btn" onclick="checkAnswer(this, 'wrong_similar')">
+                <span class="txt-en">A. Students have to cite sources to avoid plagiarism.</span>
+                <span class="txt-id">A. Mahasiswa wajib mengutip sumber untuk menghindari plagiarisme.</span>
             </button>
             
-            <button class="btn" style="background:#333; color:#fff; text-align:left;" onclick="checkAnswer(this, true)">
-                <span class="txt-en">B. To prevent intellectual theft, proper referencing is mandatory for learners.</span>
-                <span class="txt-id">B. Untuk mencegah pencurian intelektual, referensi yang tepat diwajibkan bagi pelajar.</span>
+            <button class="quiz-btn" onclick="checkAnswer(this, 'correct')">
+                <span class="txt-en">B. To prevent intellectual theft, proper referencing is mandatory.</span>
+                <span class="txt-id">B. Untuk mencegah pencurian intelektual, referensi yang tepat diwajibkan.</span>
             </button>
 
-             <button class="btn" style="background:#333; color:#fff; text-align:left;" onclick="checkAnswer(this, false)">
-                <span class="txt-en">C. Citations are annoying but necessary. (Opinion added)</span>
-                <span class="txt-id">C. Kutipan itu menyebalkan tapi perlu. (Menambah opini)</span>
+            <button class="quiz-btn" onclick="checkAnswer(this, 'wrong_opinion')">
+                <span class="txt-en">C. Citations are annoying but necessary.</span>
+                <span class="txt-id">C. Kutipan itu menyebalkan tapi perlu.</span>
             </button>
         </div>
     </div>
@@ -257,26 +273,22 @@
             if (current >= slides.length) current = 0;
             if (current < 0) current = slides.length - 1;
             slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
         }
 
         // --- GLOBAL LANGUAGE TOGGLE ---
         function toggleLanguage() {
             isIndonesian = !isIndonesian;
-            const btnIcon = document.getElementById('lang-icon');
             const btnText = document.getElementById('lang-text');
             
             const enElements = document.querySelectorAll('.txt-en');
             const idElements = document.querySelectorAll('.txt-id');
 
             if (isIndonesian) {
-                // Switch to ID
-                btnIcon.innerText = "🇮🇩";
                 btnText.innerText = "ID";
                 enElements.forEach(el => el.style.display = 'none');
                 idElements.forEach(el => el.style.display = 'block');
             } else {
-                // Switch to EN
-                btnIcon.innerText = "🇬🇧";
                 btnText.innerText = "EN";
                 enElements.forEach(el => el.style.display = 'block');
                 idElements.forEach(el => el.style.display = 'none');
@@ -301,17 +313,32 @@
             }, 800);
         }
 
-        // --- SLIDE 6 QUIZ ---
-        function checkAnswer(btn, isCorrect) {
-            if(isCorrect) {
+        // --- SLIDE 5 REVEAL ---
+        function revealParaphrase() {
+            document.getElementById('para-box').style.display = 'block';
+            document.getElementById('btn-reveal-para').style.display = 'none';
+        }
+
+        // --- SLIDE 6 QUIZ (FIXED) ---
+        function checkAnswer(btn, type) {
+            // Reset styles if needed, but for now just show result
+            
+            if(type === 'correct') {
                 btn.style.background = "var(--accent-cyan)";
                 btn.style.color = "#000";
+                btn.style.borderColor = "var(--accent-cyan)";
                 if(isIndonesian) btn.innerHTML = "✅ BENAR! Struktur baru, makna sama.";
                 else btn.innerHTML = "✅ CORRECT! New structure, same meaning.";
-            } else {
+            } else if (type === 'wrong_similar') {
                 btn.style.background = "var(--accent-red)";
-                if(isIndonesian) btn.innerHTML = "❌ SALAH. Coba lagi.";
-                else btn.innerHTML = "❌ WRONG. Try again.";
+                btn.style.borderColor = "var(--accent-red)";
+                if(isIndonesian) btn.innerHTML = "❌ SALAH. Terlalu mirip (Plagiat).";
+                else btn.innerHTML = "❌ WRONG. Too similar (Plagiarism).";
+            } else if (type === 'wrong_opinion') {
+                btn.style.background = "var(--accent-red)";
+                btn.style.borderColor = "var(--accent-red)";
+                if(isIndonesian) btn.innerHTML = "❌ SALAH. Menambahkan opini pribadi.";
+                else btn.innerHTML = "❌ WRONG. Opinion added.";
             }
         }
 
