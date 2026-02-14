@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAY 07: Academic Integrity & Process</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #E0E0E0;
+            --accent-cyan: #00E5FF;  /* Detective Color */
+            --accent-orange: #FF9100; /* Construction Color */
+            --accent-green: #00E676;
+            --card-bg: #151515;
+            --border: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 600px; }
+
+        /* HEADER */
+        header { text-align: center; margin-bottom: 30px; margin-top: 10px; }
+        h1 { font-size: 2.5rem; color: #FFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-size: 1rem; color: #888; }
+
+        /* PROGRESS BAR STICKY */
+        .progress-sticky {
+            position: sticky; top: 0; z-index: 50; background: var(--bg-color);
+            padding: 10px 0; border-bottom: 1px solid #222; margin-bottom: 20px;
+        }
+        .progress-container {
+            background: #222; height: 12px; border-radius: 6px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-orange)); 
+            width: 0%; transition: width 0.5s ease;
+        }
+        .progress-text { text-align: right; font-size: 0.8rem; color: #AAA; margin-top: 5px; }
+
+        /* CHECKLIST ACCORDION */
+        .section-title { margin-top: 30px; margin-bottom: 15px; color: #888; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; border-left: 3px solid #555; padding-left: 10px; }
+
+        details {
+            background: #1a1a1a; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border);
+            overflow: hidden; transition: 0.3s;
+        }
+        details[open] { border-color: #555; }
+        
+        summary {
+            padding: 15px; cursor: pointer; font-weight: bold; list-style: none;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #222;
+        }
+        summary:hover { background: #2a2a2a; }
+        summary::after { content: '+'; font-size: 1.2rem; color: #666; }
+        details[open] summary::after { content: '-'; color: #FFF; }
+        
+        .list-content { padding: 15px; background: #151515; }
+
+        /* CHECKBOX ITEM */
+        .check-item {
+            display: flex; align-items: flex-start; margin-bottom: 12px;
+            padding: 8px; border-radius: 6px; transition: 0.2s;
+        }
+        .check-item:hover { background: #1f1f1f; }
+        
+        input[type="checkbox"] {
+            appearance: none; width: 18px; height: 18px; border: 2px solid #555; border-radius: 4px;
+            margin-right: 12px; margin-top: 3px; cursor: pointer; flex-shrink: 0; position: relative;
+        }
+        input[type="checkbox"]:checked { background: var(--accent-green); border-color: var(--accent-green); }
+        input[type="checkbox"]:checked::after {
+            content: '✔'; color: black; font-size: 12px; position: absolute; top: -1px; left: 2px; font-weight: bold;
+        }
+        .check-label { font-size: 0.9rem; color: #CCC; line-height: 1.4; cursor: pointer; }
+        input[type="checkbox"]:checked + .check-label { text-decoration: line-through; color: #555; }
+
+        /* MODULE CARDS (TODAY) */
+        .module-card {
+            background: linear-gradient(145deg, #1e1e1e, #0f0f0f);
+            border: 1px solid #333; border-radius: 12px; padding: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: white; transition: all 0.3s ease;
+            margin-bottom: 20px; position: relative; overflow: hidden;
+        }
+        .module-card:hover { transform: translateY(-5px); }
+        
+        /* Specific Card Styles */
+        .card-detective:hover { border-color: var(--accent-cyan); box-shadow: 0 5px 20px rgba(0, 229, 255, 0.2); }
+        .card-factory:hover { border-color: var(--accent-orange); box-shadow: 0 5px 20px rgba(255, 145, 0, 0.2); }
+
+        .mod-info h2 { font-size: 1.4rem; margin-bottom: 5px; }
+        .card-detective h2 { color: var(--accent-cyan); }
+        .card-factory h2 { color: var(--accent-orange); }
+        
+        .mod-info p { color: #999; font-size: 0.9rem; }
+        .mod-icon { font-size: 2.5rem; }
+
+        /* HOME BTN */
+        .home-btn { position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 1.5rem; opacity: 0.5; }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠</a>
+
+    <div class="container">
+        
+        <header>
+            <h1>DAY 07</h1>
+            <p class="subtitle">Integrity & Process</p>
+        </header>
+
+        <div class="progress-sticky">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Knowledge Check: 0%</div>
+        </div>
+
+        <div class="section-title">⚠️ Prerequisite Check (Hutang Ilmu)</div>
+
+        <details>
+            <summary>Modul 1-3: Foundation Skills</summary>
+            <div class="list-content">
+                <div class="check-item"><input type="checkbox"><label class="check-label">M1: Tahu Gaya Belajar sendiri (VARK).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M2: Paham Prefix, Root, & Suffix dasar.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M2: Bisa menggunakan Kamus Inggris-Inggris (Monolingual).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M3: Menguasai teknik SQ3R (Survey, Question, Read, Recite, Review).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M3: Bisa membedakan Skimming (Ide Utama) vs Scanning (Detail).</label></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Modul 4-6: Note Taking Mastery</summary>
+            <div class="list-content">
+                <div class="check-item"><input type="checkbox"><label class="check-label">M4: Tahu beda Highlight (Warnai) vs Anotasi (Catatan Pinggir).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M4: Highlight maksimal 10-20% halaman.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M5: Bisa membuat catatan Metode Cornell (Cue, Notes, Summary).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M6: Bisa membuat Mind Map (Peta Pikiran) dari teks linear.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M6: Menggunakan warna & simbol dalam catatan.</label></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Modul 7: Self Management</summary>
+            <div class="list-content">
+                <div class="check-item"><input type="checkbox"><label class="check-label">M7: Punya jadwal studi mandiri yang realistis.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M7: Paham konsep dasar Integritas Akademik.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M7: Memiliki tujuan belajar jangka pendek & panjang.</label></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Modul 8-9: Logic & Arguments</summary>
+            <div class="list-content">
+                <div class="check-item"><input type="checkbox"><label class="check-label">M8: Paham Hierarki Outline (I, A, 1, a).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M8: Paham "Rule of Pairs" (Tidak ada A tanpa B).</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M8: Bisa mengubah "Tembok Teks" menjadi Struktur.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M9: Bisa membedakan Fakta vs Klaim.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M9: Mengerti pentingnya Bukti Sistemik vs Anekdot.</label></div>
+                <div class="check-item"><input type="checkbox"><label class="check-label">M9: Paham konsep Counter-Argument (Sanggahan).</label></div>
+            </div>
+        </details>
+
+
+        <div class="section-title">🚀 Today's Mission</div>
+
+        <a href="day-07-m10.html" class="module-card card-detective">
+            <div class="mod-info">
+                <h2>Modul 10: Plagiarism</h2>
+                <p>The Academic Detective. Hindari pencurian intelektual dengan teknik Parafrasa.</p>
+            </div>
+            <div class="mod-icon">🕵️‍♂️</div>
+        </a>
+
+        <a href="day-07-m11.html" class="module-card card-factory">
+            <div class="mod-info">
+                <h2>Modul 11: Writing Process</h2>
+                <p>The Writing Factory. 5 Langkah merekayasa tulisan dari Blueprint hingga Launching.</p>
+            </div>
+            <div class="mod-icon">🏭</div>
+        </a>
+
+    </div>
+
+    <script>
+        // LOGIC PROGRESS BAR
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        function updateProgress() {
+            const total = checkboxes.length;
+            let checked = 0;
+            checkboxes.forEach(box => {
+                if(box.checked) checked++;
+            });
+
+            const percent = Math.round((checked / total) * 100);
+            progressBar.style.width = percent + "%";
+            progressText.innerText = "Kesiapan Fondasi: " + percent + "%";
+            
+            saveProgress();
+        }
+
+        function saveProgress() {
+            let status = [];
+            checkboxes.forEach(box => status.push(box.checked));
+            localStorage.setItem('day07_checklist', JSON.stringify(status));
+        }
+
+        function loadProgress() {
+            const saved = JSON.parse(localStorage.getItem('day07_checklist'));
+            if (saved) {
+                checkboxes.forEach((box, index) => {
+                    if (saved[index]) box.checked = true;
+                });
+                updateProgress();
+            }
+        }
+
+        // Add Event Listeners
+        checkboxes.forEach(box => {
+            box.addEventListener('change', updateProgress);
+        });
+
+        // Init
+        window.onload = loadProgress;
+
+    </script>
+
+</body>
+</html>
