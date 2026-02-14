@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 11: The Writing Process</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --accent-orange: #ff9100; /* Construction Color */
+            --accent-yellow: #ffea00; /* Safety Color */
+            --accent-blue: #00b0ff; /* Blueprint Color */
+            --card-bg: #1e1e1e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 80px; padding-top: 60px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            background: linear-gradient(180deg, #121212 0%, #222 100%);
+            z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { text-align: center; }
+
+        /* --- TYPOGRAPHY --- */
+        h1 { color: var(--accent-orange); font-size: 1.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #333; width: 100%; padding-bottom: 10px; }
+        .step-number { font-size: 4rem; font-weight: bold; color: rgba(255, 145, 0, 0.2); position: absolute; top: 60px; right: 20px; z-index: 0; }
+
+        /* --- TEXT BOX (CONTENT) --- */
+        .content-box {
+            background: #1a1a1a; border: 1px solid #333; border-top: 4px solid var(--accent-orange);
+            padding: 20px; border-radius: 8px; width: 100%; max-width: 600px;
+            margin-bottom: 20px; text-align: justify; line-height: 1.6; font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 2; position: relative;
+        }
+
+        /* LANGUAGE CLASSES */
+        .txt-id { display: none; color: #ffcc80; font-style: italic; }
+        .txt-en { display: block; color: #e0e0e0; }
+
+        /* --- TOGGLE BUTTON --- */
+        .lang-switch {
+            position: fixed; top: 15px; right: 15px; z-index: 1000;
+            background: #222; border: 1px solid var(--accent-orange); color: var(--accent-orange);
+            padding: 8px 15px; border-radius: 50px; cursor: pointer; font-weight: bold;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        /* --- INTERACTIVE ELEMENTS --- */
+        .btn {
+            padding: 12px 25px; border: none; border-radius: 4px;
+            font-weight: bold; cursor: pointer; margin: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.2s;
+        }
+        .btn-construct { background: var(--accent-orange); color: #000; }
+        .btn-blueprint { background: var(--accent-blue); color: #000; }
+        
+        /* SLIDE 3: FLOW ANIMATION */
+        .flow-text { font-family: 'Courier New', monospace; color: #888; font-size: 0.8rem; overflow: hidden; white-space: nowrap; width: 0; }
+        .flow-anim { animation: typing 3s steps(40, end) forwards; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+
+        /* SLIDE 4: ARRM BOX */
+        .arrm-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 500px; }
+        .arrm-box { padding: 15px; border: 1px dashed #555; border-radius: 5px; text-align: left; }
+        .arrm-result { display: none; background: rgba(0, 176, 255, 0.1); border: 1px solid var(--accent-blue); }
+
+        /* SLIDE 5: EDITING GAME */
+        .typo { color: var(--accent-yellow); text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .typo:hover { background: rgba(255, 234, 0, 0.2); }
+        .fixed { color: var(--accent-blue); text-decoration: none; cursor: default; }
+
+        /* SLIDE 7: QUIZ */
+        .quiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 500px; }
+        .quiz-item {
+            background: #222; padding: 15px; border: 1px solid #444; border-radius: 8px;
+            cursor: pointer; text-align: center; font-size: 0.9rem;
+        }
+        .quiz-item:hover { border-color: var(--accent-orange); }
+
+        /* --- NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: #111; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 15px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; text-decoration: none; font-size: 1.5rem; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-07.html" class="home-btn">🏠</a>
+    
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="lang-text">EN</span>
+    </button>
+
+    <div class="slide active centered">
+        <h1>The Writing Factory</h1>
+        <h2>Module 11: Process vs Product</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🏭</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                Writing is often viewed as a product (the final paper), but it is actually a <strong>process</strong>. Just like building a car or a house, you cannot jump to the end. There are exactly <strong>5 steps</strong> you must follow to engineer a great piece of work.
+            </div>
+            <div class="txt-id">
+                Menulis sering dilihat sebagai produk (makalah akhir), padahal sebenarnya adalah <strong>proses</strong>. Seperti membangun mobil atau rumah, Anda tidak bisa langsung loncat ke akhir. Ada tepat <strong>5 langkah</strong> yang harus diikuti untuk merekayasa karya yang hebat.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <div class="step-number">01</div>
+        <h1>Pre-Writing</h1>
+        <h2>The Architect's Blueprint</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🗺️</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                <strong>The Most Important Step.</strong><br>
+                Also called Planning or Brainstorming. In this stage, you choose a topic, gather ideas, and organize them. You are the Architect drawing the blueprint before laying any bricks.<br><br>
+                <em>Tools: Mind Maps, Lists, Formal Outlines.</em>
+            </div>
+            <div class="txt-id">
+                <strong>Langkah Paling Penting.</strong><br>
+                Disebut juga Perencanaan atau Curah Pendapat. Di tahap ini, pilih topik, kumpulkan ide, dan atur logikanya. Anda adalah Arsitek yang menggambar cetak biru sebelum meletakkan batu bata.<br><br>
+                <em>Alat: Peta Pikiran, Daftar, Kerangka Formal.</em>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <div class="step-number">02</div>
+        <h1>Drafting</h1>
+        <h2>The Builder's Flow</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🧱</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                <strong>The Rough Draft.</strong><br>
+                Turn your outline into sentences. The Golden Rule: <strong>Let it flow!</strong> Do not stop to fix spelling or grammar. Just get the ideas from your head onto the paper. Mistakes are okay here.
+            </div>
+            <div class="txt-id">
+                <strong>Draf Kasar.</strong><br>
+                Ubah kerangka menjadi kalimat. Aturan Emas: <strong>Biarkan mengalir!</strong> Jangan berhenti untuk memperbaiki ejaan atau tata bahasa. Pindahkan saja ide dari kepala ke kertas. Kesalahan boleh terjadi di sini.
+            </div>
+        </div>
+
+        <div style="background:#000; padding:10px; width:100%; max-width:500px; border-left:2px solid var(--accent-orange);">
+            <div id="flow-demo" class="flow-text">writing ideas fast dont stop no grammar check just flow...</div>
+        </div>
+        <button class="btn btn-construct" onclick="startFlow()">🌊 Start Flow</button>
+    </div>
+
+    <div class="slide centered">
+        <div class="step-number">03</div>
+        <h1>Revising</h1>
+        <h2>The Heavy Renovation</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🔨</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                <strong>Focus: CONTENT & STRUCTURE.</strong><br>
+                Use the acronym <strong>ARRM</strong>:<br>
+                - <strong>A</strong>dd words.<br>
+                - <strong>R</strong>earrange sentences.<br>
+                - <strong>R</strong>emove unnecessary parts.<br>
+                - <strong>R</strong>eplace weak words.<br>
+                <em>Tip: Read aloud to hear awkward phrasing.</em>
+            </div>
+            <div class="txt-id">
+                <strong>Fokus: KONTEN & STRUKTUR.</strong><br>
+                Gunakan singkatan <strong>ARRM</strong>:<br>
+                - <strong>A</strong>dd (Tambah kata).<br>
+                - <strong>R</strong>earrange (Atur ulang kalimat).<br>
+                - <strong>R</strong>emove (Hapus bagian tak perlu).<br>
+                - <strong>R</strong>eplace (Ganti kata lemah).<br>
+                <em>Tip: Baca lantang untuk mendengar frasa janggal.</em>
+            </div>
+        </div>
+
+        <div class="arrm-container">
+            <div class="arrm-box" style="background:#330000; border-color:red;">
+                <strong>Messy Draft:</strong> "Cat big. I like. It run fast very."
+            </div>
+            <div id="arrm-res" class="arrm-box arrm-result">
+                <strong>ARRM Fixed:</strong> "I adore the massive feline because it runs incredibly fast."
+            </div>
+        </div>
+        <button class="btn btn-blueprint" onclick="applyARRM()">🛠️ Apply ARRM</button>
+    </div>
+
+    <div class="slide centered">
+        <div class="step-number">04</div>
+        <h1>Editing</h1>
+        <h2>The Final Polish</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🧼</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                <strong>Focus: MECHANICS (Proofreading).</strong><br>
+                Now you fix the surface errors. Check grammar, spelling, punctuation, and capitalization. Make it look professional.<br><br>
+                <strong>Mini Game:</strong> Click the errors below to fix them!
+            </div>
+            <div class="txt-id">
+                <strong>Fokus: MEKANIK (Koreksi).</strong><br>
+                Sekarang perbaiki kesalahan permukaan. Cek tata bahasa, ejaan, tanda baca, dan huruf kapital. Buat terlihat profesional.<br><br>
+                <strong>Mini Game:</strong> Klik kesalahan di bawah untuk memperbaikinya!
+            </div>
+        </div>
+
+        <div style="font-family:'Courier New'; font-size:1.2rem; background:#222; padding:20px; border:1px solid #555;">
+            "i <span class="typo" onclick="fix(this, 'have')">has</span> a big <span class="typo" onclick="fix(this, 'apple')">aple</span>."
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <div class="step-number">05</div>
+        <h1>Publishing</h1>
+        <h2>The Grand Launch</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🚀</div>
+        
+        <div class="content-box">
+            <div class="txt-en">
+                <strong>The Final Step.</strong><br>
+                Produce the final copy. Submit it to your teacher, present it to classmates, or post it online. You are sharing the best version of your ideas with the audience.
+            </div>
+            <div class="txt-id">
+                <strong>Langkah Terakhir.</strong><br>
+                Hasilkan salinan akhir. Serahkan ke guru, presentasikan ke teman, atau posting online. Anda membagikan versi terbaik ide Anda kepada audiens.
+            </div>
+        </div>
+        <div style="font-size:2rem; margin-top:20px;">DONE! ✅</div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Factory Inspection</h1>
+        <h2>Match the Task to the Step</h2>
+        
+        <div class="quiz-grid">
+            <div class="quiz-item" onclick="showAns(this, 'Step 1: Pre-writing')">Making a Mind Map</div>
+            <div class="quiz-item" onclick="showAns(this, 'Step 2: Drafting')">Writing without stopping</div>
+            <div class="quiz-item" onclick="showAns(this, 'Step 3: Revising')">Rearranging Paragraphs</div>
+            <div class="quiz-item" onclick="showAns(this, 'Step 4: Editing')">Fixing Spelling Errors</div>
+        </div>
+        <div id="quiz-feedback" style="margin-top:20px; font-weight:bold; color:var(--accent-orange); height:30px;"></div>
+    </div>
+
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#666; font-size:0.8rem;">Modul 11</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        let isIndonesian = false;
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        // --- TOGGLE LANGUAGE ---
+        function toggleLanguage() {
+            isIndonesian = !isIndonesian;
+            const btnText = document.getElementById('lang-text');
+            const enElements = document.querySelectorAll('.txt-en');
+            const idElements = document.querySelectorAll('.txt-id');
+
+            if (isIndonesian) {
+                btnText.innerText = "ID";
+                enElements.forEach(el => el.style.display = 'none');
+                idElements.forEach(el => el.style.display = 'block');
+            } else {
+                btnText.innerText = "EN";
+                enElements.forEach(el => el.style.display = 'block');
+                idElements.forEach(el => el.style.display = 'none');
+            }
+        }
+
+        // --- SLIDE 3 FLOW ---
+        function startFlow() {
+            const demo = document.getElementById('flow-demo');
+            demo.classList.remove('flow-anim');
+            void demo.offsetWidth; // trigger reflow
+            demo.classList.add('flow-anim');
+        }
+
+        // --- SLIDE 4 ARRM ---
+        function applyARRM() {
+            document.getElementById('arrm-res').style.display = 'block';
+        }
+
+        // --- SLIDE 5 FIX ---
+        function fix(el, correctWord) {
+            el.innerText = correctWord;
+            el.classList.remove('typo');
+            el.classList.add('fixed');
+        }
+
+        // --- SLIDE 7 QUIZ ---
+        function showAns(el, ans) {
+            document.getElementById('quiz-feedback').innerText = "✅ Correct! That is " + ans;
+            el.style.borderColor = "var(--accent-orange)";
+            el.style.color = "var(--accent-orange)";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
