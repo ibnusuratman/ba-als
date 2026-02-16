@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 8 Simulation</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .video-label {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 4px solid var(--accent-color);
+        }
+
+        .review-item {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 10px; 
+            margin-top: 10px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.9rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 8 Simulation</h1>
+        <p class="subtitle">Formal Outlines</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container"></div>
+    </form>
+</div>
+
+<script>
+    const quizData = [
+        {
+            video: "Chapter 1: The 'Wall of Text'",
+            questions: [
+                {
+                    id: 1,
+                    text: "What is the 'Wall of Text' phenomenon described in the module?",
+                    options: [
+                        "A style of writing used by famous architects.",
+                        "Recording so much data without structure that notes become useless.",
+                        "A method of highlighting text in different colors.",
+                        "Writing on a physical wall instead of paper."
+                    ],
+                    correct: 1, 
+                    [span_0](start_span)explanation: "'Wall of Text' adalah kondisi di mana kita mencatat semua data tetapi gagal menangkap strukturnya, sehingga catatan menjadi penuh dan tidak berguna[span_0](end_span)."
+                },
+                {
+                    id: 2,
+                    text: "The module suggests transitioning from being a 'passive collector of words' to becoming an:",
+                    options: [
+                        "Architect of ideas.",
+                        "Artist of doodles.",
+                        "Editor of newspapers.",
+                        "Author of novels."
+                    ],
+                    correct: 0, 
+                    [span_1](start_span)explanation: "Tujuannya adalah beralih dari sekadar transkripsi menjadi 'architect of ideas' (arsitek ide) yang membangun struktur pemahaman[span_1](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Chapter 2: Visual Logic & Hierarchy",
+            questions: [
+                {
+                    id: 3,
+                    text: "In a formal outline, which level of hierarchy is represented by Capital Letters (A, B, C)?",
+                    options: [
+                        "Level 1 (Big Buckets)",
+                        "Level 2 (Sub-Topics)",
+                        "Level 3 (Details)",
+                        "Level 4 (Granular)"
+                    ],
+                    correct: 1, 
+                    [span_2](start_span)explanation: "Level 2 (Sub-Topik) diwakili oleh Huruf Kapital (A, B, C), sedangkan Level 1 menggunakan Angka Romawi[span_2](end_span)."
+                },
+                {
+                    id: 4,
+                    text: "According to the 'Rule of Alignment', where must the identifier (e.g., letter 'A') sit?",
+                    options: [
+                        "Anywhere on the page.",
+                        "Directly under the Roman Numeral above it.",
+                        "Directly under the first letter of the word in the line above it.",
+                        "All the way to the right margin."
+                    ],
+                    correct: 2, 
+                    [span_3](start_span)explanation: "Indentasi harus sempurna: identifier harus duduk tepat di bawah huruf pertama dari kata di baris atasnya[span_3](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Chapter 3: The Rule of Pairs",
+            questions: [
+                {
+                    id: 5,
+                    text: "What does the 'Rule of Pairs' state?",
+                    options: [
+                        "You must always use two colors.",
+                        "You cannot have an A without a B, and you cannot have a 1 without a 2.",
+                        "You must write two sentences for every point.",
+                        "Every main topic must have exactly two sub-topics."
+                    ],
+                    correct: 1, 
+                    [span_4](start_span)explanation: "Aturan Pasangan menyatakan: Anda tidak boleh memiliki A tanpa B, dan tidak boleh memiliki 1 tanpa 2. Membagi berarti minimal menjadi dua bagian[span_4](end_span)."
+                },
+                {
+                    id: 6,
+                    text: "If you have a point '1' without a point '2', what does it mean according to the logic of outlining?",
+                    options: [
+                        "It means you have summarized perfectly.",
+                        "It means point '1' is actually just a continuation of the main thought and belongs on the line above.",
+                        "It means you need to invent a second point.",
+                        "It means the outline is finished."
+                    ],
+                    correct: 1, 
+                    [span_5](start_span)explanation: "Jika ada '1' tanpa '2', itu bukan sub-poin, melainkan kelanjutan dari pemikiran utama di atasnya[span_5](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Chapter 4: The Art of Brevity",
+            questions: [
+                {
+                    id: 7,
+                    text: "Formal outlines demand 'Topic Outlines'. What is the brutal rule regarding sentence structure?",
+                    options: [
+                        "Write full, grammatically correct sentences.",
+                        "Use complex compound sentences.",
+                        "One to three words per line. No complete sentences allowed.",
+                        "Write at least 50 words per line."
+                    ],
+                    correct: 2, 
+                    explanation: "Aturan brutalnya adalah: satu hingga tiga kata per baris. [span_6](start_span)Tidak boleh ada kalimat lengkap[span_6](end_span)."
+                },
+                {
+                    id: 8,
+                    text: "How should you handle a long quote (e.g., 50 words) in a formal outline?",
+                    options: [
+                        "Write the whole quote in the outline.",
+                        "Summarize it in 3 words.",
+                        "Do not put it in the outline; use a separate index card and treat the outline as a menu.",
+                        "Change the font size to make it fit."
+                    ],
+                    correct: 2, 
+                    explanation: "Jangan masukkan kutipan panjang ke dalam kerangka. [span_7](start_span)Gunakan kartu indeks terpisah dan jadikan kerangka sebagai 'menu' atau hyperlink[span_7](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Chapter 5: Case Studies (Safety & Law)",
+            questions: [
+                {
+                    id: 9,
+                    text: "In the Islamic Marriage Contracts example, why does the outline separate 'Groom Consent' and 'Bride Consent' into A and B?",
+                    options: [
+                        "To make the outline longer.",
+                        "To show that they are the same thing.",
+                        "To confirm that both are distinct legal requirements that must be met.",
+                        "Because the groom is more important."
+                    ],
+                    correct: 2, 
+                    [span_8](start_span)explanation: "Pemisahan menjadi A dan B menegaskan bahwa keduanya adalah syarat hukum terpisah yang harus dipenuhi (distinct legal requirements)[span_8](end_span)."
+                },
+                {
+                    id: 10,
+                    text: "Regarding the 'Wali', the outline creates a logic loop: Problem (A) Woman cannot marry herself, meets Solution (B):",
+                    options: [
+                        "She stays single.",
+                        "A Guardian (Wali) must represent her.",
+                        "She appoints a friend.",
+                        "She asks the groom."
+                    ],
+                    correct: 1, 
+                    [span_9](start_span)explanation: "Penyeimbangnya adalah solusi: Wali harus mewakilinya (Poin B), menciptakan lingkaran logika tertutup[span_9](end_span)."
+                }
+            ]
+        },
+        {
+            video: "Chapter 5: Data Management & Chronology",
+            questions: [
+                {
+                    id: 11,
+                    text: "What is the 'Editorial Veto' in outlining?",
+                    options: [
+                        "The right to change the author's name.",
+                        "The right to discard information (like random opinions) that does not fit the logistical structure.",
+                        "The requirement to write everything the author said.",
+                        "The rule to use red ink for corrections."
+                    ],
+                    correct: 1, 
+                    [span_10](start_span)explanation: "Hak veto editorial adalah hak untuk membuang informasi (seperti opini acak) yang tidak sesuai dengan struktur logistik[span_10](end_span)."
+                },
+                {
+                    id: 12,
+                    text: "In the Hindu Wedding timeline, why is 'Henna' not a sub-point of 'Night Before'?",
+                    options: [
+                        "Because Henna is not important.",
+                        "Because it violates the Rule of Pairs (there is no point 2). Henna IS the Night Before.",
+                        "Because Henna happens in the morning.",
+                        "Because the text forgot to mention other things."
+                    ],
+                    correct: 1, 
+                    explanation: "Jika hanya ada satu aktivitas (Henna), kita tidak boleh membuat sub-poin karena melanggar Aturan Pasangan. [span_11](start_span)Henna ADALAH Malam Sebelumnya itu sendiri[span_11](end_span)."
+                }
+            ]
+        }
+    ];
+
+    let currentVideoIndex = 0;
+    const userAnswers = {};
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return; 
+
+        container.innerHTML = ''; 
+        
+        quizData.forEach((section, index) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${index === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${index}`;
+
+            let html = `<div class="card">
+                <span class="video-label">${section.video}</span>`;
+
+            section.questions.forEach(q => {
+                html += `
+                <div style="margin-top: 20px; border-top: 1px solid #333; padding-top:20px;">
+                    <p class="question-text"><strong>${q.id}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`; 
+
+            if (index < quizData.length - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${index})">Next Video</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        });
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentIndex) {
+        const currentQuestions = quizData[currentIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        document.getElementById(`step-${currentIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const lastIndex = quizData.length - 1;
+        const currentQuestions = quizData[lastIndex].questions;
+        let allAnswered = true;
+
+        currentQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            if (!selected) allAnswered = false;
+            else userAnswers[q.id] = parseInt(selected.value);
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let score = 0;
+        let total = 0;
+        let reviewHTML = '';
+
+        quizData.forEach(section => {
+            section.questions.forEach(q => {
+                total++;
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) score++;
+
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusIcon = isCorrect ? '✅ Benar' : '❌ Salah';
+                
+                reviewHTML += `
+                <div class="review-item ${statusClass}">
+                    <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">${section.video}</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">${q.id}. ${q.text}</div>
+                    <div style="margin-bottom: 5px; color: ${isCorrect ? '#4caf50' : '#f44336'}">
+                        ${statusIcon} (You answered: ${q.options[userAnswer]})
+                    </div>
+                    ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.9rem;">Correct Answer: ${q.options[q.correct]}</div>` : ''}
+                    
+                    <div class="review-explanation">
+                        <span class="indonesian-flag">🇮🇩 PENJELASAN BAHASA INDONESIA:</span>
+                        <p class="explanation-text">${q.explanation}</p>
+                    </div>
+                </div>`;
+            });
+        });
+
+        const finalScore = Math.round((score / total) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">${finalScore}</div>
+                <p>You got ${score} out of ${total} correct.</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang</button>
+            
+            <h3 style="margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 10px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:20px;">⬆ Kembali ke Atas</button>
+        `;
+
+        document.getElementById(`step-${quizData.length - 1}`).classList.remove('active');
+        resultContainer.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
