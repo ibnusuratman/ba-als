@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAY 08: The Architect's Studio</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #E0E0E0;
+            --accent-cyan: #00E5FF;  /* Blueprint Color */
+            --accent-gold: #FFD700;  /* Milestone Color */
+            --accent-green: #00E676; /* Success Color */
+            --card-bg: #101010;
+            --border: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 650px; }
+
+        /* HEADER */
+        header { text-align: center; margin-bottom: 25px; margin-top: 10px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        h1 { font-size: 2.2rem; color: #FFF; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-size: 0.9rem; color: var(--accent-cyan); letter-spacing: 1px; }
+
+        /* PROGRESS BAR STICKY */
+        .progress-sticky {
+            position: sticky; top: 0; z-index: 50; background: var(--bg-color);
+            padding: 10px 0; border-bottom: 1px solid #222; margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .progress-container {
+            background: #222; height: 10px; border-radius: 5px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: var(--accent-cyan); 
+            width: 0%; transition: width 0.5s ease; box-shadow: 0 0 10px var(--accent-cyan);
+        }
+        .progress-text { text-align: right; font-size: 0.8rem; color: #AAA; margin-top: 5px; font-family: monospace; }
+
+        /* CHECKPOINT SECTION */
+        .checkpoint-group { margin-bottom: 15px; }
+        
+        details {
+            background: #151515; border-radius: 8px; border: 1px solid #333;
+            overflow: hidden; transition: 0.3s;
+        }
+        details[open] { border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); }
+        
+        summary {
+            padding: 15px; cursor: pointer; font-weight: bold; list-style: none;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #1a1a1a; color: #BBB;
+        }
+        summary:hover { background: #222; color: #FFF; }
+        summary::after { content: '▼'; font-size: 0.8rem; color: #666; transition: 0.3s; }
+        details[open] summary::after { content: '▲'; color: var(--accent-cyan); }
+        details[open] summary { color: var(--accent-cyan); border-bottom: 1px solid #333; }
+        
+        .list-content { padding: 15px; background: #0a0a0a; }
+
+        /* CHECKBOX ITEM */
+        .check-item {
+            display: flex; align-items: flex-start; margin-bottom: 15px;
+            padding: 10px; border-radius: 6px; transition: 0.2s; border: 1px solid transparent;
+        }
+        .check-item:hover { background: #111; border-color: #333; }
+        
+        input[type="checkbox"] {
+            appearance: none; width: 20px; height: 20px; border: 2px solid #555; border-radius: 4px;
+            margin-right: 15px; margin-top: 2px; cursor: pointer; flex-shrink: 0; position: relative;
+        }
+        input[type="checkbox"]:checked { background: var(--accent-green); border-color: var(--accent-green); }
+        input[type="checkbox"]:checked::after {
+            content: '✔'; color: black; font-size: 14px; position: absolute; top: -2px; left: 3px; font-weight: bold;
+        }
+        .check-label { font-size: 0.95rem; color: #CCC; line-height: 1.5; cursor: pointer; }
+        .check-sub { display: block; font-size: 0.8rem; color: #666; margin-top: 3px; font-style: italic; }
+        
+        input[type="checkbox"]:checked + .check-label { text-decoration: line-through; color: #555; }
+        input[type="checkbox"]:checked + .check-label .check-sub { color: #444; }
+
+        /* MODULE 12 CARD */
+        .next-mission-label { 
+            text-align: center; margin-top: 40px; margin-bottom: 15px; 
+            color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; 
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, #112240 0%, #0a192f 100%); /* Blueprint Blue */
+            border: 1px solid var(--accent-cyan); border-radius: 12px; padding: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: white; transition: all 0.3s ease;
+            position: relative; overflow: hidden; margin-bottom: 50px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+        .module-card:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 229, 255, 0.3); }
+
+        .mod-info h2 { font-size: 1.5rem; margin-bottom: 5px; color: var(--accent-cyan); }
+        .mod-info p { color: #a8d1ff; font-size: 0.9rem; }
+        .mod-icon { font-size: 3rem; }
+
+        /* HOME BTN */
+        .home-btn { position: absolute; top: 20px; left: 20px; text-decoration: none; font-size: 1.5rem; opacity: 0.5; }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠</a>
+
+    <div class="container">
+        
+        <header>
+            <h1>DAY 08</h1>
+            <p class="subtitle">Master Checkpoint & Pre-writing</p>
+        </header>
+
+        <div class="progress-sticky">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Mastery Level: 0%</div>
+        </div>
+
+        <div style="margin-bottom: 10px; color:#888; font-size:0.9rem;">⬇️ Buka setiap bagian untuk verifikasi skill.</div>
+
+        <details class="checkpoint-group">
+            <summary>Stage 1: Foundation (Modul 1-3)</summary>
+            <div class="list-content">
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Sudah mengetahui Gaya Belajar Dominan (VARK).
+                        <span class="check-sub">Apakah Anda Visual, Aural, Read/Write, atau Kinesthetic?</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Mampu menebak arti kata menggunakan Prefix & Suffix.
+                        <span class="check-sub">Contoh: 'Unhappiness' = Un (Tidak) + Happy + Ness (Kata Benda).</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Sudah menggunakan Kamus Monolingual (Inggris-Inggris).
+                        <span class="check-sub">Tidak lagi bergantung pada Google Translate.</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Menguasai teknik membaca SQ3R.
+                        <span class="check-sub">Survey, Question, Read, Recite, Review.</span>
+                    </label>
+                </div>
+            </div>
+        </details>
+
+        <details class="checkpoint-group">
+            <summary>Stage 2: Note Taking (Modul 4-6)</summary>
+            <div class="list-content">
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Highlighting tidak lebih dari 15% halaman.
+                        <span class="check-sub">Hanya warnai kata kunci, bukan seluruh kalimat.</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Rutin membuat Marginalia (Anotasi Pinggir).
+                        <span class="check-sub">Menulis pertanyaan atau ringkasan di tepi buku.</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Mampu membagi kertas dengan Metode Cornell.
+                        <span class="check-sub">Kolom Kiri (Cue), Kanan (Notes), Bawah (Summary).</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Bisa mengubah teks linear menjadi Mind Map.
+                        <span class="check-sub">Ada topik pusat, cabang utama, dan ranting detail.</span>
+                    </label>
+                </div>
+            </div>
+        </details>
+
+        <details class="checkpoint-group">
+            <summary>Stage 3: Logic & Structure (Modul 8-9)</summary>
+            <div class="list-content">
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Menguasai Hierarki Outline Formal.
+                        <span class="check-sub">Urutan: Angka Romawi (I) → Huruf Besar (A) → Angka Arab (1).</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Memahami "Rule of Pairs" dalam Outline.
+                        <span class="check-sub">Jika ada A, harus ada B. Jika ada 1, harus ada 2.</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Bisa membedakan Fakta vs Klaim.
+                        <span class="check-sub">Fakta = Realitas. Klaim = Bisa diperdebatkan (Debatable).</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Mampu menyusun Counter-Argument (Sanggahan).
+                        <span class="check-sub">Teknik "Yes, But..." untuk mematahkan argumen lawan.</span>
+                    </label>
+                </div>
+            </div>
+        </details>
+
+        <details class="checkpoint-group">
+            <summary>Stage 4: Ethics & Process (Modul 7, 10, 11)</summary>
+            <div class="list-content">
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Memiliki Jadwal Studi Mandiri yang spesifik.
+                        <span class="check-sub">Tahu kapan harus belajar, bukan "kalau sempat".</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Menghindari Plagiarisme dengan Parafrasa.
+                        <span class="check-sub">Menulis ulang dengan struktur & kosakata baru (bukan cuma ganti 1 kata).</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Hafal 5 Langkah Proses Menulis.
+                        <span class="check-sub">Pre-writing → Drafting → Revising → Editing → Publishing.</span>
+                    </label>
+                </div>
+                <div class="check-item">
+                    <input type="checkbox">
+                    <label class="check-label">
+                        Bisa membedakan Revising vs Editing.
+                        <span class="check-sub">Revising = Perbaiki Konten (ARRM). Editing = Perbaiki Typo/Grammar.</span>
+                    </label>
+                </div>
+            </div>
+        </details>
+
+
+        <div class="next-mission-label">🚀 New Mission Unlocked</div>
+
+        <a href="day-08-m12.html" class="module-card">
+            <div class="mod-info">
+                <h2>Modul 12: Pre-Writing</h2>
+                <p>The Architect's Studio. Pelajari 5 bentuk penggalian ide: Listing, Grouping, Outlining, Mapping, & Argument Map.</p>
+            </div>
+            <div class="mod-icon">🏗️</div>
+        </a>
+
+    </div>
+
+    <script>
+        // LOGIC PROGRESS BAR & SAVE
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        function updateProgress() {
+            const total = checkboxes.length;
+            let checked = 0;
+            checkboxes.forEach(box => {
+                if(box.checked) checked++;
+            });
+
+            const percent = Math.round((checked / total) * 100);
+            progressBar.style.width = percent + "%";
+            progressText.innerText = "Mastery Level: " + percent + "%";
+            
+            // Save to LocalStorage
+            let status = [];
+            checkboxes.forEach(box => status.push(box.checked));
+            localStorage.setItem('day08_mastery', JSON.stringify(status));
+        }
+
+        function loadProgress() {
+            const saved = JSON.parse(localStorage.getItem('day08_mastery'));
+            if (saved) {
+                checkboxes.forEach((box, index) => {
+                    if (saved[index]) box.checked = true;
+                });
+                updateProgress();
+            }
+        }
+
+        checkboxes.forEach(box => {
+            box.addEventListener('change', updateProgress);
+        });
+
+        window.onload = loadProgress;
+
+    </script>
+
+</body>
+</html>
