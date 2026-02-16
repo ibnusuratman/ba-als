@@ -190,14 +190,18 @@
     </header>
 
     <form id="quizForm">
-        <div id="quiz-container"></div>
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Loading questions...</p>
+        </div>
     </form>
 </div>
 
 <script>
+    // DATA SOAL MODULE 8
+    // Menggunakan kutip dua (") untuk string JSON agar aman dari apostrof (')
     const quizData = [
         {
-            video: "Chapter 1: The 'Wall of Text'",
+            video: "Chapter 1: The Wall of Text",
             questions: [
                 {
                     id: 1,
@@ -209,7 +213,7 @@
                         "Writing on a physical wall instead of paper."
                     ],
                     correct: 1, 
-                    [span_0](start_span)explanation: "'Wall of Text' adalah kondisi di mana kita mencatat semua data tetapi gagal menangkap strukturnya, sehingga catatan menjadi penuh dan tidak berguna[span_0](end_span)."
+                    explanation: "'Wall of Text' adalah kondisi di mana kita mencatat semua data tetapi gagal menangkap strukturnya, sehingga catatan menjadi penuh dan tidak berguna."
                 },
                 {
                     id: 2,
@@ -221,7 +225,7 @@
                         "Author of novels."
                     ],
                     correct: 0, 
-                    [span_1](start_span)explanation: "Tujuannya adalah beralih dari sekadar transkripsi menjadi 'architect of ideas' (arsitek ide) yang membangun struktur pemahaman[span_1](end_span)."
+                    explanation: "Tujuannya adalah beralih dari sekadar transkripsi menjadi 'architect of ideas' (arsitek ide) yang membangun struktur pemahaman."
                 }
             ]
         },
@@ -238,7 +242,7 @@
                         "Level 4 (Granular)"
                     ],
                     correct: 1, 
-                    [span_2](start_span)explanation: "Level 2 (Sub-Topik) diwakili oleh Huruf Kapital (A, B, C), sedangkan Level 1 menggunakan Angka Romawi[span_2](end_span)."
+                    explanation: "Level 2 (Sub-Topik) diwakili oleh Huruf Kapital (A, B, C), sedangkan Level 1 menggunakan Angka Romawi (I, II, III)."
                 },
                 {
                     id: 4,
@@ -250,7 +254,7 @@
                         "All the way to the right margin."
                     ],
                     correct: 2, 
-                    [span_3](start_span)explanation: "Indentasi harus sempurna: identifier harus duduk tepat di bawah huruf pertama dari kata di baris atasnya[span_3](end_span)."
+                    explanation: "Indentasi harus sempurna: identifier harus duduk tepat di bawah huruf pertama dari kata di baris atasnya (Rule of Alignment)."
                 }
             ]
         },
@@ -267,7 +271,7 @@
                         "Every main topic must have exactly two sub-topics."
                     ],
                     correct: 1, 
-                    [span_4](start_span)explanation: "Aturan Pasangan menyatakan: Anda tidak boleh memiliki A tanpa B, dan tidak boleh memiliki 1 tanpa 2. Membagi berarti minimal menjadi dua bagian[span_4](end_span)."
+                    explanation: "Aturan Pasangan menyatakan: Anda tidak boleh memiliki A tanpa B, dan tidak boleh memiliki 1 tanpa 2. Membagi kue berarti minimal menjadi dua bagian."
                 },
                 {
                     id: 6,
@@ -279,7 +283,7 @@
                         "It means the outline is finished."
                     ],
                     correct: 1, 
-                    [span_5](start_span)explanation: "Jika ada '1' tanpa '2', itu bukan sub-poin, melainkan kelanjutan dari pemikiran utama di atasnya[span_5](end_span)."
+                    explanation: "Jika ada '1' tanpa '2', itu bukan sub-poin, melainkan kelanjutan dari pemikiran utama di atasnya yang seharusnya tidak dipisah."
                 }
             ]
         },
@@ -296,7 +300,7 @@
                         "Write at least 50 words per line."
                     ],
                     correct: 2, 
-                    explanation: "Aturan brutalnya adalah: satu hingga tiga kata per baris. [span_6](start_span)Tidak boleh ada kalimat lengkap[span_6](end_span)."
+                    explanation: "Aturan brutalnya adalah: satu hingga tiga kata per baris. Tidak boleh ada kalimat lengkap (No complete sentences)."
                 },
                 {
                     id: 8,
@@ -308,7 +312,7 @@
                         "Change the font size to make it fit."
                     ],
                     correct: 2, 
-                    explanation: "Jangan masukkan kutipan panjang ke dalam kerangka. [span_7](start_span)Gunakan kartu indeks terpisah dan jadikan kerangka sebagai 'menu' atau hyperlink[span_7](end_span)."
+                    explanation: "Jangan masukkan kutipan panjang ke dalam kerangka. Gunakan kartu indeks terpisah dan jadikan kerangka sebagai 'menu' atau hyperlink."
                 }
             ]
         },
@@ -325,7 +329,7 @@
                         "Because the groom is more important."
                     ],
                     correct: 2, 
-                    [span_8](start_span)explanation: "Pemisahan menjadi A dan B menegaskan bahwa keduanya adalah syarat hukum terpisah yang harus dipenuhi (distinct legal requirements)[span_8](end_span)."
+                    explanation: "Pemisahan menjadi A dan B menegaskan bahwa keduanya adalah syarat hukum terpisah yang harus dipenuhi (distinct legal requirements)."
                 },
                 {
                     id: 10,
@@ -337,7 +341,7 @@
                         "She asks the groom."
                     ],
                     correct: 1, 
-                    [span_9](start_span)explanation: "Penyeimbangnya adalah solusi: Wali harus mewakilinya (Poin B), menciptakan lingkaran logika tertutup[span_9](end_span)."
+                    explanation: "Penyeimbangnya adalah solusi: Wali harus mewakilinya (Poin B), menciptakan lingkaran logika tertutup (closed logic loop)."
                 }
             ]
         },
@@ -354,7 +358,7 @@
                         "The rule to use red ink for corrections."
                     ],
                     correct: 1, 
-                    [span_10](start_span)explanation: "Hak veto editorial adalah hak untuk membuang informasi (seperti opini acak) yang tidak sesuai dengan struktur logistik[span_10](end_span)."
+                    explanation: "Hak veto editorial adalah hak untuk membuang informasi (seperti opini acak) yang tidak sesuai dengan struktur logistik."
                 },
                 {
                     id: 12,
@@ -366,7 +370,7 @@
                         "Because the text forgot to mention other things."
                     ],
                     correct: 1, 
-                    explanation: "Jika hanya ada satu aktivitas (Henna), kita tidak boleh membuat sub-poin karena melanggar Aturan Pasangan. [span_11](start_span)Henna ADALAH Malam Sebelumnya itu sendiri[span_11](end_span)."
+                    explanation: "Jika hanya ada satu aktivitas (Henna), kita tidak boleh membuat sub-poin karena melanggar Aturan Pasangan. Henna ADALAH Malam Sebelumnya itu sendiri."
                 }
             ]
         }
@@ -377,9 +381,9 @@
 
     function initQuiz() {
         const container = document.getElementById('quiz-container');
-        if (!container) return; 
-
-        container.innerHTML = ''; 
+        if (!container) return;
+        
+        container.innerHTML = ''; // Hapus loading text
         
         quizData.forEach((section, index) => {
             const stepDiv = document.createElement('div');
@@ -519,7 +523,8 @@
         window.scrollTo(0,0);
     }
 
-    document.addEventListener('DOMContentLoaded', initQuiz);
+    // Jalankan fungsi initQuiz langsung
+    initQuiz();
 
 </script>
 
