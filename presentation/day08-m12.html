@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 12: Pre-writing & Brainstorming</title>
+    <style>
+        :root {
+            --bg-color: #0a192f; /* Dark Blueprint Blue */
+            --grid-line: rgba(255, 255, 255, 0.1);
+            --text-color: #e6f1ff;
+            --accent-cyan: #64ffda;
+            --accent-yellow: #ffd700;
+            --accent-red: #ff5555;
+            --card-bg: #112240;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Consolas', 'Courier New', monospace; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px; padding-bottom: 80px; padding-top: 70px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { text-align: center; }
+
+        /* --- TYPOGRAPHY --- */
+        h1 { color: var(--accent-cyan); font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; border: 2px solid var(--accent-cyan); padding: 5px 15px; display: inline-block; }
+        h2 { color: #8892b0; font-size: 1rem; margin-bottom: 20px; letter-spacing: 1px; }
+
+        /* --- TOGGLE BUTTON --- */
+        .lang-switch {
+            position: fixed; top: 15px; right: 15px; z-index: 1000;
+            background: #112240; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
+            padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* LANGUAGE CLASSES */
+        .txt-id { display: none; color: #a8d1ff; font-style: italic; }
+        .txt-en { display: block; color: #e6f1ff; }
+
+        /* --- SLIDE 2: 5 FORMS GRID --- */
+        .forms-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+            width: 100%; max-width: 500px;
+        }
+        .form-card {
+            background: rgba(17, 34, 64, 0.8); border: 1px solid var(--accent-cyan);
+            padding: 10px; border-radius: 4px; text-align: left; font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+        .form-card:hover { transform: translateY(-3px); background: #233554; }
+        .form-icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+
+        /* --- SLIDE 3: LISTING (RAIN) --- */
+        .rain-container {
+            width: 100%; max-width: 400px; height: 250px; border-bottom: 2px solid #fff;
+            position: relative; overflow: hidden; margin-bottom: 10px;
+        }
+        .rain-drop {
+            position: absolute; color: var(--accent-yellow); font-size: 0.9rem;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { from { top: -20px; opacity: 1; } to { top: 230px; opacity: 0; } }
+
+        /* --- SLIDE 4: GROUPING --- */
+        .chaos-zone { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 20px; min-height: 60px; }
+        .chaos-item { background: #333; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; transition: 0.5s; }
+        
+        .group-container { display: flex; gap: 10px; width: 100%; max-width: 500px; }
+        .group-box {
+            border: 1px dashed var(--accent-cyan); flex: 1; min-height: 100px;
+            padding: 10px; border-radius: 4px; display: flex; flex-direction: column; gap: 5px;
+        }
+        .group-title { font-weight: bold; color: var(--accent-cyan); font-size: 0.8rem; border-bottom: 1px solid #555; margin-bottom: 5px; }
+
+        /* --- SLIDE 5: OUTLINE --- */
+        .blueprint-paper {
+            background: #003366; width: 100%; max-width: 400px; padding: 20px;
+            border: 2px solid #fff; position: relative; text-align: left;
+        }
+        .blueprint-line { height: 1px; background: rgba(255,255,255,0.2); width: 100%; margin: 15px 0; }
+        .outline-text { opacity: 0; transform: translateX(-10px); transition: 0.5s; }
+        .outline-text.visible { opacity: 1; transform: translateX(0); }
+
+        /* --- SLIDE 7: ARGUMENT MAP --- */
+        .arg-map { display: flex; justify-content: space-between; width: 100%; max-width: 500px; margin-top: 20px; }
+        .arg-col { width: 45%; display: flex; flex-direction: column; gap: 10px; }
+        .arg-node { padding: 10px; background: #112240; border: 1px solid; border-radius: 4px; font-size: 0.8rem; position: relative; }
+        
+        .pro { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .con { border-color: var(--accent-red); color: var(--accent-red); }
+        
+        /* Rebuttal Line */
+        .rebuttal {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+            background: var(--accent-red); display: none; transform: rotate(-5deg);
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
+            padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;
+        }
+        .btn:hover { background: rgba(100, 255, 218, 0.1); }
+        .btn-red { border-color: var(--accent-red); color: var(--accent-red); }
+
+        /* --- NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: #020c1b; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 15px; z-index: 100; border-top: 1px solid #333;
+        }
+        .nav-btn { background: #112240; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .home-btn { position: fixed; top: 15px; left: 15px; z-index: 100; text-decoration: none; font-size: 1.5rem; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-08.html" class="home-btn">🏠</a>
+    
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="lang-text">EN</span>
+    </button>
+
+    <div class="slide active centered">
+        <h1>The Architect's Studio</h1>
+        <h2>Module 12: Pre-writing</h2>
+        <div style="font-size:4rem; margin-bottom:20px;">🏗️</div>
+        <div style="max-width:500px; text-align:justify; background:rgba(0,0,0,0.3); padding:15px;">
+            <div class="txt-en">
+                Before a building rises, there must be a blueprint. Writing without pre-writing is like building without pillars—it will collapse. Today we enter the Studio to design our ideas.
+            </div>
+            <div class="txt-id">
+                Sebelum bangunan berdiri, harus ada cetak biru. Menulis tanpa pra-menulis ibarat membangun tanpa pilar—akan runtuh. Hari ini kita masuk Studio untuk merancang ide.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>The 5 Forms</h1>
+        <h2>Tools of the Trade</h2>
+        
+        <div class="forms-grid">
+            <div class="form-card">
+                <span class="form-icon">📝</span>
+                <strong>1. Listing</strong>
+                <div class="txt-en">Brainstorming list. Fast & random.</div>
+                <div class="txt-id">Daftar curah pendapat. Cepat & acak.</div>
+            </div>
+            <div class="form-card">
+                <span class="form-icon">📦</span>
+                <strong>2. Grouping</strong>
+                <div class="txt-en">Organizing the list into categories.</div>
+                <div class="txt-id">Mengelompokkan daftar ke kategori.</div>
+            </div>
+            <div class="form-card">
+                <span class="form-icon">📐</span>
+                <strong>3. Outlining</strong>
+                <div class="txt-en">Formal structure (I, A, 1).</div>
+                <div class="txt-id">Struktur formal (I, A, 1).</div>
+            </div>
+            <div class="form-card">
+                <span class="form-icon">🌳</span>
+                <strong>4. Mapping</strong>
+                <div class="txt-en">Visual branches / Mind Map.</div>
+                <div class="txt-id">Cabang visual / Peta Pikiran.</div>
+            </div>
+            <div class="form-card" style="grid-column: span 2;">
+                <span class="form-icon">❓</span>
+                <strong>5. Questions / Argument Map</strong>
+                <div class="txt-en">WH-Questions or Pro/Con analysis.</div>
+                <div class="txt-id">Pertanyaan 5W+1H atau analisis Pro/Kontra.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>1. Listing</h1>
+        <h2>Let it Rain (Topic: Mothers)</h2>
+        
+        <div class="rain-container" id="rain-box">
+            </div>
+        
+        <button class="btn" onclick="makeItRain()">🌧️ Brainstorm!</button>
+        <div class="txt-en" style="margin-top:10px; font-size:0.8rem;">Don't judge ideas. Just list them.</div>
+        <div class="txt-id" style="margin-top:10px; font-size:0.8rem;">Jangan nilai ide. Tulis saja.</div>
+    </div>
+
+    <div class="slide centered">
+        <h1>2. Grouping</h1>
+        <h2>Organize the Chaos (Topic: Old Home)</h2>
+
+        <div class="chaos-zone">
+            <div id="item1" class="chaos-item">Kitchen Smell</div>
+            <div id="item2" class="chaos-item">West Java</div>
+            <div id="item3" class="chaos-item">Grandma's Story</div>
+            <div id="item4" class="chaos-item">Near Mountain</div>
+        </div>
+
+        <div class="group-container">
+            <div class="group-box" id="box-loc">
+                <div class="group-title">Location</div>
+            </div>
+            <div class="group-box" id="box-mem">
+                <div class="group-title">Memories</div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="sortItems()">✨ Sort Ideas</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>3. Outlining</h1>
+        <h2>The Formal Blueprint</h2>
+        
+        <div class="blueprint-paper">
+            <div class="outline-text" id="out-1">I. INTRODUCTION</div>
+            <div class="outline-text" id="out-2" style="margin-left:20px;">A. Hook: Death is inevitable.</div>
+            <div class="outline-text" id="out-3" style="margin-left:20px;">B. Thesis: Preparation is key.</div>
+            <div class="blueprint-line"></div>
+            <div class="outline-text" id="out-4">II. BODY: The 3 Stages</div>
+            <div class="outline-text" id="out-5" style="margin-left:20px;">A. Before Death (Deeds)</div>
+            <div class="outline-text" id="out-6" style="margin-left:20px;">B. During Death (Sakarat)</div>
+        </div>
+
+        <button class="btn" onclick="drawBlueprint()">🖊️ Draw Structure</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>4. Mind Mapping</h1>
+        <h2>Visual Branches (Topic: Wedding)</h2>
+        
+        <div style="position:relative; height:300px; width:300px; margin-top:20px;">
+            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#000; padding:15px; border-radius:50%; font-weight:bold; z-index:2;">WEDDING</div>
+            
+            <div id="br-who" style="position:absolute; top:10%; left:50%; opacity:0; transition:0.5s;">Who? (Guests)</div>
+            <div id="br-where" style="position:absolute; top:50%; right:0%; opacity:0; transition:0.5s;">Where? (Hotel)</div>
+            <div id="br-food" style="position:absolute; bottom:10%; left:50%; opacity:0; transition:0.5s;">Food? (Catering)</div>
+            <div id="br-cost" style="position:absolute; top:50%; left:0%; opacity:0; transition:0.5s;">Cost? (Budget)</div>
+            
+            <svg style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;">
+                <line id="line1" x1="150" y1="150" x2="150" y2="40" stroke="var(--accent-cyan)" stroke-width="2" style="opacity:0; transition:0.5s;" />
+                <line id="line2" x1="150" y1="150" x2="260" y2="150" stroke="var(--accent-cyan)" stroke-width="2" style="opacity:0; transition:0.5s;" />
+                <line id="line3" x1="150" y1="150" x2="150" y2="260" stroke="var(--accent-cyan)" stroke-width="2" style="opacity:0; transition:0.5s;" />
+                <line id="line4" x1="150" y1="150" x2="40" y2="150" stroke="var(--accent-cyan)" stroke-width="2" style="opacity:0; transition:0.5s;" />
+            </svg>
+        </div>
+
+        <button class="btn" onclick="growTree()">🌱 Grow Map</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>5. Argument Map</h1>
+        <h2>Pro vs Con (Topic: TV)</h2>
+
+        <div class="arg-map">
+            <div class="arg-col">
+                <strong style="color:var(--accent-cyan)">PRO (Manfaat)</strong>
+                <div class="arg-node pro">
+                    News / Info
+                    <div class="rebuttal" id="reb1"></div>
+                </div>
+                <div class="arg-node pro">
+                    Education
+                    <div class="rebuttal" id="reb2"></div>
+                </div>
+            </div>
+            
+            <div class="arg-col">
+                <strong style="color:var(--accent-red)">CON (Bahaya)</strong>
+                <div class="arg-node con">Addiction</div>
+                <div class="arg-node con">Haram Content</div>
+            </div>
+        </div>
+
+        <button class="btn btn-red" onclick="toggleRebuttal()">🛑 Toggle Rebuttal</button>
+        <div class="txt-en" style="font-size:0.8rem; margin-top:10px;">Click to strike down weak arguments.</div>
+        <div class="txt-id" style="font-size:0.8rem; margin-top:10px;">Klik untuk mematahkan argumen lemah.</div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#8892b0; font-size:0.8rem;">Modul 12</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        let isIndonesian = false;
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        // --- TOGGLE LANGUAGE ---
+        function toggleLanguage() {
+            isIndonesian = !isIndonesian;
+            const btnText = document.getElementById('lang-text');
+            const enElements = document.querySelectorAll('.txt-en');
+            const idElements = document.querySelectorAll('.txt-id');
+
+            if (isIndonesian) {
+                btnText.innerText = "ID";
+                enElements.forEach(el => el.style.display = 'none');
+                idElements.forEach(el => el.style.display = 'block');
+            } else {
+                btnText.innerText = "EN";
+                enElements.forEach(el => el.style.display = 'block');
+                idElements.forEach(el => el.style.display = 'none');
+            }
+        }
+
+        // --- SLIDE 3 RAIN ---
+        function makeItRain() {
+            const container = document.getElementById('rain-box');
+            container.innerHTML = '';
+            const words = ["Love", "Care", "Cooking", "Sacrifice", "Teacher", "Home", "Nurse"];
+            
+            words.forEach((w, i) => {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.innerText = w;
+                    el.className = 'rain-drop';
+                    el.style.left = Math.random() * 80 + '%';
+                    el.style.animationDuration = (1.5 + Math.random()) + 's';
+                    container.appendChild(el);
+                }, i * 300);
+            });
+        }
+
+        // --- SLIDE 4 SORT ---
+        function sortItems() {
+            document.getElementById('box-loc').appendChild(document.getElementById('item2')); // West Java
+            document.getElementById('box-loc').appendChild(document.getElementById('item4')); // Mountain
+            document.getElementById('box-mem').appendChild(document.getElementById('item1')); // Smell
+            document.getElementById('box-mem').appendChild(document.getElementById('item3')); // Grandma
+        }
+
+        // --- SLIDE 5 BLUEPRINT ---
+        function drawBlueprint() {
+            for(let i=1; i<=6; i++) {
+                setTimeout(() => {
+                    document.getElementById('out-'+i).classList.add('visible');
+                }, i * 500);
+            }
+        }
+
+        // --- SLIDE 6 TREE ---
+        function growTree() {
+            ['br-who','br-where','br-food','br-cost'].forEach(id => document.getElementById(id).style.opacity = 1);
+            ['line1','line2','line3','line4'].forEach(id => document.getElementById(id).style.opacity = 1);
+        }
+
+        // --- SLIDE 7 REBUTTAL ---
+        function toggleRebuttal() {
+            const r1 = document.getElementById('reb1');
+            const r2 = document.getElementById('reb2');
+            if(r1.style.display === 'block') {
+                r1.style.display = 'none'; r2.style.display = 'none';
+            } else {
+                r1.style.display = 'block'; r2.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
