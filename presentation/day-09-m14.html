@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 14: The Drafting Process</title>
+    <style>
+        :root {
+            --bg-color: #263238; /* Dark Concrete */
+            --text-color: #eceff1;
+            --accent-orange: #ff6d00; /* Safety Orange */
+            --accent-yellow: #ffea00; /* Warning Yellow */
+            --accent-blue: #40c4ff;   /* Blueprint */
+            --card-bg: #37474f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2px, transparent 2px);
+            background-size: 50px 50px;
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px 20px 80px 20px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { text-align: center; justify-content: center; }
+
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            color: var(--accent-orange); font-size: 1.8rem; margin-bottom: 10px; 
+            text-transform: uppercase; letter-spacing: 3px; font-weight: 900;
+            border: 4px solid var(--accent-orange); padding: 5px 15px; display: inline-block;
+            transform: skew(-10deg);
+        }
+        h2 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 20px; font-weight: bold; letter-spacing: 1px; }
+        
+        .txt-box {
+            background: var(--card-bg); border-left: 5px solid var(--accent-orange);
+            padding: 20px; border-radius: 4px; max-width: 600px; width: 100%;
+            text-align: justify; line-height: 1.6; font-size: 0.95rem;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); margin-bottom: 15px;
+        }
+
+        /* LANGUAGE TOGGLE */
+        .lang-switch {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: #000; border: 2px solid var(--accent-yellow); color: var(--accent-yellow);
+            padding: 8px 16px; border-radius: 0px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 234, 0, 0.5); font-family: monospace;
+        }
+        .txt-id { display: none; color: #ffe0b2; font-style: italic; }
+        .txt-en { display: block; color: #eceff1; }
+
+        /* --- VISUAL ELEMENTS --- */
+        
+        /* SLIDE 2: THE WALL (PARAGRAPH) */
+        .wall-container { display: flex; flex-direction: column; width: 300px; gap: 5px; margin-top: 20px; }
+        .beam-top { background: var(--accent-blue); color: #000; padding: 15px; font-weight: bold; text-align: center; border-radius: 5px 5px 0 0; cursor: pointer; }
+        .brick-layer { background: #5d4037; color: #fff; padding: 10px; text-align: center; border: 1px solid #795548; font-size: 0.9rem; cursor: pointer; }
+        .beam-bottom { background: #455a64; color: #fff; padding: 10px; text-align: center; font-style: italic; border-radius: 0 0 5px 5px; cursor: pointer; }
+        .wall-info { margin-top: 10px; color: var(--accent-yellow); font-size: 0.9rem; height: 40px; }
+
+        /* SLIDE 3: FIND THE CAPTAIN */
+        .paragraph-body {
+            background: #fff; color: #000; padding: 20px; border-radius: 5px; width: 100%; max-width: 500px;
+            font-family: 'Times New Roman', serif; text-align: left; position: relative; margin-top: 20px;
+        }
+        .missing-slot {
+            width: 100%; height: 40px; border: 2px dashed #999; background: #eee; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: center; color: #666; font-style: italic;
+        }
+        .option-btn {
+            display: block; width: 100%; max-width: 500px; margin: 5px auto; padding: 10px;
+            background: var(--card-bg); border: 1px solid var(--accent-blue); color: #fff; cursor: pointer; text-align: left;
+        }
+        .option-btn:hover { background: var(--accent-blue); color: #000; }
+
+        /* SLIDE 4: THESIS CORNERSTONE */
+        .cornerstone {
+            width: 250px; height: 150px; background: #546e7a; 
+            border-bottom: 10px solid var(--accent-orange); border-right: 10px solid #263238;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: bold; box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+            margin: 30px 0; text-transform: uppercase;
+        }
+
+        /* SLIDE 5: HAZARDS */
+        .hazard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-top: 10px; }
+        .hazard-sign {
+            border: 3px solid var(--accent-yellow); color: var(--accent-yellow); background: rgba(0,0,0,0.3);
+            padding: 15px; text-align: center; border-radius: 10px; position: relative;
+        }
+        .hazard-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
+
+        /* SLIDE 6: STRENGTH TESTER */
+        .test-machine {
+            background: #222; border: 4px solid #444; padding: 20px; border-radius: 10px; width: 100%; max-width: 500px;
+            text-align: center; margin-bottom: 20px;
+        }
+        .screen {
+            background: #000; color: var(--accent-green); font-family: monospace; padding: 15px; margin-bottom: 15px;
+            border: 1px solid #333; min-height: 80px; display: flex; align-items: center; justify-content: center;
+        }
+        .gauge {
+            width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin-bottom: 15px;
+        }
+        .gauge-fill { height: 100%; width: 0%; background: linear-gradient(90deg, red, yellow, green); transition: width 0.5s; }
+        
+        .btn-test { padding: 10px 20px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; }
+        .btn-weak { background: #d32f2f; color: white; }
+        .btn-strong { background: #388e3c; color: white; }
+
+        /* SLIDE 7: POUR CONCRETE */
+        .concrete-flow {
+            width: 100%; max-width: 500px; height: 150px; background: #cfd8dc; color: #455a64;
+            padding: 15px; font-family: 'Courier New', monospace; overflow: hidden; border-radius: 5px;
+            margin-top: 15px; position: relative; border: 2px solid #90a4ae;
+        }
+        .concrete-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 0%; 
+            background: rgba(120, 144, 156, 0.9); transition: height 3s linear;
+            display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 1.5rem;
+        }
+
+        /* BUTTON GENERIC */
+        .btn-action {
+            background: var(--accent-orange); color: #000; padding: 12px 30px; 
+            border: none; font-weight: bold; text-transform: uppercase; cursor: pointer;
+            box-shadow: 0 4px 0 #bf360c; transition: 0.1s;
+        }
+        .btn-action:active { transform: translateY(4px); box-shadow: none; }
+
+        /* NAV BAR */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: #102027; border-top: 3px solid var(--accent-orange); 
+            display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 100;
+        }
+        .nav-btn { background: #37474f; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        .home-btn { position: fixed; top: 20px; left: 20px; text-decoration: none; font-size: 1.5rem; opacity: 0.7; z-index: 100; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-09.html" class="home-btn">🏠</a>
+    
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="lang-text">EN</span>
+    </button>
+
+    <div class="slide active centered">
+        <h1>CONSTRUCTION SITE</h1>
+        <h2>Module 14: The Drafting Process</h2>
+        <div style="font-size:5rem; margin-bottom:20px;">🏗️</div>
+        <div class="txt-box">
+            <div class="txt-en">
+                Welcome to the site. A rough draft is like a building frame—it doesn't have to be pretty, it just needs to stand up. Today we lay bricks (Paragraphs) and set the cornerstone (Thesis).
+            </div>
+            <div class="txt-id">
+                Selamat datang di lokasi. Draf kasar itu seperti kerangka bangunan—tidak perlu cantik, yang penting kokoh. Hari ini kita menyusun bata (Paragraf) dan meletakkan batu penjuru (Tesis).
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>The Brick Wall</h1>
+        <h2>Anatomy of a Paragraph</h2>
+        
+        <div class="wall-container">
+            <div class="beam-top" onmouseover="showWallInfo('Topic Sentence: The Main Idea')" onmouseout="clearWallInfo()">TOPIC SENTENCE</div>
+            <div class="brick-layer" onmouseover="showWallInfo('Supporting Details: Evidence & Data')" onmouseout="clearWallInfo()">
+                🧱 Detail 1<br>🧱 Detail 2<br>🧱 Detail 3
+            </div>
+            <div class="beam-bottom" onmouseover="showWallInfo('Concluding Sentence: Transition')" onmouseout="clearWallInfo()">Concluding Sentence</div>
+        </div>
+        
+        <div id="wall-display" class="wall-info"></div>
+
+        <div class="txt-box" style="margin-top:10px;">
+            <div class="txt-en">One paragraph = One main idea. The Top Beam controls everything below it.</div>
+            <div class="txt-id">Satu paragraf = Satu ide utama. Balok Atas mengontrol semua yang ada di bawahnya.</div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Find The Captain</h1>
+        <h2>Identify the Topic Sentence</h2>
+        
+        <div class="paragraph-body">
+            <div class="missing-slot" id="slot">??? (Click a Sentence Below) ???</div>
+            They grade papers, manage classrooms, and mentor students. They often work late hours and weekends without extra pay. Despite this, their salaries remain below the national average for professionals with similar education.
+        </div>
+
+        <div style="margin-top:15px; width:100%; max-width:500px;">
+            <button class="option-btn" onclick="checkTopic(false)">A. Teachers are nice people.</button>
+            <button class="option-btn" onclick="checkTopic(true)">B. Teachers work hard but are underpaid.</button>
+            <button class="option-btn" onclick="checkTopic(false)">C. Schools are important buildings.</button>
+        </div>
+        <div id="topic-feedback" style="margin-top:10px; font-weight:bold; height:20px;"></div>
+    </div>
+
+    <div class="slide centered">
+        <h1>The Cornerstone</h1>
+        <h2>The Thesis Statement</h2>
+        
+        <div class="cornerstone">THESIS</div>
+
+        <div class="txt-box">
+            <div class="txt-en">
+                The Thesis is the foundation of your entire essay. It is usually the last sentence of your Introduction. It must be an <strong>ARGUMENT</strong>, not a fact.
+            </div>
+            <div class="txt-id">
+                Tesis adalah pondasi seluruh esai Anda. Biasanya merupakan kalimat terakhir dari Pendahuluan. Tesis harus berupa <strong>ARGUMEN</strong>, bukan fakta.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Safety Hazards</h1>
+        <h2>What a Thesis is NOT</h2>
+        
+        <div class="hazard-grid">
+            <div class="hazard-sign">
+                <span class="hazard-icon">🚫</span>
+                <strong>NO FACTS</strong>
+                <div class="txt-en" style="font-size:0.8rem">"The sky is blue." (Cannot argue)</div>
+                <div class="txt-id" style="font-size:0.8rem">"Langit itu biru." (Tak bisa didebat)</div>
+            </div>
+            <div class="hazard-sign">
+                <span class="hazard-icon">🚫</span>
+                <strong>NO ANNOUNCEMENTS</strong>
+                <div class="txt-en" style="font-size:0.8rem">"This paper will discuss..."</div>
+                <div class="txt-id" style="font-size:0.8rem">"Makalah ini akan membahas..."</div>
+            </div>
+            <div class="hazard-sign" style="grid-column: span 2;">
+                <span class="hazard-icon">🚫</span>
+                <strong>NO QUESTIONS</strong>
+                <div class="txt-en" style="font-size:0.8rem">"Why is obesity bad?" (A thesis is an ANSWER, not a question)</div>
+                <div class="txt-id" style="font-size:0.8rem">"Kenapa obesitas buruk?" (Tesis adalah JAWABAN, bukan pertanyaan)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Thesis Lab</h1>
+        <h2>Strength Tester</h2>
+        
+        <div class="test-machine">
+            <div class="screen" id="test-screen">"Vegetarians live longer."</div>
+            <div class="gauge"><div class="gauge-fill" id="gauge-fill"></div></div>
+            
+            <div style="display:flex; justify-content:center; gap:20px;">
+                <button class="btn-test btn-weak" onclick="testThesis('weak')">WEAK / FACT</button>
+                <button class="btn-test btn-strong" onclick="testThesis('strong')">STRONG</button>
+            </div>
+            <div id="test-result" style="margin-top:10px; color:#fff;"></div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Pouring Concrete</h1>
+        <h2>Drafting = Flow</h2>
+        
+        <div class="txt-en">Don't stop to smooth the concrete yet. Just pour! Grammar can wait for the Revision phase.</div>
+        <div class="txt-id">Jangan berhenti untuk meratakan semen. Tuang saja! Tata bahasa bisa menunggu fase Revisi.</div>
+
+        <div class="concrete-flow" id="flow-text">
+            (Waiting to pour ideas...)
+            <div class="concrete-overlay" id="concrete">DRAFTING...</div>
+        </div>
+
+        <button class="btn-action" style="margin-top:20px;" onclick="pourConcrete()">🚧 Start Pouring (Write)</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>Structure Complete</h1>
+        <h2>Module 14 Finished</h2>
+        <div style="font-size:5rem; margin-bottom:20px;">🏢</div>
+        
+        <div class="txt-box">
+            <div class="txt-en">
+                You have built the frame.<br>
+                1. Paragraphs have Captains (Topic Sentences).<br>
+                2. The Building has a Cornerstone (Thesis).<br>
+                3. The Concrete is poured (Rough Draft).<br>
+                Next Step: Revision.
+            </div>
+            <div class="txt-id">
+                Anda telah membangun kerangka.<br>
+                1. Paragraf punya Kapten (Kalimat Topik).<br>
+                2. Bangunan punya Pondasi (Tesis).<br>
+                3. Semen sudah dituang (Draf Kasar).<br>
+                Langkah Selanjutnya: Revisi.
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#aaa; font-size:0.8rem;">Modul 14</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        let isIndonesian = false;
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        function toggleLanguage() {
+            isIndonesian = !isIndonesian;
+            document.getElementById('lang-text').innerText = isIndonesian ? "ID" : "EN";
+            document.querySelectorAll('.txt-en').forEach(el => el.style.display = isIndonesian ? 'none' : 'block');
+            document.querySelectorAll('.txt-id').forEach(el => el.style.display = isIndonesian ? 'block' : 'none');
+        }
+
+        // --- SLIDE 2: WALL INFO ---
+        function showWallInfo(text) {
+            const info = document.getElementById('wall-display');
+            if(isIndonesian) {
+                if(text.includes("Topic")) info.innerText = "Kalimat Topik: Ide Utama";
+                else if(text.includes("Supporting")) info.innerText = "Detail Pendukung: Bukti & Data";
+                else if(text.includes("Concluding")) info.innerText = "Kalimat Penutup: Transisi";
+            } else {
+                info.innerText = text;
+            }
+        }
+        function clearWallInfo() {
+            document.getElementById('wall-display').innerText = "";
+        }
+
+        // --- SLIDE 3: CAPTAIN ---
+        function checkTopic(correct) {
+            const fb = document.getElementById('topic-feedback');
+            const slot = document.getElementById('slot');
+            
+            if(correct) {
+                fb.style.color = "var(--accent-blue)";
+                fb.innerText = isIndonesian ? "BENAR! Itu merangkum semuanya." : "CORRECT! It summarizes everything.";
+                slot.style.background = "var(--accent-blue)";
+                slot.style.color = "#000";
+                slot.innerText = "Teachers work hard but are underpaid.";
+            } else {
+                fb.style.color = "var(--accent-orange)";
+                fb.innerText = isIndonesian ? "SALAH. Itu terlalu sempit/luas." : "WRONG. That is too narrow/broad.";
+            }
+        }
+
+        // --- SLIDE 6: STRENGTH TESTER ---
+        const questions = [
+            { q: "Vegetarians live longer.", type: "weak", reason: "Fact (Fakta)" },
+            { q: "A balanced vegetarian diet benefits health significantly.", type: "strong", reason: "Arguable (Argumen)" },
+            { q: "This paper is about obesity.", type: "weak", reason: "Announcement (Pengumuman)" },
+            { q: "Minimum wage should be a living wage to help the economy.", type: "strong", reason: "Specific Argument" }
+        ];
+        let qIdx = 0;
+
+        function testThesis(choice) {
+            const curr = questions[qIdx];
+            const gauge = document.getElementById('gauge-fill');
+            const res = document.getElementById('test-result');
+            const screen = document.getElementById('test-screen');
+
+            if(choice === curr.type) {
+                gauge.style.width = "100%";
+                gauge.style.background = "#00e676"; // Green
+                res.innerText = isIndonesian ? "BENAR! " + curr.reason : "CORRECT! " + curr.reason;
+            } else {
+                gauge.style.width = "30%";
+                gauge.style.background = "#d50000"; // Red
+                res.innerText = isIndonesian ? "SALAH. Coba lagi." : "WRONG. Try again.";
+            }
+
+            setTimeout(() => {
+                qIdx = (qIdx + 1) % questions.length;
+                screen.innerText = "\"" + questions[qIdx].q + "\"";
+                gauge.style.width = "0%";
+                res.innerText = "";
+            }, 1500);
+        }
+
+        // --- SLIDE 7: POUR CONCRETE ---
+        function pourConcrete() {
+            const overlay = document.getElementById('concrete');
+            const txt = document.getElementById('flow-text');
+            
+            txt.innerText = "Ideas flowing fast. Not checking spelling. Just writing. Building the wall. Laying bricks. Don't stop. Let the cement set later...";
+            overlay.style.height = "100%";
+            
+            setTimeout(() => {
+                overlay.innerText = "DONE!";
+            }, 3000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
