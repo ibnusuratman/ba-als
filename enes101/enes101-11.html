@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 11 Simulation (Randomized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 11 Simulation</h1>
+        <p class="subtitle">The Writing Process</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Loading questions...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL MODUL 11 (Belum diacak)
+    // 6 C1 (10pt), 3 C2 (20pt), 3 C3 (30pt)
+    
+    const rawQuizData = [
+        // --- C1: MENGINGAT (10 Poin) ---
+        {
+            id: 1,
+            video: "Video 11a: Overview",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "According to the module, how many distinct steps are there in the writing process that must be followed?",
+            options: [
+                "Three steps (Thinking, Writing, Finishing).",
+                "Four steps (Planning, Drafting, Editing, Publishing).",
+                "Five steps (Pre-writing, Drafting, Revising, Editing, Publishing).",
+                "Six steps (Brainstorming, Outlining, Drafting, Revising, Editing, Sharing)."
+            ],
+            correct: 2, 
+            explanation: "Modul secara eksplisit menyatakan ada tepat lima langkah: 1. Pre-writing, 2. Drafting, 3. Revising, 4. Editing, 5. Publishing. [Video 11a]"
+        },
+        {
+            id: 2,
+            video: "Video 11d: Revising",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "What does the acronym 'ARRM' stand for in the context of the Revising step?",
+            options: [
+                "Analyzing, Reading, Rewriting, Memorizing.",
+                "Adding, Rearranging, Removing, Replacing.",
+                "Asking, Researching, Recording, Mapping.",
+                "Arranging, Reviewing, Re-reading, Marking."
+            ],
+            correct: 1, 
+            explanation: "ARRM adalah singkatan untuk panduan revisi: Adding (Menambah), Rearranging (Mengatur ulang), Removing (Menghapus), dan Replacing (Mengganti). [Video 11d]"
+        },
+        {
+            id: 3,
+            video: "Video 11e: Editing",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "The 'Editing' step (Step 4) focuses primarily on fixing which type of errors?",
+            options: [
+                "Content and logical flow errors.",
+                "Mechanical errors (Grammar, Spelling, Punctuation).",
+                "Organizational and structural errors.",
+                "Research and citation errors."
+            ],
+            correct: 1, 
+            explanation: "Editing (atau proofreading) berfokus pada mekanika tulisan: tata bahasa (grammar), ejaan (spelling), dan tanda baca (punctuation). [Video 11e]"
+        },
+        {
+            id: 4,
+            video: "Video 11a: Overview",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "Which step is described in the module as 'arguably the most important step' because it sets the foundation?",
+            options: [
+                "Step 1: Pre-writing.",
+                "Step 2: Drafting.",
+                "Step 3: Revising.",
+                "Step 5: Publishing."
+            ],
+            correct: 0, 
+            explanation: "Langkah pertama, Pre-writing (Pra-menulis), disebut sebagai langkah terpenting karena menetapkan dasar dan arah bagi sisa makalah. [Video 11a]"
+        },
+        {
+            id: 5,
+            video: "Video 11e: Publishing",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "What is the primary definition of the final step, 'Publishing'?",
+            options: [
+                "Sending your work to a newspaper to get paid.",
+                "Producing the final copy and sharing it with the intended audience.",
+                "Reading your paper aloud to yourself to check for errors.",
+                "Rewriting the entire paper from scratch."
+            ],
+            correct: 1, 
+            explanation: "Publishing berarti menghasilkan draf akhir (final copy) dan membagikannya kepada audiens yang dituju (misal: guru atau teman sekelas). [Video 11e]"
+        },
+        {
+            id: 6,
+            video: "Video 11c: Drafting",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "What is the 'Golden Rule' of Drafting mentioned in the module?",
+            options: [
+                "Always check your spelling as you write every word.",
+                "Make sure every sentence is grammatically perfect immediately.",
+                "Simply let your ideas flow without worrying about mistakes.",
+                "Write the conclusion before you write the introduction."
+            ],
+            correct: 2, 
+            explanation: "Aturan emas Drafting adalah membiarkan ide mengalir ('let ideas flow') tanpa berhenti untuk mengkhawatirkan kesalahan atau ejaan. [Video 11c]"
+        },
+
+        // --- C2: MEMAHAMI (20 Poin) ---
+        {
+            id: 7,
+            video: "Video 11d: Concepts",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "What is the fundamental difference between 'Revising' (Step 3) and 'Editing' (Step 4)?",
+            options: [
+                "Revising focuses on content and structure; Editing focuses on mechanics and grammar.",
+                "Revising is for spelling errors; Editing is for changing the meaning of the paper.",
+                "Revising is done by the teacher; Editing is done by the student.",
+                "There is no difference; they are just two names for the exact same activity."
+            ],
+            correct: 0, 
+            explanation: "Perbedaan mendasarnya: Revisi fokus pada 'Big Picture' (Konten, Ide, Struktur), sedangkan Editing fokus pada detail teknis (Mekanika, Ejaan, Tata Bahasa). [Video 11d & 11e]"
+        },
+        {
+            id: 8,
+            video: "Video 11c: Drafting Strategy",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "Why does the instructor advise NOT to stop and check for spelling or grammar errors during the Drafting phase?",
+            options: [
+                "Because spelling errors are not important in academic writing.",
+                "Because interrupting your thought process to check errors can stop your creative flow.",
+                "Because computers will automatically fix everything later anyway.",
+                "Because you should have already checked spelling during the pre-writing phase."
+            ],
+            correct: 1, 
+            explanation: "Berhenti untuk mengecek error saat drafting akan mengganggu aliran ide kreatif ('interrupt creative flow'). Tujuannya adalah menuangkan ide dulu, perbaikan dilakukan nanti. [Video 11c]"
+        },
+        {
+            id: 9,
+            video: "Video 11a: Process vs Product",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "The module states that writing is often wrongly viewed as a 'product' rather than a 'process'. What does this misconception lead students to do?",
+            options: [
+                "It leads them to spend too much time planning and brainstorming.",
+                "It leads them to jump straight into writing sentences without any planning steps.",
+                "It leads them to ask too many questions to the teacher.",
+                "It leads them to write multiple drafts before the final version."
+            ],
+            correct: 1, 
+            explanation: "Melihat menulis hanya sebagai 'produk' membuat siswa langsung melompat menulis kalimat (jump right in) tanpa melalui tahapan perencanaan yang krusial. [Video 11a]"
+        },
+
+        // --- C3: MENERAPKAN (30 Poin) ---
+        {
+            id: 10,
+            video: "Application: Pre-writing",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "A student has just received an assignment topic. Instead of writing sentences, she starts drawing a Mind Map to connect her ideas. Which step is she performing?",
+            options: [
+                "She is performing Step 2: Drafting.",
+                "She is performing Step 4: Editing.",
+                "She is performing Step 1: Pre-writing.",
+                "She is performing Step 3: Revising."
+            ],
+            correct: 2, 
+            explanation: "Menggunakan alat seperti Peta Pikiran (Mind Map), daftar, atau kerangka adalah aktivitas khas dari Langkah 1: Pre-writing (Perencanaan). [Video 11b]"
+        },
+        {
+            id: 11,
+            video: "Application: Revising Strategy",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "You have finished your draft. Now, you are reading it aloud to hear if the sentences flow logically, and you decide to move paragraph 3 to the beginning. Which step are you in?",
+            options: [
+                "You are in Step 4: Editing (Proofreading).",
+                "You are in Step 3: Revising (Rearranging content).",
+                "You are in Step 1: Pre-writing (Brainstorming).",
+                "You are in Step 5: Publishing (Finalizing)."
+            ],
+            correct: 1, 
+            explanation: "Membaca lantang untuk mengecek alur dan memindahkan paragraf (Rearranging) adalah fokus dari Langkah 3: Revisi (fokus pada konten/struktur), bukan mekanika. [Video 11d]"
+        },
+        {
+            id: 12,
+            video: "Application: Editing",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "A student is looking at his paper and strictly focusing on capitalizing proper nouns and fixing comma splices. He is NOT changing any ideas. What is he doing?",
+            options: [
+                "He is Drafting new ideas.",
+                "He is Revising the structure of his argument.",
+                "He is Editing for mechanical errors.",
+                "He is Pre-writing his main points."
+            ],
+            correct: 2, 
+            explanation: "Fokus pada huruf kapital (capitalization) dan tanda baca (commas) tanpa mengubah ide adalah definisi murni dari Langkah 4: Editing/Proofreading. [Video 11e]"
+        }
+    ];
+
+    // Array untuk soal yang sudah diacak
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    // Fungsi Pengacak (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        
+        // 1. Acak Soal
+        quizData = shuffleArray([...rawQuizData]);
+
+        // 2. Bagi menjadi halaman (3 soal per halaman)
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category} (${q.points} Poin)</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Tombol Navigasi
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Next Section</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        // Halaman Hasil
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category} | Nilai: ${q.points}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.95rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Score</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang (Soal Diacak)</button>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
