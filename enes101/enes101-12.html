@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 12 Simulation (Randomized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 12 Simulation</h1>
+        <p class="subtitle">Pre-writing & Brainstorming</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Loading questions...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL MODUL 12
+    // 6 C1 (10pt), 3 C2 (20pt), 3 C3 (30pt)
+    
+    const rawQuizData = [
+        // --- C1: MENGINGAT (10 Poin) ---
+        {
+            id: 1,
+            video: "Video 12a: Introduction",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "The module uses a specific analogy to describe the importance of pre-writing. Pre-writing is to writing as __________ are to a building.",
+            options: [
+                "The windows (without them, you cannot see out).",
+                "The roof (without it, you are not protected).",
+                "The pillars (without them, the building has no foundation and will collapse).",
+                "The paint (without it, the building looks ugly)."
+            ],
+            correct: 2, 
+            [span_0](start_span)explanation: "Modul menggunakan analogi 'Pillars' (Pilar/Tiang). Tanpa pilar, bangunan tidak memiliki pondasi dan akan runtuh, sama seperti tulisan tanpa pra-menulis.[span_0](end_span)"
+        },
+        {
+            id: 2,
+            video: "Video 12c: Outlining Rules",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "Which of the following is a strict rule when creating a formal outline using Roman numerals and letters?",
+            options: [
+                "You must have at least 5 main topics.",
+                "You cannot have a Roman numeral I without a II, and you cannot have an A without a B.",
+                "You must write every point in full sentences.",
+                "You must use a different color pen for each level."
+            ],
+            correct: 1, 
+            [span_1](start_span)explanation: "Aturan utama Outlining adalah 'Rule of Pairs': Anda tidak boleh memiliki I tanpa II, atau A tanpa B. Semuanya harus berpasangan dan sejajar.[span_1](end_span)"
+        },
+        {
+            id: 3,
+            video: "Video 12a: Formats",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "According to Video 12a, which of the following is NOT listed as a valid format for pre-writing?",
+            options: [
+                "Lists and Bullet Points.",
+                "Maps and Outlines.",
+                "Writing full paragraphs immediately.",
+                "Question Format."
+            ],
+            correct: 2, 
+            explanation: "Format yang valid adalah daftar, poin, peta, kerangka, atau pertanyaan. [span_2](start_span)Menulis paragraf penuh (Writing full paragraphs) adalah 'Drafting', bukan Pre-writing.[span_2](end_span)"
+        },
+        {
+            id: 4,
+            video: "Video 12e: Mapping Strategy",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "When creating a mind map for an event (like 'The Last Wedding'), what specific strategy does the instructor suggest for the branches?",
+            options: [
+                "Use Roman numerals for every branch.",
+                "Use 'WH-questions' (Where, When, How, Who, What) as your branches.",
+                "Draw detailed pictures instead of writing words.",
+                "List the names of every single guest first."
+            ],
+            correct: 1, 
+            [span_3](start_span)explanation: "Strategi yang disarankan adalah menggunakan 'WH-questions' (Di mana, Kapan, Bagaimana, Siapa, Apa) sebagai cabang utama untuk memancing ide.[span_3](end_span)"
+        },
+        {
+            id: 5,
+            video: "Video 12f: Argument Mapping",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "When mapping an argument (e.g., 'Why You Should Not Watch TV'), what two main sides must your map include?",
+            options: [
+                "Introduction and Conclusion only.",
+                "Benefits (to serve as counter-arguments) and Disadvantages.",
+                "Funny stories and Sad stories.",
+                "Opinions of your parents and opinions of your teachers."
+            ],
+            correct: 1, 
+            [span_4](start_span)explanation: "Peta argumen harus mencakup 'Benefits' (sebagai bahan sanggahan/counter-argument) dan 'Disadvantages' (argumen utama Anda).[span_4](end_span)"
+        },
+        {
+            id: 6,
+            video: "Video 12b: Topics",
+            category: "C1 - Mengingat",
+            points: 10,
+            text: "In the brainstorming practice activities, which of the following was NOT used as a practice topic?",
+            options: [
+                "Why Mothers are Important.",
+                "Your Childhood Home.",
+                "Your Favorite Sport/Activity.",
+                "How to Bake a Cake."
+            ],
+            correct: 3, 
+            [span_5](start_span)explanation: "Topik yang dibahas adalah Olahraga Favorit[span_5](end_span)[span_6](start_span), Mengapa Ibu Penting[span_6](end_span)[span_7](start_span), dan Rumah Masa Kecil[span_7](end_span). 'How to Bake a Cake' tidak ada."
+        },
+
+        // --- C2: MEMAHAMI (20 Poin) ---
+        {
+            id: 7,
+            video: "Video 12a: Purpose",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "Why does the instructor describe jumping immediately into writing sentences as a 'huge mistake'?",
+            options: [
+                "Because it makes your handwriting look messy.",
+                "Because without careful pre-writing, the writing will lack foundation and be ineffective.",
+                "Because teachers prefer short sentences over long ones.",
+                "Because computers cannot process sentences written too quickly."
+            ],
+            correct: 1, 
+            [span_8](start_span)explanation: "Langsung menulis kalimat adalah kesalahan besar karena tanpa pra-menulis (pondasi), tulisan akan tidak efektif dan bisa 'runtuh' seperti bangunan tanpa pilar.[span_8](end_span)"
+        },
+        {
+            id: 8,
+            video: "Video 12c: Revising Pre-writing",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "In Video 12c, the instructor advises going back to your brainstorming list and adding numbers next to the items. What is the purpose of this action?",
+            options: [
+                "To count how many ideas you have generated.",
+                "To rank the ideas from most important to least important.",
+                "To group the ideas into specific paragraphs (e.g., all '1s' go in paragraph 1).",
+                "To memorize the list for a test."
+            ],
+            correct: 2, 
+            [span_9](start_span)explanation: "Tujuan memberi nomor adalah untuk mengelompokkan ide ke dalam paragraf tertentu (misal: semua ide bernomor 1 masuk paragraf 1), sehingga memudahkan saat drafting.[span_9](end_span)"
+        },
+        {
+            id: 9,
+            video: "Video 12f: Argument Logic",
+            category: "C2 - Memahami",
+            points: 20,
+            text: "In the 'Why You Should Not Watch TV' map, why did the instructor include 'Educational Programs' under the Benefits branch if she is arguing AGAINST TV?",
+            options: [
+                "Because she changed her mind and thinks TV is good.",
+                "To provide a topic for immediate rebuttal (e.g., 'You can watch them on YouTube instead').",
+                "To fill up empty space on the paper.",
+                "To confuse the reader with contradictory information."
+            ],
+            correct: 1, 
+            explanation: "Manfaat seperti 'Program Pendidikan' dimasukkan agar bisa langsung disanggah (Rebuttal). [span_10](start_span)Sanggahannya: 'Kalian bisa menontonnya di YouTube yang lebih terkontrol'.[span_10](end_span)"
+        },
+
+        // --- C3: MENERAPKAN (30 Poin) ---
+        {
+            id: 10,
+            video: "Application: Outlining",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "You are outlining a paper on 'Healthy Eating'. You have Main Topic I: Fruits. You have Subtopic A: Apples. Based on the rules of outlining, what must you do next?",
+            options: [
+                "Move immediately to Main Topic II: Vegetables.",
+                "Add a Subtopic B (e.g., Bananas) because you cannot have an A without a B.",
+                "Start writing full sentences about apples.",
+                "Leave it as it is; one subtopic is enough."
+            ],
+            correct: 1, 
+            explanation: "Sesuai aturan 'Rule of Pairs', jika Anda memiliki A (Apples), Anda WAJIB memiliki B (misal: Bananas). [span_11](start_span)Anda tidak boleh membagi topik menjadi satu bagian saja.[span_11](end_span)"
+        },
+        {
+            id: 11,
+            video: "Application: Mapping",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "You want to brainstorm for an essay about 'My First Job' using the Question Mapping strategy. Which of the following sets of branches would be most effective?",
+            options: [
+                "Branch 1: Introduction, Branch 2: Body, Branch 3: Conclusion.",
+                "Branch 1: Where was it?, Branch 2: What did I do?, Branch 3: Who did I work with?, Branch 4: When was it?",
+                "Branch 1: Good, Branch 2: Bad, Branch 3: Okay.",
+                "Branch 1: Salary, Branch 2: Money, Branch 3: Paycheck."
+            ],
+            correct: 1, 
+            [span_12](start_span)explanation: "Strategi pemetaan yang paling efektif untuk topik naratif adalah menggunakan pertanyaan WH (Where, What, Who, When) untuk menggali detail spesifik.[span_12](end_span)"
+        },
+        {
+            id: 12,
+            video: "Application: Revising Lists",
+            category: "C3 - Menerapkan",
+            points: 30,
+            text: "You have a raw brainstorming list for 'My Dream House': 1. Big pool, 2. White walls, 3. Florida, 4. 5 bedrooms, 5. Near the beach. How should you group these for a logical outline?",
+            options: [
+                "Group by preference: Things I like vs Things I don't like.",
+                "Group by alphabet: B words (Bedroom, Beach) vs other letters.",
+                "Group by category: Location (Florida, Near beach) vs Description (Pool, Walls, Bedrooms).",
+                "Do not group them; just write them in the order they came to mind."
+            ],
+            correct: 2, 
+            [span_13](start_span)explanation: "Penerapan revisi pra-menulis yang benar adalah mengelompokkan berdasarkan kategori logis: Lokasi (Florida, Pantai) terpisah dari Deskripsi Fisik (Kolam, Dinding, Kamar).[span_13](end_span)"
+        }
+    ];
+
+    // Array untuk soal yang sudah diacak
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    // Fungsi Pengacak (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        
+        // 1. Acak Soal
+        quizData = shuffleArray([...rawQuizData]);
+
+        // 2. Bagi menjadi halaman (3 soal per halaman)
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category} (${q.points} Poin)</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Tombol Navigasi
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Next Section</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        // Halaman Hasil
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category} | Nilai: ${q.points}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.95rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Score</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang (Soal Diacak)</button>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
