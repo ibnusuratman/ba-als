@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IOU Module 12 Simulation (Randomized)</title>
+    <title>IOU Module 12 Simulation (Fixed)</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -215,9 +215,7 @@
 </div>
 
 <script>
-    // DATA SOAL MODUL 12
-    // 6 C1 (10pt), 3 C2 (20pt), 3 C3 (30pt)
-    
+    // DATA SOAL MODUL 12 (FIXED VERSION)
     const rawQuizData = [
         // --- C1: MENGINGAT (10 Poin) ---
         {
@@ -233,7 +231,7 @@
                 "The paint (without it, the building looks ugly)."
             ],
             correct: 2, 
-            [span_0](start_span)explanation: "Modul menggunakan analogi 'Pillars' (Pilar/Tiang). Tanpa pilar, bangunan tidak memiliki pondasi dan akan runtuh, sama seperti tulisan tanpa pra-menulis.[span_0](end_span)"
+            explanation: "Modul menggunakan analogi Pillars (Pilar/Tiang). Tanpa pilar, bangunan tidak memiliki pondasi dan akan runtuh, sama seperti tulisan tanpa pra-menulis."
         },
         {
             id: 2,
@@ -248,7 +246,7 @@
                 "You must use a different color pen for each level."
             ],
             correct: 1, 
-            [span_1](start_span)explanation: "Aturan utama Outlining adalah 'Rule of Pairs': Anda tidak boleh memiliki I tanpa II, atau A tanpa B. Semuanya harus berpasangan dan sejajar.[span_1](end_span)"
+            explanation: "Aturan utama Outlining adalah Rule of Pairs: Anda tidak boleh memiliki I tanpa II, atau A tanpa B. Semuanya harus berpasangan dan sejajar."
         },
         {
             id: 3,
@@ -263,29 +261,29 @@
                 "Question Format."
             ],
             correct: 2, 
-            explanation: "Format yang valid adalah daftar, poin, peta, kerangka, atau pertanyaan. [span_2](start_span)Menulis paragraf penuh (Writing full paragraphs) adalah 'Drafting', bukan Pre-writing.[span_2](end_span)"
+            explanation: "Format yang valid adalah daftar, poin, peta, kerangka, atau pertanyaan. Menulis paragraf penuh (Writing full paragraphs) adalah Drafting, bukan Pre-writing."
         },
         {
             id: 4,
             video: "Video 12e: Mapping Strategy",
             category: "C1 - Mengingat",
             points: 10,
-            text: "When creating a mind map for an event (like 'The Last Wedding'), what specific strategy does the instructor suggest for the branches?",
+            text: "When creating a mind map for an event (like The Last Wedding), what specific strategy does the instructor suggest for the branches?",
             options: [
                 "Use Roman numerals for every branch.",
-                "Use 'WH-questions' (Where, When, How, Who, What) as your branches.",
+                "Use WH-questions (Where, When, How, Who, What) as your branches.",
                 "Draw detailed pictures instead of writing words.",
                 "List the names of every single guest first."
             ],
             correct: 1, 
-            [span_3](start_span)explanation: "Strategi yang disarankan adalah menggunakan 'WH-questions' (Di mana, Kapan, Bagaimana, Siapa, Apa) sebagai cabang utama untuk memancing ide.[span_3](end_span)"
+            explanation: "Strategi yang disarankan adalah menggunakan WH-questions (Di mana, Kapan, Bagaimana, Siapa, Apa) sebagai cabang utama untuk memancing ide."
         },
         {
             id: 5,
             video: "Video 12f: Argument Mapping",
             category: "C1 - Mengingat",
             points: 10,
-            text: "When mapping an argument (e.g., 'Why You Should Not Watch TV'), what two main sides must your map include?",
+            text: "When mapping an argument (e.g., Why You Should Not Watch TV), what two main sides must your map include?",
             options: [
                 "Introduction and Conclusion only.",
                 "Benefits (to serve as counter-arguments) and Disadvantages.",
@@ -293,7 +291,7 @@
                 "Opinions of your parents and opinions of your teachers."
             ],
             correct: 1, 
-            [span_4](start_span)explanation: "Peta argumen harus mencakup 'Benefits' (sebagai bahan sanggahan/counter-argument) dan 'Disadvantages' (argumen utama Anda).[span_4](end_span)"
+            explanation: "Peta argumen harus mencakup Benefits (sebagai bahan sanggahan/counter-argument) dan Disadvantages (argumen utama Anda)."
         },
         {
             id: 6,
@@ -308,7 +306,7 @@
                 "How to Bake a Cake."
             ],
             correct: 3, 
-            [span_5](start_span)explanation: "Topik yang dibahas adalah Olahraga Favorit[span_5](end_span)[span_6](start_span), Mengapa Ibu Penting[span_6](end_span)[span_7](start_span), dan Rumah Masa Kecil[span_7](end_span). 'How to Bake a Cake' tidak ada."
+            explanation: "Topik yang dibahas adalah Olahraga Favorit, Mengapa Ibu Penting, dan Rumah Masa Kecil. How to Bake a Cake tidak ada."
         },
 
         // --- C2: MEMAHAMI (20 Poin) ---
@@ -317,7 +315,7 @@
             video: "Video 12a: Purpose",
             category: "C2 - Memahami",
             points: 20,
-            text: "Why does the instructor describe jumping immediately into writing sentences as a 'huge mistake'?",
+            text: "Why does the instructor describe jumping immediately into writing sentences as a huge mistake?",
             options: [
                 "Because it makes your handwriting look messy.",
                 "Because without careful pre-writing, the writing will lack foundation and be ineffective.",
@@ -325,7 +323,7 @@
                 "Because computers cannot process sentences written too quickly."
             ],
             correct: 1, 
-            [span_8](start_span)explanation: "Langsung menulis kalimat adalah kesalahan besar karena tanpa pra-menulis (pondasi), tulisan akan tidak efektif dan bisa 'runtuh' seperti bangunan tanpa pilar.[span_8](end_span)"
+            explanation: "Langsung menulis kalimat adalah kesalahan besar karena tanpa pra-menulis (pondasi), tulisan akan tidak efektif dan bisa runtuh seperti bangunan tanpa pilar."
         },
         {
             id: 8,
@@ -336,26 +334,26 @@
             options: [
                 "To count how many ideas you have generated.",
                 "To rank the ideas from most important to least important.",
-                "To group the ideas into specific paragraphs (e.g., all '1s' go in paragraph 1).",
+                "To group the ideas into specific paragraphs (e.g., all 1s go in paragraph 1).",
                 "To memorize the list for a test."
             ],
             correct: 2, 
-            [span_9](start_span)explanation: "Tujuan memberi nomor adalah untuk mengelompokkan ide ke dalam paragraf tertentu (misal: semua ide bernomor 1 masuk paragraf 1), sehingga memudahkan saat drafting.[span_9](end_span)"
+            explanation: "Tujuan memberi nomor adalah untuk mengelompokkan ide ke dalam paragraf tertentu (misal: semua ide bernomor 1 masuk paragraf 1), sehingga memudahkan saat drafting."
         },
         {
             id: 9,
             video: "Video 12f: Argument Logic",
             category: "C2 - Memahami",
             points: 20,
-            text: "In the 'Why You Should Not Watch TV' map, why did the instructor include 'Educational Programs' under the Benefits branch if she is arguing AGAINST TV?",
+            text: "In the Why You Should Not Watch TV map, why did the instructor include Educational Programs under the Benefits branch if she is arguing AGAINST TV?",
             options: [
                 "Because she changed her mind and thinks TV is good.",
-                "To provide a topic for immediate rebuttal (e.g., 'You can watch them on YouTube instead').",
+                "To provide a topic for immediate rebuttal (e.g., You can watch them on YouTube instead).",
                 "To fill up empty space on the paper.",
                 "To confuse the reader with contradictory information."
             ],
             correct: 1, 
-            explanation: "Manfaat seperti 'Program Pendidikan' dimasukkan agar bisa langsung disanggah (Rebuttal). [span_10](start_span)Sanggahannya: 'Kalian bisa menontonnya di YouTube yang lebih terkontrol'.[span_10](end_span)"
+            explanation: "Manfaat seperti Program Pendidikan dimasukkan agar bisa langsung disanggah (Rebuttal). Sanggahannya: Kalian bisa menontonnya di YouTube yang lebih terkontrol."
         },
 
         // --- C3: MENERAPKAN (30 Poin) ---
@@ -364,7 +362,7 @@
             video: "Application: Outlining",
             category: "C3 - Menerapkan",
             points: 30,
-            text: "You are outlining a paper on 'Healthy Eating'. You have Main Topic I: Fruits. You have Subtopic A: Apples. Based on the rules of outlining, what must you do next?",
+            text: "You are outlining a paper on Healthy Eating. You have Main Topic I: Fruits. You have Subtopic A: Apples. Based on the rules of outlining, what must you do next?",
             options: [
                 "Move immediately to Main Topic II: Vegetables.",
                 "Add a Subtopic B (e.g., Bananas) because you cannot have an A without a B.",
@@ -372,14 +370,14 @@
                 "Leave it as it is; one subtopic is enough."
             ],
             correct: 1, 
-            explanation: "Sesuai aturan 'Rule of Pairs', jika Anda memiliki A (Apples), Anda WAJIB memiliki B (misal: Bananas). [span_11](start_span)Anda tidak boleh membagi topik menjadi satu bagian saja.[span_11](end_span)"
+            explanation: "Sesuai aturan Rule of Pairs, jika Anda memiliki A (Apples), Anda WAJIB memiliki B (misal: Bananas). Anda tidak boleh membagi topik menjadi satu bagian saja."
         },
         {
             id: 11,
             video: "Application: Mapping",
             category: "C3 - Menerapkan",
             points: 30,
-            text: "You want to brainstorm for an essay about 'My First Job' using the Question Mapping strategy. Which of the following sets of branches would be most effective?",
+            text: "You want to brainstorm for an essay about My First Job using the Question Mapping strategy. Which of the following sets of branches would be most effective?",
             options: [
                 "Branch 1: Introduction, Branch 2: Body, Branch 3: Conclusion.",
                 "Branch 1: Where was it?, Branch 2: What did I do?, Branch 3: Who did I work with?, Branch 4: When was it?",
@@ -387,22 +385,22 @@
                 "Branch 1: Salary, Branch 2: Money, Branch 3: Paycheck."
             ],
             correct: 1, 
-            [span_12](start_span)explanation: "Strategi pemetaan yang paling efektif untuk topik naratif adalah menggunakan pertanyaan WH (Where, What, Who, When) untuk menggali detail spesifik.[span_12](end_span)"
+            explanation: "Strategi pemetaan yang paling efektif untuk topik naratif adalah menggunakan pertanyaan WH (Where, What, Who, When) untuk menggali detail spesifik."
         },
         {
             id: 12,
             video: "Application: Revising Lists",
             category: "C3 - Menerapkan",
             points: 30,
-            text: "You have a raw brainstorming list for 'My Dream House': 1. Big pool, 2. White walls, 3. Florida, 4. 5 bedrooms, 5. Near the beach. How should you group these for a logical outline?",
+            text: "You have a raw brainstorming list for My Dream House: 1. Big pool, 2. White walls, 3. Florida, 4. 5 bedrooms, 5. Near the beach. How should you group these for a logical outline?",
             options: [
-                "Group by preference: Things I like vs Things I don't like.",
+                "Group by preference: Things I like vs Things I dont like.",
                 "Group by alphabet: B words (Bedroom, Beach) vs other letters.",
                 "Group by category: Location (Florida, Near beach) vs Description (Pool, Walls, Bedrooms).",
                 "Do not group them; just write them in the order they came to mind."
             ],
             correct: 2, 
-            [span_13](start_span)explanation: "Penerapan revisi pra-menulis yang benar adalah mengelompokkan berdasarkan kategori logis: Lokasi (Florida, Pantai) terpisah dari Deskripsi Fisik (Kolam, Dinding, Kamar).[span_13](end_span)"
+            explanation: "Penerapan revisi pra-menulis yang benar adalah mengelompokkan berdasarkan kategori logis: Lokasi (Florida, Pantai) terpisah dari Deskripsi Fisik (Kolam, Dinding, Kamar)."
         }
     ];
 
