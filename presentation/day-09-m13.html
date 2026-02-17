@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 13: Pre-Writing Strategies</title>
+    <style>
+        :root {
+            --bg-color: #050a14;
+            --text-color: #e0f2f1;
+            --accent-cyan: #00e5ff;
+            --accent-blue: #2979ff;
+            --accent-red: #ff1744;
+            --accent-green: #00e676;
+            --glass-panel: rgba(10, 25, 47, 0.85);
+            --border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: var(--text-color);
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 20px 20px 80px 20px;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1; overflow-y: auto;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 5; }
+        .slide.centered { text-align: center; justify-content: center; }
+
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 10px; 
+            text-transform: uppercase; letter-spacing: 2px; 
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            border-bottom: 2px solid var(--accent-cyan); padding-bottom: 5px;
+        }
+        h2 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 20px; font-weight: 400; letter-spacing: 1px; }
+        
+        .txt-box {
+            background: var(--glass-panel); border: var(--border);
+            padding: 20px; border-radius: 8px; max-width: 600px; width: 100%;
+            text-align: justify; line-height: 1.6; font-size: 0.95rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 15px;
+            position: relative;
+        }
+
+        /* LANGUAGE TOGGLE */
+        .lang-switch {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(0,0,0,0.8); border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
+            padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+        }
+        .txt-id { display: none; color: #b3e5fc; font-style: italic; }
+        .txt-en { display: block; color: #e0f2f1; }
+
+        /* --- VISUAL ELEMENTS --- */
+        
+        /* SLIDE 2: FLOWCHART */
+        .flow-container { display: flex; gap: 10px; align-items: center; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .flow-step {
+            background: #112; border: 1px solid var(--accent-blue); padding: 15px; border-radius: 8px;
+            width: 100px; text-align: center; font-size: 0.8rem; font-weight: bold;
+            box-shadow: 0 0 10px rgba(41, 121, 255, 0.2);
+        }
+        .flow-arrow { font-size: 1.5rem; color: var(--accent-cyan); }
+
+        /* SLIDE 3: KEYWORD EXPANDER */
+        .keyword-hub {
+            position: relative; width: 300px; height: 250px; margin-top: 20px;
+        }
+        .hub-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--accent-cyan); color: #000; padding: 15px; border-radius: 50%;
+            font-weight: bold; cursor: pointer; z-index: 2; box-shadow: 0 0 20px var(--accent-cyan);
+        }
+        .hub-node {
+            position: absolute; background: #222; border: 1px solid var(--accent-cyan);
+            padding: 8px; font-size: 0.8rem; border-radius: 4px; opacity: 0; transition: 0.5s;
+        }
+        
+        /* SLIDE 4: GOOGLE LOOP */
+        .search-sim {
+            background: #222; width: 100%; max-width: 500px; padding: 15px; border-radius: 8px; margin-top: 20px;
+        }
+        .search-bar { background: #fff; padding: 8px; border-radius: 20px; color: #333; display: flex; margin-bottom: 10px; font-family: monospace; }
+        .search-result { 
+            background: #333; padding: 10px; margin-top: 5px; font-size: 0.8rem; text-align: left; display: none; border-left: 3px solid var(--accent-blue);
+        }
+        .pivot-highlight { color: var(--accent-green); font-weight: bold; }
+
+        /* SLIDE 5: SPLIT TABLE (COMPARATIVE) */
+        .split-table {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 600px; margin-top: 10px;
+        }
+        .col-usa { border: 1px solid var(--accent-red); padding: 10px; border-radius: 5px; background: rgba(255, 23, 68, 0.1); }
+        .col-islam { border: 1px solid var(--accent-green); padding: 10px; border-radius: 5px; background: rgba(0, 230, 118, 0.1); }
+        .table-header { font-weight: bold; border-bottom: 1px solid #555; margin-bottom: 5px; padding-bottom: 5px; }
+
+        /* SLIDE 6-7: SOURCE FILTER */
+        .source-card {
+            background: #1a1a1a; border: 1px solid #444; padding: 20px; border-radius: 8px;
+            width: 100%; max-width: 400px; margin: 20px 0; text-align: center;
+        }
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1;
+        }
+        .btn-reject { background: #b71c1c; color: #fff; }
+        .btn-accept { background: #1b5e20; color: #fff; }
+
+        /* SLIDE 8: SCALES */
+        .scale-container { position: relative; width: 300px; height: 150px; margin-top: 20px; border-bottom: 2px solid #fff; }
+        .scale-pivot { position: absolute; bottom: 0; left: 50%; width: 4px; height: 100px; background: #fff; transform: translateX(-50%); }
+        .scale-bar { 
+            position: absolute; top: 50px; left: 50%; width: 250px; height: 4px; background: var(--accent-cyan); 
+            transform: translateX(-50%) rotate(0deg); transition: transform 1s ease;
+        }
+        .plate-left { position: absolute; left: 0; top: 0; width: 60px; height: 60px; background: rgba(255,0,0,0.3); border: 1px solid red; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; text-align: center; }
+        .plate-right { position: absolute; right: 0; top: 0; width: 60px; height: 60px; background: rgba(0,255,0,0.3); border: 1px solid green; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; text-align: center; }
+
+        /* SLIDE 9: RED ALERT */
+        .alert-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 0, 0, 0.2); border: 5px solid red;
+            display: none; align-items: center; justify-content: center;
+            font-size: 2rem; color: red; font-weight: bold; text-transform: uppercase;
+            animation: pulse 0.5s infinite alternate; pointer-events: none;
+        }
+        @keyframes pulse { from { opacity: 0.3; } to { opacity: 0.8; } }
+
+        /* NAV BAR */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: #02040a; border-top: 1px solid #333; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 100;
+        }
+        .nav-btn { background: #112; color: var(--accent-cyan); border: 1px solid #333; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        .home-btn { position: fixed; top: 20px; left: 20px; text-decoration: none; font-size: 1.5rem; opacity: 0.7; z-index: 100; }
+
+    </style>
+</head>
+<body>
+
+    <a href="day-09.html" class="home-btn">🏠</a>
+    
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="lang-text">EN</span>
+    </button>
+
+    <div class="slide active centered">
+        <h1>The Digital Research Hub</h1>
+        <h2>Module 13: Pre-Writing Strategies</h2>
+        <div style="font-size:5rem; margin-bottom:20px; color:var(--accent-cyan);">🌐</div>
+        <div class="txt-box">
+            <div class="txt-en">Transforming raw ideas into solid academic plans. We will master the art of Listing, Sourcing, and Outlining through 3 detailed case studies.</div>
+            <div class="txt-id">Mengubah ide mentah menjadi rencana akademik yang solid. Kita akan menguasai seni Listing, Sourcing, dan Outlining melalui 3 studi kasus detail.</div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>The 3-Step Protocol</h1>
+        <h2>Video 13a: Fundamental Process</h2>
+        
+        <div class="flow-container">
+            <div class="flow-step">1. LISTING<br><span style="font-size:0.7rem; font-weight:normal;">Brainstorming Ideas</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">2. SOURCING<br><span style="font-size:0.7rem; font-weight:normal;">Google & Notes</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">3. OUTLINING<br><span style="font-size:0.7rem; font-weight:normal;">Structure Plan</span></div>
+        </div>
+
+        <div class="txt-box" style="margin-top:20px;">
+            <div class="txt-en">Never skip listing. Never write without sources. Never draft without an outline.</div>
+            <div class="txt-id">Jangan lewatkan listing. Jangan menulis tanpa sumber. Jangan membuat draf tanpa kerangka.</div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Case 1: Literacy Project</h1>
+        <h2>Expanding Keywords</h2>
+        
+        <div class="keyword-hub">
+            <div class="hub-center" onclick="expandKeywords()">LITERACY<br>South Africa</div>
+            <div id="node1" class="hub-node" style="top:10%; left:50%; transform:translateX(-50%);">Computer Literacy</div>
+            <div id="node2" class="hub-node" style="top:50%; right:0%;">Foreign Languages</div>
+            <div id="node3" class="hub-node" style="bottom:10%; left:50%; transform:translateX(-50%);">Digital Inequality</div>
+            <div id="node4" class="hub-node" style="top:50%; left:0%;">School vs Home</div>
+        </div>
+        
+        <div class="txt-en" style="font-size:0.8rem; margin-top:20px;">Click the center to expand ideas.</div>
+        <div class="txt-id" style="font-size:0.8rem; margin-top:20px;">Klik tengah untuk memperluas ide.</div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Deep Dive: The Pivot</h1>
+        <h2>Video 13c: One article changes everything</h2>
+        
+        <div class="search-sim">
+            <div class="search-bar">🔍 <span id="search-input">Literacy in South Africa</span></div>
+            <div id="s-res1" class="search-result">Result: "Unequal Digital Literacy Practices in Cape Town Homes"</div>
+            <div id="s-res2" class="search-result" style="border-color:var(--accent-green); display:none;">
+                <span class="pivot-highlight">PIVOT!</span> New Direction: Comparing Socio-Economic Status & Access.
+            </div>
+        </div>
+
+        <button class="btn btn-accept" style="margin-top:15px;" onclick="pivotSearch()">Run Google Loop</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>Case 2: Comparative Law</h1>
+        <h2>Capital Punishment: Islam vs USA</h2>
+        
+        <div class="split-table">
+            <div class="col-usa">
+                <div class="table-header">USA System</div>
+                <ul style="text-align:left; font-size:0.8rem; padding-left:15px;">
+                    <li>Inconsistent (State by State)</li>
+                    <li>Lethal Injection / Electric Chair</li>
+                    <li>Risk of Torture / Failure</li>
+                    <li>Human Rights Criticism</li>
+                </ul>
+            </div>
+            <div class="col-islam">
+                <div class="table-header">Islamic System</div>
+                <ul style="text-align:left; font-size:0.8rem; padding-left:15px;">
+                    <li>Divine Revelation (Wahyu)</li>
+                    <li>Beheading (Qisas)</li>
+                    <li>Instantaneous (Less Pain)</li>
+                    <li>Justice & Deterrence</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Sourcing: The US Side</h1>
+        <h2>Filter for Reliability</h2>
+        
+        <div class="source-card">
+            <strong id="src-name1">Source: Wikipedia (Death Penalty)</strong>
+            <p id="src-desc1" style="font-size:0.8rem; color:#888; margin:10px 0;">"Anyone can edit."</p>
+            <div class="btn-group">
+                <button class="btn btn-reject" onclick="checkSource(1, false)">Reject</button>
+                <button class="btn btn-accept" onclick="checkSource(1, true)">Accept</button>
+            </div>
+            <div id="feedback1" style="margin-top:10px; font-weight:bold;"></div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Sourcing: The Islamic Side</h1>
+        <h2>Filter for Authenticity</h2>
+        
+        <div class="source-card">
+            <strong id="src-name2">Source: Naseem Akhtar (ResearchGate)</strong>
+            <p id="src-desc2" style="font-size:0.8rem; color:#888; margin:10px 0;">"Article: Human Rights in Islam." (Muslim Scholar)</p>
+            <div class="btn-group">
+                <button class="btn btn-reject" onclick="checkSource(2, false)">Reject</button>
+                <button class="btn btn-accept" onclick="checkSource(2, true)">Accept</button>
+            </div>
+            <div id="feedback2" style="margin-top:10px; font-weight:bold;"></div>
+        </div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Case 3: Women's Rights</h1>
+        <h2>Equity vs Sameness</h2>
+        
+        <div class="scale-container">
+            <div class="scale-pivot"></div>
+            <div id="scale-bar" class="scale-bar">
+                <div class="plate-left">Western<br>Sameness</div>
+                <div class="plate-right">Islamic<br>Equity</div>
+            </div>
+        </div>
+
+        <div class="txt-box" style="margin-top:20px;">
+            <div class="txt-en"><strong>West:</strong> Equality means "Physical Sameness" (e.g., Firefighter).<br><strong>Islam:</strong> Equality means "Complimentary Roles" (Wife, Mother).</div>
+            <div class="txt-id"><strong>Barat:</strong> Kesetaraan berarti "Sama Fisik" (misal: Pemadam Kebakaran).<br><strong>Islam:</strong> Kesetaraan berarti "Peran Pelengkap" (Istri, Ibu).</div>
+        </div>
+        
+        <button class="btn btn-accept" onclick="balanceScale()">Show Balance</button>
+    </div>
+
+    <div class="slide centered">
+        <h1>The Source Trap</h1>
+        <h2>Avoid "Islamic Feminism"</h2>
+        
+        <div class="source-card" style="border-color:red;">
+            <strong>Blog: "Reinterpreting Hijab"</strong>
+            <p style="font-size:0.8rem;">Author: Progressive Feminist Blog</p>
+            <button class="btn btn-reject" onclick="triggerAlert()">Analyze Bias</button>
+        </div>
+
+        <div id="alert-box" class="alert-overlay">
+            ⚠️ BIAS DETECTED ⚠️<br>REJECT SOURCE
+        </div>
+        
+        <div class="txt-en" style="margin-top:10px; font-size:0.9rem;">Stick to Orthodox Sources (e.g., Muhammad al-Jibaly).</div>
+        <div class="txt-id" style="margin-top:10px; font-size:0.9rem;">Gunakan Sumber Ortodoks (misal: Muhammad al-Jibaly).</div>
+    </div>
+
+    <div class="slide centered">
+        <h1>Module 13 Complete</h1>
+        <h2>Ready for Drafting?</h2>
+        
+        <div style="text-align:left; background:var(--glass-panel); padding:20px; border-radius:8px;">
+            <p>✅ Brainstorming List Created?</p>
+            <p>✅ Google Loop Performed?</p>
+            <p>✅ Sources Filtered (No Bias)?</p>
+            <p>✅ Outline Structured?</p>
+        </div>
+        <div style="font-size:3rem; margin-top:20px;">📝</div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">❮ Prev</button>
+        <span style="color:#666; font-size:0.8rem;">Modul 13</span>
+        <button class="nav-btn" onclick="move(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        let isIndonesian = false;
+
+        function move(dir) {
+            slides[current].classList.remove('active');
+            current += dir;
+            if (current >= slides.length) current = 0;
+            if (current < 0) current = slides.length - 1;
+            slides[current].classList.add('active');
+            slides[current].scrollTop = 0;
+        }
+
+        function toggleLanguage() {
+            isIndonesian = !isIndonesian;
+            document.getElementById('lang-text').innerText = isIndonesian ? "ID" : "EN";
+            document.querySelectorAll('.txt-en').forEach(el => el.style.display = isIndonesian ? 'none' : 'block');
+            document.querySelectorAll('.txt-id').forEach(el => el.style.display = isIndonesian ? 'block' : 'none');
+        }
+
+        // --- SLIDE 3: EXPAND ---
+        function expandKeywords() {
+            const nodes = ['node1', 'node2', 'node3', 'node4'];
+            nodes.forEach((id, index) => {
+                setTimeout(() => {
+                    document.getElementById(id).style.opacity = 1;
+                }, index * 200);
+            });
+        }
+
+        // --- SLIDE 4: PIVOT ---
+        function pivotSearch() {
+            document.getElementById('s-res1').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('s-res2').style.display = 'block';
+            }, 1000);
+        }
+
+        // --- SLIDE 6-7: SOURCE CHECK ---
+        function checkSource(slide, accepted) {
+            const feedback = document.getElementById('feedback' + slide);
+            // Slide 6 (Wiki) should be rejected. Slide 7 (Scholar) accepted.
+            const correct = (slide === 1 && !accepted) || (slide === 2 && accepted);
+            
+            if(correct) {
+                feedback.innerHTML = "<span style='color:var(--accent-green)'>CORRECT CHOICE! ✅</span>";
+            } else {
+                feedback.innerHTML = "<span style='color:var(--accent-red)'>WRONG DECISION ❌</span>";
+            }
+        }
+
+        // --- SLIDE 8: SCALE ---
+        function balanceScale() {
+            document.getElementById('scale-bar').style.transform = "translateX(-50%) rotate(0deg)";
+            // Animation reset implies balance logic discussed in audio
+        }
+
+        // --- SLIDE 9: ALERT ---
+        function triggerAlert() {
+            const overlay = document.getElementById('alert-box');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 2000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if(e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+
+</body>
+</html>
