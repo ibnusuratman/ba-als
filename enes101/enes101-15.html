@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 15 Simulation (Randomized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 15 Simulation</h1>
+        <p class="subtitle">Revision & Editing</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Loading questions...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL MODUL 15
+    // 6 C1 (10pt), 3 C2 (20pt), 3 C3 (30pt)
+    
+    const rawQuizData = [
+        // --- C1: REMEMBERING (10 Poin) ---
+        {
+            id: 1,
+            video: "Video 15a: Introduction",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "According to the module, what is the primary distinction between revision and editing?",
+            options: [
+                "Revision focuses on spelling and grammar, while editing focuses on content.",
+                "Revision involves adding or deleting ideas and reorganizing content, while editing focuses on mechanics like spelling.",
+                "Revision should be done while writing the draft, while editing is done at the end.",
+                "Revision is for the instructor to do, while editing is for the student to do."
+            ],
+            correct: 1, 
+            explanation: "Video 15a secara spesifik menyatakan bahwa revisi adalah melihat kembali konten, menambah/menghapus kalimat, dan mengatur ulang ide. Sedangkan editing (penyuntingan) berfokus pada mekanik seperti ejaan dan tata bahasa."
+        },
+        {
+            id: 2,
+            video: "Video 15a: Timing",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "How much time does the instructor recommend waiting between finishing a draft and starting the revision process?",
+            options: [
+                "A few hours.",
+                "Immediately after finishing the last sentence.",
+                "A few days.",
+                "At least two weeks."
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 15a dan 15b, instruktur menyarankan untuk membiarkan tulisan selama 'beberapa hari' (a few days) agar penulis bisa kembali dengan sudut pandang yang segar dan kritis."
+        },
+        {
+            id: 3,
+            video: "Video 15b: Examples",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "Which famous author is mentioned as having rewritten the ending of 'A Farewell to Arms' 39 times?",
+            options: [
+                "William Shakespeare",
+                "Ernest Hemingway",
+                "Mark Twain",
+                "Charles Dickens"
+            ],
+            correct: 1, 
+            explanation: "Video 15b menyebutkan Ernest Hemingway sebagai contoh penulis hebat yang melakukan revisi berulang kali, khususnya bagian akhir novel 'A Farewell to Arms' sebanyak 39 kali."
+        },
+        {
+            id: 4,
+            video: "Video 15c: Techniques",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "When revising at the sentence level to find 'dead spots' or awkward phrasing, what technique is highly recommended?",
+            options: [
+                "Reading the paper silently.",
+                "Using a grammar checking software only.",
+                "Reading the paper aloud.",
+                "Translating the paper into another language."
+            ],
+            correct: 2, 
+            explanation: "Video 15c menekankan bahwa membaca dengan lantang (reading aloud) sangat efektif untuk menemukan kata yang hilang, frasa yang canggung, atau bagian yang membosankan ('dead spots')."
+        },
+        {
+            id: 5,
+            video: "Video 15d: Sources",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "Which specific source is explicitly mentioned in the module as one that should be avoided in academic research papers?",
+            options: [
+                "Oxford Dictionary",
+                "Online journals",
+                "Wikipedia",
+                "Library books"
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 15d, saat membahas kredibilitas sumber, instruktur secara eksplisit mengingatkan untuk tidak menggunakan Wikipedia sebagai sumber dalam makalah akademis."
+        },
+        {
+            id: 6,
+            video: "Video 15c: Sentence Variety",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "In the context of sentence variety, the module advises against starting consecutive sentences with:",
+            options: [
+                "Transitional phrases.",
+                "The same subject-verb pattern (e.g., 'He went...', 'He bought...').",
+                "Adjectives.",
+                "Questions."
+            ],
+            correct: 1, 
+            explanation: "Video 15c menyarankan variasi kalimat. Memulai kalimat berturut-turut dengan pola Subjek-Predikat yang sama (seperti 'Dia pergi... Dia membeli...') dianggap membosankan dan harus dihindari."
+        },
+
+        // --- C2: UNDERSTANDING (20 Poin) ---
+        {
+            id: 7,
+            video: "Video 15a: Process",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "Why does the instructor advise against revising simultaneously while writing the first draft?",
+            options: [
+                "Because it consumes too much computer memory.",
+                "Because it interferes with the creative process and the flow of ideas.",
+                "Because spelling errors are easier to catch when writing fast.",
+                "Because the rubric does not allow it."
+            ],
+            correct: 1, 
+            explanation: "Video 15a menjelaskan bahwa mencoba merevisi saat sedang menulis draf pertama dapat mengganggu proses kreatif (interfere with the creative process) dan menghambat aliran ide."
+        },
+        {
+            id: 8,
+            video: "Video 15b: Logic Check",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "If a writer discovers a contradiction or a 'loose end' in their thesis during the revision process, what is the most appropriate course of action?",
+            options: [
+                "Ignore the contradiction and hope the reader does not notice.",
+                "Delete the entire paragraph that contains the contradiction.",
+                "Adjust the thesis to accommodate the new understanding or acknowledge the complexity.",
+                "Submit the paper as is because the first draft should not be changed."
+            ],
+            correct: 2, 
+            explanation: "Video 15b menyarankan jika ada kontradiksi ('loose ends'), solusinya adalah mengubah tesis agar sesuai dengan ide baru atau mengakui kompleksitas masalah tersebut dalam tulisan."
+        },
+        {
+            id: 9,
+            video: "Video 15b: Tools",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "What is the main purpose of using a 'Track Changes' feature or printing a hard copy with double spacing during revision?",
+            options: [
+                "To make the paper look longer.",
+                "To allow the writer to monitor modifications and add notes without losing the original text.",
+                "To save ink and paper.",
+                "To prevent others from reading the work."
+            ],
+            correct: 1, 
+            explanation: "Video 15b membahas penggunaan fitur 'Track Changes' atau mencetak dengan spasi ganda agar penulis bisa melihat perubahan yang dibuat tanpa menghapus teks asli secara permanen."
+        },
+
+        // --- C3: APPLYING (30 Poin) ---
+        {
+            id: 10,
+            video: "Video 15e: Application",
+            category: "C3 - Applying",
+            points: 30,
+            text: "Based on the examples in Video 15e, how should the sentence 'The secretary looked up' be revised to be more engaging and less repetitive?",
+            options: [
+                "The secretary looked up quickly.",
+                "She looked up.",
+                "Marcy, a secretary, looked up and smiled.",
+                "The worker at the desk looked up."
+            ],
+            correct: 2, 
+            explanation: "Dalam contoh revisi Video 15e, kalimat direvisi menjadi 'Marcy, a secretary, looked up and smiled.' Tujuannya menghindari penggunaan kata sandang 'The' yang repetitif dan memberikan detail spesifik."
+        },
+        {
+            id: 11,
+            video: "Video 15f: Case Study",
+            category: "C3 - Applying",
+            points: 30,
+            text: "In the revision exercise (Video 15f), the original draft stated: 'Although it might not be applied wholly.' Why did the instructor decide to remove this phrase from the introduction?",
+            options: [
+                "Because it was grammatically incorrect.",
+                "Because it was a factually false statement.",
+                "Because it was irrelevant to the main argument and weakened the defense of the thesis.",
+                "Because the sentence was too long."
+            ],
+            correct: 2, 
+            explanation: "Pada Video 15f, instruktur menghapus frasa tersebut karena meskipun benar, hal itu tidak relevan dengan argumen utama dan justru melemahkan posisi penulis dalam mempertahankan tesisnya."
+        },
+        {
+            id: 12,
+            video: "Video 15c: Sentence Energy",
+            category: "C3 - Applying",
+            points: 30,
+            text: "A student writes: 'There are many problems in the system.' According to the module's advice on sentence energy, how should this be improved?",
+            options: [
+                "Change it to: 'It is clear that there are many problems.'",
+                "Change it to: 'The system suffers from numerous problems.' (Removing 'There are' to make it active).",
+                "Keep it as is; it is a perfect sentence.",
+                "Change it to: 'There are indeed many problems in the system.'"
+            ],
+            correct: 1, 
+            explanation: "Video 15c menyarankan menghindari kalimat pasif/lemah seperti 'There are'. Penulis didorong merevisinya menjadi kalimat aktif dengan kata kerja kuat ('The system suffers...')."
+        }
+    ];
+
+    // Array untuk soal yang sudah diacak
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    // Fungsi Pengacak (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        
+        // 1. Acak Soal
+        quizData = shuffleArray([...rawQuizData]);
+
+        // 2. Bagi menjadi halaman (3 soal per halaman)
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category} (${q.points} Poin)</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Tombol Navigasi
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Next Section</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        // Halaman Hasil
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category} | Nilai: ${q.points}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.95rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Score</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang (Soal Diacak)</button>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
