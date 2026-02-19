@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 16 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 16 Simulation</h1>
+        <p class="subtitle">Connecting Words & Transitions</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 16b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "When comparing Paragraph A (without transitions) and Paragraph B (with transitions) regarding how Americans treat their dogs, why is Paragraph B considered significantly easier to understand?",
+            options: [
+                "It introduces new facts and statistics about how Americans train their dogs in obedience schools.",
+                "It links ideas using transitions, creating a cohesive narrative and eliminating a choppy rhythm.",
+                "It avoids the repetitive subject-verb structure by replacing all nouns with complex academic pronouns.",
+                "It uses shorter, unrelated sentences to create a faster reading rhythm for the audience."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n\n\nParagraf B menggunakan kata transisi untuk membangun hubungan sebab-akibat dan urutan (kohesi), sehingga 'menjembatani' antar kalimat dan menghilangkan ritme yang terputus-putus dan monoton seperti di Paragraf A."
+        },
+        {
+            id: 2,
+            video: "Video 16a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the categories of transition words, which of the following pairs is used to express similarity between two ideas?",
+            options: [
+                "Therefore and thus",
+                "Actually and ultimately",
+                "Instead and whereas",
+                "Likewise and similarly"
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n\n\n'Likewise' dan 'similarly' secara spesifik dikategorikan sebagai kata penghubung yang menyatakan kesamaan (similarity). Pilihan lain melambangkan sebab-akibat, elaborasi, atau kontras."
+        },
+        {
+            id: 3,
+            video: "Video 16c",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Read the following sentence carefully and choose the most logical transition word to fill in the blank. 'David is a very poor football player, (...) he should be dropped from the team.'",
+            options: [
+                "Therefore",
+                "However",
+                "For instance",
+                "Since"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nKonteks kalimatnya adalah sebab-akibat (David pemain yang buruk, akibat logisnya ia harus dikeluarkan). Kata 'therefore' (oleh karena itu) adalah transisi sebab-akibat yang paling tepat di sini."
+        },
+        {
+            id: 4,
+            video: "Video 16f",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Transition words are divided into distinct functional categories. Which of the following pairs of words specifically indicates 'space and place'?",
+            options: [
+                "Above and behind",
+                "Afterwards and next",
+                "Although and despite",
+                "Thus and consequently"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n'Above' (di atas) dan 'behind' (di belakang) secara eksplisit disebutkan sebagai preposisi/transisi yang menandakan ruang dan tempat (space and place)."
+        },
+        {
+            id: 5,
+            video: "Video 16f",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Analyze the use of the transition word in the following context: 'Some people in New Jersey built their houses very close to the shoreline. Consequently, they have had to spend a lot of money to protect their property from the sea.' What specific relationship does the word 'consequently' establish here?",
+            options: [
+                "It shows the direct result or outcome of building houses very close to the shoreline.",
+                "It contrasts the high cost of the houses with the natural beauty of the shoreline.",
+                "It adds supplementary information about the specific types of houses built in New Jersey.",
+                "It provides an illustration of how people practically protect their property from storms."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nDalam konteks ini, 'consequently' (akibatnya) menunjukkan hasil atau dampak logis (sebab-akibat) dari tindakan membangun rumah di dekat pantai."
+        },
+        {
+            id: 6,
+            video: "Video 16a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "During the revision phase of an academic paper, what is the fundamental purpose of ensuring that sufficient connecting words have been employed?",
+            options: [
+                "To correct underlying grammatical and spelling errors within a complex sentence.",
+                "To bridge what has previously been stated with the upcoming discussion so the reader can follow easily.",
+                "To emphasize the main point by repeatedly using the same subject and verb structures.",
+                "To replace difficult academic vocabulary with easier, everyday language for the general public."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nTujuan dasar kata penghubung adalah menjembatani apa yang telah dinyatakan sebelumnya dengan diskusi yang akan datang agar pembaca mudah mengikutinya secara logis."
+        },
+        {
+            id: 7,
+            video: "Video 16d",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Select the appropriate transition to complete the textual flow in this description of a computer: 'It is not a perfect computer. It crashed a few years ago and has been much slower since. (...) It has downloaded some programs that I do not like, and I don't know how to delete them.'",
+            options: [
+                "However",
+                "Furthermore",
+                "Overall",
+                "For instance"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nTeks sedang mendaftar serangkaian kekurangan. 'Furthermore' (terlebih/selanjutnya) sangat tepat karena menambahkan poin negatif tambahan yang sejalan dengan gagasan sebelumnya."
+        },
+        {
+            id: 8,
+            video: "Video 16c",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which transition word correctly completes the following conditional cause-and-effect sequence? 'If you drive too fast, (...) you will get a ticket.'",
+            options: [
+                "Because",
+                "Then",
+                "Since",
+                "So"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n\n\nUntuk struktur logika skenario kondisional 'If... (jika...)', kata 'then' (maka) adalah pasangan transisi yang secara presisi mendikte hasil logis dari kondisi sebab tersebut."
+        },
+        {
+            id: 9,
+            video: "Video 16d",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Read the concluding thought of a text discussing the impact of computers: '(...) computers have a major influence on our lives in many ways, and in business and communication they have the greatest influence.' Which transition word correctly wraps up the entire argument in this final paragraph?",
+            options: [
+                "In conclusion",
+                "For example",
+                "As a result",
+                "Moreover"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n\n\nDi paragraf terakhir sebuah esai, frasa 'In conclusion' (kesimpulannya) adalah transisi definitif yang paling tepat untuk meringkas dan membungkus seluruh argumen teks."
+        },
+        {
+            id: 10,
+            video: "Video 16e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the narrative description of the Weekend Market, the text states: 'It can be confusing when walking around the market. (...) if you get lost, it is best to look for the clock tower...' Which transition word is used to signal the solution/contrast to the confusion?",
+            options: [
+                "Consequently",
+                "In fact",
+                "However",
+                "Moreover"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n'However' (namun) digunakan untuk menawarkan sebuah solusi atau kontras yang membantu mengatasi masalah (kebingungan) yang disebutkan di kalimat sebelumnya."
+        },
+        {
+            id: 11,
+            video: "Video 16e",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Choose the best transition word to signal a positive turn in the narrative context below: 'After a while you might feel dizzy and look for a quiet place to rest and a refreshing drink. (...) there are many small cafes and drink stalls selling fresh coconut juice, orange juice, or iced water.'",
+            options: [
+                "Fortunately",
+                "Furthermore",
+                "In other words",
+                "As time goes by"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nSetelah mendeskripsikan situasi negatif (merasa pusing), narasi beralih secara positif (menemukan kafe untuk istirahat). Perubahan nada yang positif ini secara eksplisit ditandai dengan kata 'Fortunately' (untungnya)."
+        },
+        {
+            id: 12,
+            video: "Video 16a & 16f",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What specific function do the words 'moreover' and 'furthermore' serve within a paragraph's structure?",
+            options: [
+                "They indicate a chronological sequence of events.",
+                "They express a cause and effect relationship between two variables.",
+                "They add further information or elaboration to the main point.",
+                "They introduce a contrasting or entirely opposing idea."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n'Moreover' dan 'furthermore' dikategorikan sebagai kata transisi untuk 'addition' (penambahan informasi lebih lanjut ke poin utama yang sedang dibahas)."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN (Bahasa Indonesia):</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+            </div>
+
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
