@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 13 Simulation (Randomized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 13 Simulation</h1>
+        <p class="subtitle">Applied Pre-Writing & Research</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Loading questions...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    // DATA SOAL MODUL 13
+    // 6 C1 (10pt), 3 C2 (20pt), 3 C3 (30pt)
+    
+    const rawQuizData = [
+        // --- C1: REMEMBERING (10 Poin) ---
+        {
+            id: 1,
+            video: "Video 13e: Sourcing for Comparative Law",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "According to the instructor, which specific website is explicitly mentioned as a source that students must avoid using because it is not considered a valid academic reference?",
+            options: [
+                "ResearchGate",
+                "Wikipedia",
+                "Google Scholar",
+                "Abdurrahman.org"
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13e, instruktur secara eksplisit menyatakan 'jangan gunakan sumber Wikipedia' karena siapa saja bisa menambahkan informasi di sana sehingga kebenarannya tidak terjamin. ResearchGate dan Google Scholar justru disarankan."
+        },
+        {
+            id: 3,
+            video: "Video 13a: Fundamentals of Pre-Writing",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "In the context of the 'Community Literacy Project' assignment discussed, what is the required length of the paper?",
+            options: [
+                "1–2 pages",
+                "3 pages",
+                "5 pages",
+                "10–15 pages"
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 13a, instruktur menyoroti instruksi tugas dan menyatakan 'panjangnya harus 5 halaman'."
+        },
+        {
+            id: 5,
+            video: "Video 13f: Women's Rights",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "When discussing reliable sources for the topic of 'Women's Rights in Islam,' which specific author does the instructor recall and recommend, mentioning a book titled The Quest for Love?",
+            options: [
+                "Nancy H. Hornberger",
+                "Naseem Akhtar",
+                "Shazia Ramzan",
+                "Muhammad al-Jibaly"
+            ],
+            correct: 3, 
+            explanation: "Dalam Video 13f, saat membahas hak wanita, instruktur teringat buku The Quest for Love karya Muhammad al-Jibaly dan merekomendasikannya."
+        },
+        {
+            id: 7,
+            video: "Video 13a: Fundamentals of Pre-Writing",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "According to modern scholarship mentioned in the transcript, how is the definition of 'literacy' expanded beyond just reading and writing?",
+            options: [
+                "It is limited strictly to academic textbook comprehension.",
+                "It focuses solely on the ability to speak a foreign language fluently.",
+                "It includes learning anything from a foreign language to how to use a computer.",
+                "It is defined exclusively as the ability to write distinct narratives for a community."
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 13a, transkrip menyatakan bahwa definisi literasi telah diperluas mencakup pembelajaran apa saja, mulai dari bahasa lain hingga cara menggunakan komputer."
+        },
+        {
+            id: 10,
+            video: "Video 13d: Comparative Law Assignment",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "For the comparative law assignment, the instructor decides to focus on the 'Criminal Legal System.' Which specific sub-topic is chosen to narrow down the focus for the comparison between the US and Islamic law?",
+            options: [
+                "Theft and Hand Amputation",
+                "The Death Penalty",
+                "Adultery and Stoning",
+                "Tax Evasion Laws"
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13d, instruktur mempersempit topik sistem hukum pidana secara spesifik ke 'hukuman mati' (death penalty) untuk perbandingan."
+        },
+        {
+            id: 12,
+            video: "Video 13a: Fundamentals of Pre-Writing",
+            category: "C1 - Remembering",
+            points: 10,
+            text: "What is the very first recommended action a student should take upon receiving an assignment, even before using Google?",
+            options: [
+                "Write a thesis statement.",
+                "Download three professional articles.",
+                "Brainstorm and list all ideas on a piece of paper.",
+                "Create a set of index cards for references."
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 13a, instruktur berkata: 'hal pertama yang kalian lakukan adalah curah pendapat (brainstorm). Jadi buatlah daftar semua ide di selembar kertas.' Ini dilakukan sebelum mencari di Google."
+        },
+
+        // --- C2: UNDERSTANDING (20 Poin) ---
+        {
+            id: 4,
+            video: "Video 13d: Comparative Law Assignment",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "In the comparative analysis between the US and Islamic criminal legal systems, the instructor contrasts 'beheading' with 'electrocution/lethal injection.' What is the underlying logic used to argue that beheading might be considered 'less cruel' in this specific context?",
+            options: [
+                "Beheading is a historic tradition, whereas electrocution is a modern invention without cultural roots.",
+                "Beheading is described as instantaneous, whereas electrocution or injection carries a risk of prolonged suffering or malfunction.",
+                "Beheading is legally permitted in more countries than electrocution, making it a more universal standard.",
+                "Beheading is performed in public to deter crime, whereas electrocution is done in private, which is considered secretive."
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13d, instruktur berargumen bahwa pemenggalan (beheading) itu 'bam! Sudah selesai' (instan), sedangkan kursi listrik atau suntikan mematikan bisa malfungsi dan menyebabkan siksaan/rasa sakit yang lama."
+        },
+        {
+            id: 8,
+            video: "Video 13e: Sourcing for Comparative Law",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "Why does the instructor emphasize finding articles written specifically by Muslim authors when researching the 'Islamic Criminal Legal System'?",
+            options: [
+                "Because non-Muslim authors are strictly forbidden from writing about Islamic topics in academic journals.",
+                "To ensure the paper focuses on the Arabic language rather than the legal concepts.",
+                "To obtain an authentic internal perspective that views the laws as divine justice, rather than a critical external view that labels them as barbaric.",
+                "Because Muslim authors are the only ones available on platforms like ResearchGate and Google Scholar."
+            ],
+            correct: 2, 
+            explanation: "Dalam Video 13e, instruktur menekankan pentingnya mencari artikel yang ditulis oleh Muslim agar mendapatkan penjelasan bahwa hukum tersebut adalah wahyu/keadilan, bukan sekadar kritik negatif dari luar yang menganggapnya menindas."
+        },
+        {
+            id: 11,
+            video: "Video 13b: Applied Pre-Writing",
+            category: "C2 - Understanding",
+            points: 20,
+            text: "During the pre-writing phase, the instructor suggests searching for the 'definition' of key terms like literacy practices (e.g., 'values, attitudes, feelings'). What is the primary purpose of this step?",
+            options: [
+                "To copy the definition directly into the conclusion of the paper to fill space.",
+                "To ensure the student creates a pre-writing list that includes these deeper aspects, not just surface-level descriptions.",
+                "To memorize the definition for a future exam regarding South African literacy.",
+                "To prove that the dictionary definition is incorrect compared to the assignment sheet."
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13b, instruktur mencari definisi untuk memastikan aspek-aspek seperti 'nilai, sikap, dan perasaan' masuk ke dalam daftar pra-menulis (list) agar cakupan tulisan menjadi komprehensif."
+        },
+
+        // --- C3: APPLYING (30 Poin) ---
+        {
+            id: 2,
+            video: "Video 13f: Women's Rights",
+            category: "C3 - Applying",
+            points: 30,
+            text: "A student is writing a paper on 'Women's Rights in Islam' and finds an article written by an author who identifies as an 'Islamic feminist.' Based on the strategy recommended in Video 13f, what is the most appropriate action for the student to take regarding this source?",
+            options: [
+                "Use the source as the primary reference because it offers a modern perspective on the issue.",
+                "Avoid using the source because the instructor suggests it may offer a distorted or non-orthodox interpretation.",
+                "Pair this source with a Western critique to balance the argument regarding oppression.",
+                "Use the source only to define the historical context of the pre-Islamic era."
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13f, instruktur menemukan artikel dari seorang 'feminis muslim' dan memutuskan untuk tidak menggunakannya ('I will take that back'), karena khawatir interpretasinya akan mendistorsi konsep teologis atau tidak ortodoks."
+        },
+        {
+            id: 6,
+            video: "Video 13c: Alternative Topics",
+            category: "C3 - Applying",
+            points: 30,
+            text: "You are creating a pre-writing list for a paper on 'Computer Literacy.' You discover a study comparing digital usage between children in middle-class suburbs and those in urban townhouses in Cape Town. Based on the instructor's method in Video 13c, under which category should you place this information?",
+            options: [
+                "The definition of literacy practices.",
+                "Socio-economic status and comparisons.",
+                "Computer hardware specifications in schools.",
+                "Employment rates and income generation."
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13c, setelah membaca abstrak tentang perbedaan anak-anak kelas menengah dan townhouse perkotaan, instruktur memutuskan untuk memasukkannya ke dalam kategori 'tingkat sosial ekonomi' dalam daftar pra-menulis."
+        },
+        {
+            id: 9,
+            video: "Video 13a: Fundamentals of Pre-Writing",
+            category: "C3 - Applying",
+            points: 30,
+            text: "A student has just received a new assignment. According to the 'Three-Step Pre-Writing Method' finalized in Video 13a, which sequence correctly represents the workflow the student must follow?",
+            options: [
+                "Search Google for articles → Write the Thesis Statement → Create a Mind Map.",
+                "List ideas on paper → Take notes from sources → Create an outline from the notes.",
+                "Read the rubric → Write the first draft immediately → Edit the draft for grammar.",
+                "Create a detailed outline → Search Google to fill the gaps → List original ideas."
+            ],
+            correct: 1, 
+            explanation: "Dalam Video 13a, instruktur menyimpulkan: 'Jadi, pra-menulis kalian singkatnya ada 3 langkah. Kalian membuat daftar ide, kemudian membuat catatan... lalu membuat garis besar.'"
+        }
+    ];
+
+    // Array untuk soal yang sudah diacak
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    // Fungsi Pengacak (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        
+        // 1. Acak Soal
+        quizData = shuffleArray([...rawQuizData]);
+
+        // 2. Bagi menjadi halaman (3 soal per halaman)
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category} (${q.points} Poin)</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Tombol Navigasi
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Next Section</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Submit & See Score</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        // Halaman Hasil
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before proceeding.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category} | Nilai: ${q.points}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 0.95rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Quiz Completed!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Score</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+            </div>
+
+            <button type="button" class="btn btn-nav" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+            <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang (Soal Diacak)</button>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px;">Review & Explanation (Bahasa Indonesia)</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
