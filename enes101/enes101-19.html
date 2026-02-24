@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 19 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 19 Simulation</h1>
+        <p class="subtitle">Advanced Punctuation & Mechanics</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 19a",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Analyze the following sentences: 'I love chocolate-covered peanuts' and 'The peanuts were chocolate covered.' Why does the first sentence use a hyphen while the second one does not?",
+            options: [
+                "Hyphens are strictly optional after a verb, depending entirely on the writer's style.",
+                "'Chocolate-covered' acts as a single compound adjective before a noun in the first case, but it appears after the noun in the second case.",
+                "The first sentence contains a plural noun, which automatically requires any preceding adjectives to be hyphenated.",
+                "Compound modifiers placed after a noun always require a hyphen to prevent reader confusion."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n\n\nSesuai Aturan 1 di Video 19a, tanda hubung digunakan untuk menggabungkan dua kata yang berfungsi sebagai satu kata sifat (adjective) sebelum kata benda (peanuts). Namun, jika kata pengubah (modifier) ini muncul setelah kata benda, tanda hubung tidak digunakan."
+        },
+        {
+            id: 2,
+            video: "Video 19d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What is the primary grammatical function of a semicolon when it is used to join two independent clauses?",
+            options: [
+                "To completely replace a subordinating conjunction in a dependent clause.",
+                "To separate a dependent clause from an independent clause.",
+                "To replace a period when two sentences are completely unrelated to each other.",
+                "To replace a coordinating conjunction (such as 'and', 'but') between two closely related complete sentences."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n[Image comparing semicolon usage vs coordinating conjunctions]\n\nVideo 19d menjelaskan bahwa titik koma pada dasarnya menggantikan konjungsi koordinat (seperti and, but, yet) di antara dua klausa independen (kalimat lengkap) yang saling terkait erat."
+        },
+        {
+            id: 3,
+            video: "Video 19d",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Apply the correct punctuation rules to join the two independent clauses using a transitional expression. Which sentence is punctuated correctly?",
+            options: [
+                "I was going to go shopping with you, however; I am expected to go out with my friends.",
+                "I was going to go shopping with you however; I am expected to go out with my friends.",
+                "I was going to go shopping with you; however, I am expected to go out with my friends.",
+                "I was going to go shopping with you; however I am expected to go out with my friends."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n\n\nSesuai aturan di Video 19d, saat menggabungkan dua klausa independen menggunakan kata transisi (conjunctive adverb), polanya harus: [Klausa 1] + [Titik Koma] + [Kata Transisi] + [Koma] + [Klausa 2]."
+        },
+        {
+            id: 4,
+            video: "Video 19b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the rules of punctuation, what is the specific purpose of using single quotation marks (' ')?",
+            options: [
+                "To set off quoted material or a short title that is already enclosed within double quotation marks.",
+                "To indicate that the speaker is paraphrasing someone else's speech instead of quoting directly.",
+                "To mark the title of a long, independent work such as a novel or a newspaper.",
+                "To emphasize a particular word when writing a formal academic essay."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nBerdasarkan Aturan 2 di Video 19b, tanda kutip tunggal (single quotation marks) digunakan untuk memisahkan kutipan atau judul karya pendek yang berada di dalam kutipan lain yang sudah diapit oleh tanda kutip ganda."
+        },
+        {
+            id: 5,
+            video: "Video 19a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which of the following prefixes ALWAYS requires a hyphen when attached to a base word?",
+            options: [
+                "pre-",
+                "re-",
+                "un-",
+                "self-"
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nSesuai Aturan 4 di Video 19a, tanda hubung (hyphen) akan SELALU digunakan bersama awalan ex-, all-, dan self-."
+        },
+        {
+            id: 6,
+            video: "Video 19d",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "In a complex list of items (e.g., 'The people at the party included John, my husband's coworker; Sue, John's wife...'), why are semicolons used instead of commas to separate the main items?",
+            options: [
+                "To replace the final coordinating conjunction 'and' at the end of the list.",
+                "To show that every item in the list is a fully independent clause.",
+                "To emphasize the extreme importance of each individual person in the list.",
+                "To prevent reader confusion regarding grouping when one or more items already contain commas."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n[Image showing a complex list separated by semicolons to avoid comma confusion]\n\nVideo 19d dengan jelas menerangkan bahwa dalam daftar yang kompleks, jika item-item di dalamnya sudah memuat tanda koma (seperti keterangan apositif 'Sue, istrinya John'), penggunaan koma biasa akan mengacaukan pembaca. Titik koma berfungsi mencegah kebingungan pengelompokan tersebut."
+        },
+        {
+            id: 7,
+            video: "Video 19f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Evaluate the following sentence from the Boston Molasses Flood text. Which version applies commas and pluralization perfectly?",
+            options: [
+                "The first wave, over 25 feet high, smashed buildings, trees, people, and animals like toys.",
+                "The first wave over 25 feet high, smashed buildings, trees, people, and animals like toys.",
+                "The first wave, over 25 feet high, smashed building's, tree's, people, and animals like toys.",
+                "The first wave over 25 feet high smashed buildings trees people and animals like toys."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nSesuai bedah kasus di Video 19f. Frasa 'over 25 feet high' adalah informasi tambahan (non-esensial) sehingga harus diapit koma. Selain itu, daftar item (buildings, trees, people, and animals) harus dipisah dengan koma, dan kata 'buildings' diketik sebagai bentuk jamak (plural s), bukan kepemilikan (apostrof s)."
+        },
+        {
+            id: 8,
+            video: "Video 19e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "When listing steps or elements sequentially in a paragraph using numbers or letters (e.g., 1, 2, 3 or a, b, c), which punctuation mark should enclose those numbers or letters?",
+            options: [
+                "Semicolons",
+                "Quotation marks",
+                "Hyphens",
+                "Parentheses"
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nAturan 2 di Video 19e secara eksplisit menyatakan bahwa tanda kurung (parentheses) digunakan untuk angka atau huruf yang dilampirkan dalam sebuah urutan/daftar (misalnya: (1), (2), (a), (b))."
+        },
+        {
+            id: 9,
+            video: "Video 19b & 19c",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Examine the following sentence: David said, 'Our flag is a symbol.' Why is the word 'Our' capitalized inside the quotation marks?",
+            options: [
+                "Because 'Our' acts as a proper noun in this specific context.",
+                "Because capitalization inside dialogue is entirely optional and left to the writer's preference.",
+                "Because the first letter of a direct quotation must always be capitalized.",
+                "Because 'Our flag' constitutes an independent clause that cannot exist outside quotes."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nBerdasarkan penjelasan di Video 19b dan latihan 19c, huruf pertama setelah tanda kutip pembuka dari ucapan langsung/kutipan harus selalu ditulis dengan huruf kapital."
+        },
+        {
+            id: 10,
+            video: "Video 19b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which of the following types of works should have its title enclosed in quotation marks rather than being italicized?",
+            options: [
+                "Magazines",
+                "Short stories",
+                "Newspapers",
+                "Long books"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nAturan 1 di Video 19b menyatakan bahwa tanda kutip digunakan untuk menandai judul karya pendek seperti puisi, lagu, artikel, dan cerita pendek (short stories)."
+        },
+        {
+            id: 11,
+            video: "Video 19f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Determine the correctly punctuated version of the following complex sentence about Native American medicine men:",
+            options: [
+                "The Dakotas, for example, relieved asthma with skunk cabbage root powder, the Kiowas eliminated dandruff with the soaproot plant.",
+                "The Dakotas for example, relieved asthma with skunk cabbage root powder; the Kiowas eliminated dandruff, with the soaproot plant.",
+                "The Dakotas, for example, relieved asthma with skunk cabbage root powder; the Kiowas eliminated dandruff with the soaproot plant.",
+                "The Dakotas, for example relieved asthma with skunk cabbage root powder; the Kiowas eliminated dandruff with the soaproot plant."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nBerdasarkan koreksi di Video 19f. Frasa transisi penegas 'for example' diapit oleh koma ('The Dakotas, for example,'). Selanjutnya, dua kalimat utuh tersebut dipisahkan dengan sempurna menggunakan titik koma setelah kata 'powder'."
+        },
+        {
+            id: 12,
+            video: "Video 19a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "If you reach the end of a line while typing and need to divide a word using a hyphen, what is the fundamental rule you must follow?",
+            options: [
+                "You can break the word anywhere as long as it fits the paper's margin.",
+                "You must break the word strictly between syllables.",
+                "You should place the hyphen right before a two-letter suffix at the start of the next line.",
+                "You must place the hyphen immediately after the first letter of the word."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n\n\nAturan 5 di Video 19a mengharuskan pemenggalan kata di akhir baris menggunakan tanda hubung (line break) HANYA dilakukan tepat di antara pemisahan suku kata (syllables)."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
