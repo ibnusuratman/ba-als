@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 21 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 21 Simulation</h1>
+        <p class="subtitle">Coordination & Subordination</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 21e",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Read the following sentence: 'Many women continue to work after marriage; therefore, their husbands must help with the housework.' What function does the word 'therefore' serve in this context?",
+            options: [
+                "It introduces a dependent clause that shows the direct cause of the women working.",
+                "It connects two unequal clauses to highlight a completely contrasting situation.",
+                "It indicates the logical consequence or result of the first independent clause.",
+                "It emphasizes that the two independent clauses have entirely unrelated meanings."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n\n\nOpsi C benar karena 'therefore' (oleh karena itu) adalah kata keterangan konjungtif yang digunakan dalam result clause (klausa hasil) untuk menunjukkan konsekuensi logis dari tindakan di klausa pertama (istri bekerja berakibat suami harus membantu)."
+        },
+        {
+            id: 2,
+            video: "Video 21b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which of the following groups of subordinators is used exclusively to indicate a relationship of time?",
+            options: [
+                "Whether, rather than, and than.",
+                "Since, until, when, and while.",
+                "So, so that, and in order that.",
+                "Even, if, unless, and provided."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nOpsi B benar karena kata-kata seperti 'since', 'until', 'when', dan 'while' merupakan konjungsi subordinatif spesifik untuk menunjukkan keterangan waktu (temporal relationships)."
+        },
+        {
+            id: 3,
+            video: "Video 21f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Read the following sentences: 'The pharmacist was too lazy to stir the medicine into a glass of water. He mixed the syrup with soda water. Soda water was closer to where he was standing.' Which of the following combines these ideas most logically using both coordination and subordination?",
+            options: [
+                "The pharmacist was too lazy to stir the medicine into a glass of water, so he mixed the syrup with soda water because it was closer to where he was standing.",
+                "Because the pharmacist was too lazy to stir the medicine into a glass of water; he mixed the syrup with soda water, so it was closer to where he was standing.",
+                "The pharmacist was too lazy to stir the medicine into a glass of water, however he mixed the syrup with soda water since it was closer to where he was standing.",
+                "The pharmacist mixed the syrup with soda water because he was too lazy to stir the medicine into a glass of water, nevertheless it was closer to where he was standing."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n\n\nOpsi A benar secara logika dan sintaksis. Kalimat ini menggunakan konjungsi koordinatif 'so' untuk menunjukkan hasil (karena apoteker malas, jadi ia mencampur sirupnya) dan konjungsi subordinatif 'because' untuk menunjukkan alasan (mengapa dicampur soda? Karena soda lebih dekat)."
+        },
+        {
+            id: 4,
+            video: "Video 21a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What is the correct punctuation pattern when using a conjunctive adverb to link two closely related independent clauses?",
+            options: [
+                "Comma + conjunctive adverb + comma.",
+                "Semicolon + conjunctive adverb + semicolon.",
+                "Semicolon + conjunctive adverb + comma.",
+                "Comma + conjunctive adverb + semicolon."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nOpsi C benar karena format standar untuk menggabungkan dua klausa independen dengan kata keterangan konjungtif adalah: titik koma (;) + kata keterangan konjungtif + koma (,)."
+        },
+        {
+            id: 5,
+            video: "Video 21a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which of the following words is classified as a coordinating conjunction used specifically to show contrast or difference?",
+            options: [
+                "Therefore",
+                "Because",
+                "Yet",
+                "Since"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nOpsi C benar karena kata 'yet' (namun) adalah salah satu dari 7 konjungsi koordinatif (and, but, for, nor, or, so, yet) dan fungsinya khusus untuk menunjukkan kontras atau perbedaan, mirip dengan 'but'."
+        },
+        {
+            id: 6,
+            video: "Video 21b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Why is the phrase 'Because it snowed all night' considered a dependent clause rather than an independent clause?",
+            options: [
+                "It lacks both a subject and a verb required to form a complete grammatical sentence.",
+                "It has a subject and a verb but does not express a complete thought without a main clause.",
+                "It contains a coordinating conjunction that forcefully connects two completely equal ideas.",
+                "It functions perfectly as a complete sentence but requires a semicolon for proper formatting."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n[Image illustrating dependent vs independent clauses differences]\n\nOpsi B benar. Sebuah klausa dependen memang memiliki subjek (it) dan kata kerja (snowed), tetapi ia tidak bisa berdiri sendiri karena maknanya belum sempurna (menggantung) tanpa klausa utama."
+        },
+        {
+            id: 7,
+            video: "Video 21f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Consider the following sentences: 'Air is a very poor conductor of electricity. Almost any object that can help bridge the gap will offer a closer path.' Which of the following is the most logical way to synthesize these sentences using subordination?",
+            options: [
+                "Air is a very poor conductor of electricity, so almost any object that can help bridge the gap will offer a closer path.",
+                "Since air is a very poor conductor of electricity, almost any object that can help bridge the gap will offer a closer path.",
+                "Air is a very poor conductor of electricity; however, almost any object that can help bridge the gap will offer a closer path.",
+                "Even though air is a very poor conductor of electricity, almost any object that can help bridge the gap will offer a closer path."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nOpsi B benar karena kalimat ini meminta penggunaan teknik subordinasi (subordination). Penggunaan subordinator 'since' di awal dengan tepat membangun hubungan sebab-akibat (karena udara adalah konduktor buruk, maka rute terdekat diambil)."
+        },
+        {
+            id: 8,
+            video: "Video 21e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "The transition words 'therefore' and 'consequently' are most commonly associated with which specific type of clause?",
+            options: [
+                "Contrast clauses",
+                "Reason clauses",
+                "Result clauses",
+                "Time clauses"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nOpsi C benar karena 'therefore' dan 'consequently' merupakan penanda wacana (indikator) khusus yang memfasilitasi hubungan hasil atau konsekuensi (result clauses) dari klausa sebelumnya."
+        },
+        {
+            id: 9,
+            video: "Video 21c",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Based on the punctuation rules of subordination, which of the following sentences is formatted correctly?",
+            options: [
+                "Because volcanoes do not give warning signals they are always dangerous.",
+                "Volcanoes are always dangerous, because they do not give warning signals.",
+                "Because volcanoes do not give warning signals, they are always dangerous.",
+                "Volcanoes are always dangerous; because they do not give warning signals."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n[Image showing comma rule for dependent clauses at the beginning of a sentence]\n\nOpsi C benar. Aturannya adalah jika sebuah kalimat diawali dengan klausa dependen (yang mengandung subordinator seperti 'because'), maka harus ada koma yang memisahkan klausa dependen tersebut dari klausa utamanya."
+        },
+        {
+            id: 10,
+            video: "Video 21d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which of the following pairs of words are commonly used as conjunctive adverbs to introduce a contrast clause?",
+            options: [
+                "However and nevertheless",
+                "Therefore and consequently",
+                "Because and since",
+                "Both and and"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nOpsi A benar. 'However' dan 'nevertheless' adalah contoh khas dari kata keterangan konjungtif (conjunctive adverbs) yang difungsikan untuk membangun kerangka contrast clauses (klausa yang berlawanan)."
+        },
+        {
+            id: 11,
+            video: "Video 21b",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Evaluate the following sentence: 'Because people stared at her, Rikki wore a see-through blouse.' What is the primary logical flaw in how this sentence is constructed?",
+            options: [
+                "The dependent clause lacks a functioning verb and subject, rendering the entire sentence grammatically incomplete.",
+                "The subordinator 'because' should simply be replaced with the coordinator 'and' to fix the structural issue.",
+                "The cause and effect relationship is reversed, incorrectly implying the staring caused her clothing choice.",
+                "The sentence is correctly constructed grammatically and logically, containing no underlying fallacies at all."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nOpsi C benar. Evaluasi logis dari kalimat ini cacat karena sebab-akibatnya terbalik. Secara logika (sesuai kutipan sumber), Rikki ditatap orang KARENA ia memakai baju tembus pandang, bukan sebaliknya."
+        },
+        {
+            id: 12,
+            video: "Video 21a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Which option presents a correct pair of correlative conjunctions used to establish a balance between two independent clauses?",
+            options: [
+                "Neither ... or",
+                "Not only ... but also",
+                "Both ... or",
+                "Either ... nor"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n[Image showing pairs of correlative conjunctions]\n\nOpsi B benar karena konjungsi korelatif digunakan secara berpasangan untuk membangun keseimbangan. Pasangan yang tepat adalah 'not only...' yang berpasangan dengan '...but also'."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        // Added the explicit "Back to Dashboard / Menu Utama" button here
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
