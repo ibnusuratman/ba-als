@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 24 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 24 Simulation</h1>
+        <p class="subtitle">Concluding Paragraphs</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 24c",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "A student writes the following conclusion for a persuasive essay about recycling: 'I have explained in this paper why recycling is mandatory for our survival. Thank you for taking the time to read my thoughts on this critical environmental issue.' Based on the guidelines for effective persuasive conclusions, how should this paragraph be revised?",
+            options: [
+                "The student should keep the current phrasing but add a detailed, new argument about ocean pollution to strengthen the final point.",
+                "The student should expand the 'thank you' section to acknowledge specific opposing viewpoints mentioned in the body paragraphs.",
+                "The student should change the meta-commentary to third-person point of view, such as 'The author has explained in this paper...'",
+                "The student should remove the meta-commentary phrases and informal thanks, replacing them with a summary of arguments and a clear call to action."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n\n\nSesuai materi Video 24c, penulis harus membuang frasa meta-komentar (seperti 'Saya telah menjelaskan') dan ucapan 'terima kasih' yang informal, lalu menggantinya dengan ringkasan argumen serta ajakan bertindak (call to action) yang jelas."
+        },
+        {
+            id: 2,
+            video: "Video 24a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the recommended framework for a concluding paragraph, which of the following represents the correct sequence of its three essential components?",
+            options: [
+                "A lingering thought, explanation of significance, and restatement of the thesis.",
+                "Restatement of the thesis, explanation of significance, and a lingering thought.",
+                "Restatement of the thesis, summary of opposing views, and a lingering thought.",
+                "Introduction of new evidence, restatement of the thesis, and a famous quote."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nSesuai Video 24a, tiga elemen penting dalam kerangka kesimpulan adalah: 1) Menyatakan ulang tesis, 2) Menjelaskan signifikansi (faktor 'so what?'), dan 3) Lingering thought atau pernyataan akhir yang melekat (kicker)."
+        },
+        {
+            id: 3,
+            video: "Video 24a",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "The lecture compares the structure of an essay to a funnel. How does the structural flow of a concluding paragraph differ from that of an introductory paragraph based on this analogy?",
+            options: [
+                "Both paragraphs begin broadly and narrow down to a specific thesis statement.",
+                "The conclusion begins broadly with a general truth and narrows down to the thesis, reversing the introduction.",
+                "The conclusion starts with a narrow restatement of the thesis and broadens outward toward a general truth.",
+                "The conclusion maintains a narrow focus throughout, whereas the introduction remains entirely broad."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n\n\nDalam Video 24a dijelaskan bahwa kesimpulan adalah 'pintu keluar corong' atau corong terbalik. Ia dimulai secara sempit dengan menyatakan kembali tesis, lalu meluas (broaden outward) berbicara tentang kebenaran yang lebih umum atau gambaran yang lebih besar."
+        },
+        {
+            id: 4,
+            video: "Video 24d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the case study of the descriptive essay 'The Thunderstorm,' what specific image is used in the concluding paragraph to signify the sudden end of the chaotic weather?",
+            options: [
+                "A rainbow spreading up and across the water, allowing the horizon to be seen.",
+                "A brightly shining moon reflecting over the calm, dark ocean.",
+                "A large ship safely returning to the harbor after battling the high waves.",
+                "A flock of seagulls flying back to the shoreline under a grey, cloudy sky."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nDi Video 24d (Studi Kasus: Badai Petir), penulis mengakhiri esai dengan visual yang kuat bahwa badai tiba-tiba berhenti dan 'Pelangi, hampir sangat cerah... menyebar di atas dan di seberang air. Aku bisa melihat cakrawala lagi.'"
+        },
+        {
+            id: 5,
+            video: "Video 24e",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "A writer is finishing a narrative essay about overcoming a severe fear of public speaking. The climax features the writer successfully delivering a speech. If the writer wants to employ the 'ending with an action' technique for the conclusion, which of the following sentences would be most appropriate?",
+            options: [
+                "'I realized then that fear is merely a temporary illusion created by our own insecurities and doubts.'",
+                "'My mentor leaned in and whispered, 'I always knew you had it in you to conquer this fear.''",
+                "'As the applause faded, I smiled at the crowd, stepped down from the podium, and confidently walked out the door.'",
+                "'The auditorium was a sea of bright lights, echoing cheers, and colorful banners waving in the air.'"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nOpsi ini menggambarkan gerakan fisik yang menentukan (tersenyum, turun dari podium, berjalan keluar), yang secara langsung mengaplikasikan teknik 'Ending with an Action' seperti yang dijelaskan pada Video 24e."
+        },
+        {
+            id: 6,
+            video: "Video 24c",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What specific element must be included in a highly effective persuasive essay conclusion that is typically absent in a standard expository conclusion?",
+            options: [
+                "A clear summary of the rebuttals against opposing arguments.",
+                "A direct quotation from a famous philosopher or historical figure.",
+                "A detailed analysis of the author's primary literary devices.",
+                "A strict maximum limit of exactly three sentences to avoid redundancy."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nVideo 24c dengan sangat jelas menyatakan bahwa kesimpulan persuasif yang efektif harus mencakup ringkasan dukungan dan ringkasan sanggahan (rebuttals), suatu elemen yang tidak ada di esai eksposisi biasa."
+        },
+        {
+            id: 7,
+            video: "Video 24e",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "How does the fundamental purpose of a narrative essay's conclusion diverge significantly from the conclusions of expository and persuasive essays?",
+            options: [
+                "It must explicitly state the exact academic results of a research study rather than a fictional story.",
+                "It requires a direct call to action urging the reader to vote or change a specific government law.",
+                "It aims to leave a profound emotional or intellectual impression, such as a sudden realization.",
+                "It strictly relies on summarizing opposing rebuttals to prove the main character's initial point."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nSesuai Video 24e, kesimpulan naratif sangat berbeda karena ia harus 'memberikan kesan semangat', 'kesan kebangkitan', atau 'meninggalkan kesan emosional/intelektual yang mendalam pada pembaca'."
+        },
+        {
+            id: 8,
+            video: "Video 24f",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the narrative essay titled 'The Cold Breath of Death,' what specific action does the narrator perform in the concluding paragraph to provide a poignant resolution?",
+            options: [
+                "The narrator decides to move back into the grandparents' old house to preserve its memories.",
+                "The narrator loudly cries while looking at an old photograph of the grandfather in the hallway.",
+                "The narrator writes a long letter of apology for missing the grandfather's final living moments.",
+                "The narrator continues to pray for the grandfather using his exact own words."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nPada akhir cerita 'Napas Kematian yang Dingin' (Video 24f), narator melakukan tindakan spesifik: 'sampai hari ini, aku berdoa untuk kakekku dengan doa yang pernah dia ucapkan...' Hal ini memberikan resolusi tindakan yang bermakna."
+        },
+        {
+            id: 9,
+            video: "Video 24a",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "A student is writing an expository essay with the thesis: 'Renewable energy sources, such as solar and wind power, are essential for reducing global carbon emissions and promoting long-term economic stability.' Using the exact starter phrase recommended in the lecture for struggling writers, which of the following best restates this thesis for the conclusion?",
+            options: [
+                "'To summarize the entire essay, we must urgently invest in solar and wind power to completely eradicate the catastrophic effects of global warming.'",
+                "'When one considers solar power, wind energy, and economic stability, it is clear that renewable resources are vital for lowering emissions and securing our financial future.'",
+                "'I have explained in this paper that solar and wind power are essential for reducing global carbon emissions and promoting long-term economic stability.'",
+                "'Renewable energy sources, such as solar and wind power, are essential for reducing global carbon emissions and promoting long-term economic stability.'"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nPada Video 24a, frasa pembuka (starter phrase) yang sangat disarankan untuk siswa yang kesulitan menulis ulang tesis adalah 'When one considers [Topik X, Y, Z], it is clear that...'. Opsi ini mengaplikasikan template tersebut dengan sempurna."
+        },
+        {
+            id: 10,
+            video: "Video 24b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "When writing the concluding paragraph for a literary analysis essay, what specific information is imperative to reveal within the final sentences?",
+            options: [
+                "A detailed summary of the main character's physical appearance and character traits.",
+                "The exact word count and structural outline of the essay's preceding body paragraphs.",
+                "A brand new thesis statement that contradicts the introductory paragraph to surprise the reader.",
+                "The core message or final warning the author wishes to convey to the audience."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nPada Video 24b, sangat ditekankan bahwa saat membuat analisis sastra, hal terakhir yang krusial untuk diungkapkan dalam kesimpulan adalah 'pesan terakhir' atau 'pesan apa yang ingin disampaikan oleh penulis'."
+        },
+        {
+            id: 11,
+            video: "Video 24d",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "In drafting the conclusion for a descriptive essay about a summer vacation, a student decides to include a brief, previously unmentioned story about a flat tire to make the ending more exciting. Based on the guidelines for descriptive essays, how should this decision be evaluated?",
+            options: [
+                "It is incorrect because concluding paragraphs in descriptive essays must strictly avoid introducing any new information.",
+                "It is acceptable as long as the new story is properly cited using the 8th edition MLA format to avoid plagiarism.",
+                "It is highly recommended because it adds a lingering thought that surprises the reader and creates narrative tension.",
+                "It is necessary because descriptive conclusions require a final action or dialogue to be structurally effective."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nMenurut panduan di Video 24d untuk esai deskriptif, penulis 'benar-benar menahan diri untuk tidak memasukkan informasi baru apa pun di dalam paragraf penutup.' Menambah cerita baru di kesimpulan adalah salah."
+        },
+        {
+            id: 12,
+            video: "Video 24a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the guidelines for writing an effective conclusion, what is the primary reason writers should avoid copying and pasting their exact thesis statement from the introduction?",
+            options: [
+                "It confuses the reader by accidentally introducing entirely new and unrelated arguments.",
+                "It automatically requires the writer to include an additional MLA citation, complicating the essay.",
+                "It causes the concluding paragraph to exceed the strict maximum limit of five sentences.",
+                "It makes the writing appear robotic and constitutes a literary disaster."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nDi Video 24a secara tegas dikatakan bahwa menyalin tesis asli sama persis ke dalam kesimpulan akan membuatnya tampak 'seperti robot' dan merupakan 'sebuah bencana' literatur (literary disaster)."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        // Added the explicit "Back to Dashboard / Menu Utama" button here
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
