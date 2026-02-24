@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 22 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 22 Simulation</h1>
+        <p class="subtitle">English Grammar - Parallelism</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 22e",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Identify the correct parallel revision for this sentence: 'Larissa will either add a flock of plastic pink flamingos, or she will purchase a bunch of ceramic gnomes.'",
+            options: [
+                "Larissa will either add a flock of plastic pink flamingos, or purchase a bunch of ceramic gnomes.",
+                "Larissa either will add a flock of plastic pink flamingos, or she will purchase a bunch of ceramic gnomes.",
+                "Larissa will add either a flock of plastic pink flamingos, or she purchases a bunch of ceramic gnomes.",
+                "Larissa will neither add a flock of plastic pink flamingos, or she will purchase a bunch of ceramic gnomes."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n\n\nSesuai dengan aturan konjungsi korelatif (either... or), elemen tata bahasa yang mengikuti kata 'either' harus persis sama strukturnya dengan yang mengikuti 'or'. Pada opsi A, 'either' diikuti kata kerja (add), dan 'or' juga diikuti kata kerja (purchase), sehingga strukturnya seimbang."
+        },
+        {
+            id: 2,
+            video: "Video 22b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the list of words 'watched, ate, slept, and drive', why is the word 'drive' considered grammatically non-parallel?",
+            options: [
+                "It is an adjective that does not match the preceding sequence of adverbs.",
+                "It is a noun, whereas the other words in the list are action verbs.",
+                "It is in the present tense, while the other verbs in the sequence are in the past tense.",
+                "It is in the past tense, while the other verbs in the sequence are in the present tense."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nDi dalam video disebutkan secara eksplisit bahwa 'drive' adalah kata kerja bentuk sekarang (present tense), sedangkan rangkaian sebelumnya ('watched', 'ate', 'slept') berada dalam bentuk lampau (past tense). Agar paralel, seharusnya diubah menjadi 'drove'."
+        },
+        {
+            id: 3,
+            video: "Video 22d",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Read the following excerpt: 'Desmond's aquarium was filled with biting spiders, hissing snakes, and spiders that bite.' Why does the phrase 'spiders that bite' ruin the parallelism, and how is it corrected?",
+            options: [
+                "It uses a past tense verb instead of an adjective; it should be changed to 'bitten spiders'.",
+                "It uses a relative clause instead of a participle; it should be changed to 'biting spiders' to match the other participle modifiers.",
+                "It uses a participle instead of a relative clause; it should be changed to 'snakes that hiss' and 'spiders that bite'.",
+                "It uses a prepositional phrase instead of a noun; it should be changed to 'spiders of bite'."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nFrasa 'biting spiders' dan 'hissing snakes' menggunakan partisip (participle -ing) sebagai pengubah. Tiba-tiba muncul 'spiders that bite' yang menggunakan klausa relatif. Untuk sejajar, klausa tersebut harus direduksi menjadi partisip yang sama, yaitu 'biting spiders'."
+        },
+        {
+            id: 4,
+            video: "Video 22a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the textbook English Grammar for the Utterly Confused, what is the fundamental meaning of 'parallel structure' in a sentence?",
+            options: [
+                "Placing ideas of the same level of importance into identical grammatical structures.",
+                "Combining completely different grammatical structures in one sentence to create variety.",
+                "Ensuring every word in the sentence starts with the same alphabetical letter.",
+                "Using only action verbs and omitting all adjectives or adverbs entirely."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n[Image comparing non-parallel vs parallel sentence structures]\n\nVideo secara jelas mengutip bahwa struktur paralel berarti menempatkan gagasan-gagasan yang setingkat ke dalam struktur gramatikal yang sama persis (misal: kata benda dengan kata benda, klausa dengan klausa)."
+        },
+        {
+            id: 5,
+            video: "Video 22f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "A student writes the following draft: 'At the family reunion, we ate Grandma's barbecue ribs, Aunt Sally's potato salad, and piling plates with Jell-O prepared by Cousin Sue.' How should the final item be applied to properly match the established parallel structure?",
+            options: [
+                "...and Cousin Sue prepared plates of Jell-O.",
+                "...and we piled plates with Cousin Sue's Jell-O.",
+                "...and eating Jell-O that Cousin Sue prepared.",
+                "...and Cousin Sue's banana Jell-O."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nDua item sebelumnya adalah modifikasi frasa kata benda kepemilikan (possessive noun phrases): 'Grandma's barbecue ribs', 'Aunt Sally's potato salad'. Agar setara secara struktur, item ketiga harus diubah formatnya menjadi kepemilikan juga, yaitu 'Cousin Sue's banana Jell-O'."
+        },
+        {
+            id: 6,
+            video: "Video 22e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "When creating a descriptive list of subjects using articles (e.g., 'the clock', 'the air conditioner', and 'a fluorescent bulb'), is the structure considered grammatically parallel?",
+            options: [
+                "No, because parallel structures strictly forbid the use of any articles before a noun.",
+                "No, because 'a' is an indefinite article and cannot structurally be grouped with the definite article 'the'.",
+                "Yes, because both definite and indefinite articles fulfill the same grammatical requirement of being an article.",
+                "Yes, but only because all the nouns listed are related to electrical room appliances."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nDi video 22e dijelaskan bahwa meskipun 'the' adalah artikel pasti dan 'a' adalah artikel tidak pasti, keduanya sama-sama memenuhi syarat tata bahasa sebagai artikel yang diikuti oleh kata benda, sehingga tetap dianggap paralel."
+        },
+        {
+            id: 7,
+            video: "Video 22f",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Consider the following sequence: 'Skipping the directions, hurrying to finish first, and neglecting to double-check her work.' Why is this considered grammatically parallel despite minor internal variations?",
+            options: [
+                "Because all three elements fundamentally operate as a uniform sequence of gerund phrases.",
+                "Because all three elements are independent clauses containing their own specific subjects.",
+                "Because they alternate perfectly between present participles and past participles.",
+                "Because they all end strictly with an infinitive extension such as 'to finish'."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nKetiga frasa tersebut ('skipping', 'hurrying', 'neglecting') diawali oleh gerund (kata kerja bentuk -ing yang berfungsi sebagai kata benda). Meskipun detail pelengkap di belakangnya berbeda-beda, fondasi awal kalimatnya bersifat seragam (gerund phrases) sehingga dinyatakan paralel."
+        },
+        {
+            id: 8,
+            video: "Video 22a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Based on the instructional video, what is the primary grammatical difference between a clause and a phrase?",
+            options: [
+                "A phrase contains both a subject and a verb, while a clause does not.",
+                "A clause contains both a subject and a verb, while a phrase does not.",
+                "A phrase is exclusively used for prepositional elements at the beginning of sentences.",
+                "A clause is always placed at the very end of a dependent sentence."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n[Image contrasting Clause (S+V) vs Phrase (No S+V)]\n\nPada video 22a disampaikan dengan tegas aturan dasarnya: 'Klausa berisi subjek dan kata kerja, sedangkan frasa tidak memiliki kombinasi subjek-kata kerja tersebut.'"
+        },
+        {
+            id: 9,
+            video: "Video 22c",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Evaluate the syntax and select the most appropriate correction for the following non-parallel sentence: 'Stress makes it difficult to exercise regularly, establishing a stable relationship, and eat diets that are healthy.'",
+            options: [
+                "Stress makes it difficult to maintain regular exercise, stable relationships, and a healthy diet.",
+                "Stress makes it easy to exercise regularly, establishing stable relationships, and eat healthy diets.",
+                "Stress makes it difficult to exercise regularly, establish stable relationship, and eating diets healthy.",
+                "Stress makes it difficult exercising regularly, to establish stable relationships, and ate healthy diets."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nUntuk memperbaiki kekacauan struktur antara infinitif, gerund, dan kata kerja dasar, video menyarankan penggunaan satu kata kerja utama (seperti 'maintain') yang menaungi rangkaian pasangan kata sifat-kata benda secara rapi: 'regular exercise', 'stable relationships', 'a healthy diet'."
+        },
+        {
+            id: 10,
+            video: "Video 22c",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Why is the final phrase 'cleaning' considered non-parallel in the following routine sequence: 'Wen exercises every day by walking her dog, going for a bike ride, and cleaning'?",
+            options: [
+                "It contains a direct object, whereas the other gerund phrases do not.",
+                "It is a past tense verb that conflicts directly with the present progressive verbs.",
+                "It is an infinitive, whereas the other phrases are formulated as gerunds.",
+                "It stands alone as a solitary gerund without an object or extension, unlike the other verb phrases."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nSesuai analisis di video 22c, 'walking her dog' dan 'going for a bike ride' adalah frasa gerund yang memiliki objek/pelengkap. Sedangkan 'cleaning' hanya berdiri sendiri sebagai satu kata gerund tanpa objek, sehingga mematahkan ritme struktur paralel kalimat tersebut."
+        },
+        {
+            id: 11,
+            video: "Video 22b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Analyze the following list of geographical locations: 'Toronto, Yukon, Manitoba, and Nova Scotia.' Why does the word 'Toronto' break the parallel structure in this specific group?",
+            options: [
+                "Because Toronto is a city, while the others are categorically Canadian provinces or territories.",
+                "Because Toronto is a country, while the others are classified as specific capital cities.",
+                "Because Toronto does not end with the letter 'a' like the other geographical locations.",
+                "Because Toronto is a province, while all the other words represent specific cities."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nParalelisme juga melibatkan kesetaraan kategori semantik (makna). Yukon, Manitoba, dan Nova Scotia adalah level provinsi/wilayah di Kanada. Sedangkan Toronto hanyalah sebuah kota (city). Maka, Toronto adalah entitas yang merusak deret geografis tersebut."
+        },
+        {
+            id: 12,
+            video: "Video 22d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What is the strict grammatical rule when applying the correlative conjunction pair 'not only ... but also'?",
+            options: [
+                "The phrase 'not only' must exclusively be followed by a noun, and 'but also' by a verb.",
+                "The conjunction pair must only be used at the absolute beginning of an academic sentence.",
+                "The structure following 'but also' must always take the form of an independent clause.",
+                "The grammatical unit following 'not only' must identically match the structural unit following 'but also'."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n\n\nVideo 22d sangat menekankan bahwa konjungsi korelatif menuntut penempatan absolut. Jika 'not only' diikuti kata kerja, 'but also' harus diikuti kata kerja. Jika diikuti frasa preposisi, pasangannya wajib frasa preposisi yang identik secara gramatikal."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        // Added the explicit "Back to Dashboard / Menu Utama" button here
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
