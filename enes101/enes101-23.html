@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 23 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 23 Simulation</h1>
+        <p class="subtitle">Essay Introductions & Thesis Statements</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 23e",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "You are tasked with writing a persuasive essay on the topic 'The Main Causes of Urban Poverty.' Based on the module's guidelines for persuasive introductions, which of the following is the most appropriate and effective thesis statement for your essay?",
+            options: [
+                "'In this essay, I will discuss the various factors that cause urban poverty, such as unemployment and lack of education.'",
+                "'Urban poverty is a major issue in today's society, and there are a multitude of statistical reasons and factual data showing why it happens.'",
+                "'While many factors contribute to urban poverty, I believe the primary causes are systemic educational inequality and the centralization of wealth.'",
+                "'The main causes of urban poverty include a lack of flexible working hours, poor communication skills between partners, and emotional incompatibility.'"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n\n\nEsai persuasif menuntut opini atau perspektif penulis (Video 23e). Kalimat 'I believe the primary causes are...' dengan jelas menunjukkan opini (tesis) dan memetakan poin spesifik (roadmap) secara organik tanpa terdengar mekanis."
+        },
+        {
+            id: 2,
+            video: "Video 23a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the foundational rules of essay writing discussed in the module, what is the recommended number of sentences for a well-crafted, effective academic introduction?",
+            options: [
+                "Exactly 2 to 4 sentences",
+                "At least 5 to 7 sentences",
+                "Precisely 3 to 5 sentences",
+                "A minimum of 7 to 9 sentences"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nDi Video 23a, secara eksplisit disebutkan bahwa pendahuluan yang baik secara struktural harus memiliki setidaknya lima hingga tujuh (5 to 7) kalimat untuk membangun konteks yang cukup sebelum masuk ke tesis."
+        },
+        {
+            id: 3,
+            video: "Video 23c",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "When critiquing poor introductions, the instructor highlights a common trap that novice writers fall into regarding vocabulary. Why is the use of artificially complex vocabulary heavily criticized in the module?",
+            options: [
+                "It inevitably causes severe grammatical errors and structural flow problems, particularly the creation of run-on sentences missing essential commas.",
+                "It usually leads to an overly informal academic tone, which reduces the overall credibility and authority of the research paper.",
+                "It requires the reader to constantly consult external sources, which distracts them from understanding the main thesis statement.",
+                "It often results in verbosity and redundancy, meaning the writer ends up repeating the exact same concept in varying ways within a single sentence."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nDi Video 23c dijelaskan bahwa penulis sering jatuh ke dalam perangkap menggunakan kata-kata sulit agar terlihat profesional, yang pada akhirnya hanya menghasilkan kemubaziran/redundansi (mengulang konsep yang sama berulang-ulang di satu kalimat tanpa menambah makna baru)."
+        },
+        {
+            id: 4,
+            video: "Video 23f",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the context of advanced narrative writing, the author of the essay 'The Cold Breath of Death' uses the phrase 'she went out like a lightbulb' to introduce Grandma Edna. What specific stylistic device is utilized in this phrase?",
+            options: [
+                "Metaphor",
+                "Anecdote",
+                "Simile",
+                "Personification"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n[Image explaining simile with 'like' or 'as']\n\nFrasa 'went out like a lightbulb' (keluar seperti bola lampu) menggunakan kata 'seperti/like', yang menjadikannya sebuah Simile (Perumpamaan). Hal ini secara eksplisit disebutkan di Video 23f."
+        },
+        {
+            id: 5,
+            video: "Video 23f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "You are drafting a narrative essay about a sudden, tragic accident that happens during a vacation. Applying the advanced narrative techniques demonstrated in the 'Sharron's Death' case study, which opening most effectively uses a descriptive hook to create immediate suspense?",
+            options: [
+                "'On a bright Sunday morning, I was sitting comfortably in my hotel room. I drank some hot coffee and read an interesting book about the history of the ocean.'",
+                "'The sun was shining brightly as Mark excitedly packed his bags for the mountain hiking trip, completely unaware that he would never return home.'",
+                "'Have you ever wondered what it feels like to lose a close friend? Losing someone is a very sad and traumatic experience that many people unfortunately go through.'",
+                "'Recent statistics show that hiking accidents have increased by 20% over the last decade, making it a highly dangerous hobby for unprepared youths.'"
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nOpsi ini paling tepat mengaplikasikan teknik 'Kematian Sharron' (Video 23f). Dimulai dengan deskripsi cuaca dan latar (matahari bersinar, mengepak tas) lalu ditutup dengan kalimat penarik perhatian yang penuh ketegangan murni: 'tidak menyadari bahwa dia tidak akan pernah pulang'."
+        },
+        {
+            id: 6,
+            video: "Video 23c",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "When reviewing the grammatical and structural rules for formal research writing, which of the following elements does the instructor explicitly state must be strictly avoided?",
+            options: [
+                "Contractions (e.g., using 'it's' instead of 'it is')",
+                "Rhetorical questions",
+                "Ambiguous pronouns",
+                "Scientific theories"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nDi Video 23c, instruktur secara tegas memperingatkan agar tidak menggunakan singkatan/kontraksi (seperti 'it's', 'don't', 'can't') dalam penelitian formal. Penulis harus menulisnya secara utuh (misal: 'it is', 'do not')."
+        },
+        {
+            id: 7,
+            video: "Video 23b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "In the 'British Columbia Driving Regulations' case study, how do the authors successfully integrate their roadmap (strategic outline) without making the essay sound rigid or mechanical?",
+            options: [
+                "By placing the roadmap at the very beginning of the introductory paragraph to act as a compelling attention-grabbing hook.",
+                "By explicitly stating 'I will examine the transportation needs of young people' to give clear, unambiguous directions to the reader.",
+                "By completely omitting the outline sentence and relying on the reader's intuition to guess the essay's trajectory through context clues.",
+                "By utilizing the phrase 'By examining...' to organically map out the essay's trajectory straight into the thesis statement."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nDi Video 23b dijelaskan bahwa penulis menghindari ungkapan mekanis dan sebaliknya menggunakan kata 'By examining...' (Dengan mengkaji...) untuk memetakan lintasan pembahasan secara organik dan mulus menuju tesis."
+        },
+        {
+            id: 8,
+            video: "Video 23d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the distinctions made in the module, what specific type of essay requires the author to report actual facts and heavily rely on objective statistical data rather than personal opinions?",
+            options: [
+                "Narrative essay",
+                "Persuasive essay",
+                "Expository essay",
+                "Descriptive essay"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nDi Video 23d dan 23e, disebutkan bahwa tulisan Eksposisi (Expository writing) adalah pembuatan laporan atau makalah penelitian yang berfokus pada pelaporan fakta sebenarnya dan memerlukan banyak data statistik objektif."
+        },
+        {
+            id: 9,
+            video: "Video 23c",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "Review the following introductory draft: 'It starts from the idea surrounding crime, and putting its definition within a set of boundaries is a complicated issue because bad things happen.' Applying the critique principles from the module, how should this sentence be fundamentally revised to reflect an excellent academic introduction?",
+            options: [
+                "'Defining crime is a complex task due to differences in opinions, and an individual's view is shaped by diverse social factors like religion and education.'",
+                "'Crime is like an ugly piece of art; it is very difficult to look at, but many individuals have completely different perspectives on its boundaries.'",
+                "'In this essay, I will examine why crime is a complicated issue and how society's definition of it makes people commit domestic violence.'",
+                "'Every individual's definition of crime is shaped by the society in which they live, where things like religion, education, political views.'"
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nIni adalah perbaikan yang sangat baik sesuai dengan 'Studi Kasus 4' di Video 23c. Kalimat ini menghilangkan kata-kata mubazir, langsung menjawab masalah dengan jelas, dan menyertakan peta jalan eksplisit (faktor sosial seperti agama dan pendidikan)."
+        },
+        {
+            id: 10,
+            video: "Video 23e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "What is the very first step of the writing process where a writer generates raw ideas, compiles data, and brainstorms before attempting to draft the actual introduction?",
+            options: [
+                "Proofreading",
+                "Outlining",
+                "Revising",
+                "Pre-writing"
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\n\n\nDi Video 23d & 23e dijelaskan bahwa Pre-writing (Pramenulis atau curah pendapat/brainstorming) adalah fase pertama di mana penulis mengumpulkan data mentah dan ide sebelum mulai membuat kalimat pendahuluan."
+        },
+        {
+            id: 11,
+            video: "Video 23d",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "During the drafting process of a narrative introduction (such as describing a childhood home), why does the instructor strongly recommend NOT to overly rely on detailed pre-writing notes in the first paragraph?",
+            options: [
+                "Because pre-writing notes usually contain too many empirical statistics that are strictly reserved for expository essays.",
+                "Because deeper specificities are often better reserved for body paragraphs, allowing the introduction to focus solely on establishing an emotional connection.",
+                "Because pre-writing notes are inherently unorganized and will automatically ruin the chronological narrative flow of the story.",
+                "Because narrative writing does not require any factual background information, physical descriptions, or real-world locations to be mentioned at all."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nDi Video 23d, disebutkan aturan penting bagi penulis pemula: jangan terlalu bergantung pada detail catatan pramenulis di pendahuluan. Kekhususan yang lebih dalam (seperti gaya arsitektur rumah) lebih baik disimpan untuk paragraf isi/pembahasan, agar pendahuluan bisa fokus membangun hubungan emosional dengan pembaca."
+        },
+        {
+            id: 12,
+            video: "Video 23a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In an effective academic introduction, which specific component functions as a strategic outline demonstrating exactly what the essay will cover before reaching the conclusion?",
+            options: [
+                "Background information",
+                "Thesis statement",
+                "Roadmap",
+                "Attention grabber"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nDi Video 23a, dinyatakan bahwa pendahuluan harus diakhiri dengan roadmap (peta jalan atau garis besar strategis) yang berfungsi menunjukkan dengan tepat rute/apa saja yang akan dibahas dalam esai tersebut."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        // Added the explicit "Back to Dashboard / Menu Utama" button here
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
