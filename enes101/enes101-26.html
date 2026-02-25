@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOU Module 26 Simulation (Randomized & Visualized)</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4da6ff;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 1.5rem; margin: 0; color: var(--accent-color); }
+        p.subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .video-tag {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            background-color: #2c3e50;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #4da6ff;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+        }
+
+        .option-label input {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-nav {
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #555;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Dashboard Button Highlight */
+        .btn-dashboard {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .btn-dashboard:hover {
+            background-color: #e68a00;
+        }
+
+        /* Results & Review */
+        .result-box {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 5px solid var(--accent-color);
+        }
+
+        .score-number { font-size: 2.2rem; font-weight: bold; color: var(--accent-color); }
+        .score-label { font-size: 0.8rem; color: #aaa; margin-top: -5px; }
+
+        .review-item {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #555;
+            text-align: left;
+        }
+
+        .review-item.correct { border-left-color: var(--correct-color); }
+        .review-item.wrong { border-left-color: var(--wrong-color); }
+
+        .review-explanation {
+            background-color: #333; 
+            border: 1px solid #FFD700; 
+            padding: 15px; 
+            margin-top: 15px; 
+            border-radius: 8px;
+        }
+        
+        .indonesian-flag {
+            font-size: 0.95rem;
+            color: #FFD700; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .explanation-text {
+            color: #fff;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IOU Module 26 Simulation</h1>
+        <p class="subtitle">Academic Literacy: APA, MLA & Report Writing</p>
+    </header>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <p style="text-align:center; color: #666;">Memuat soal...</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    const rawQuizData = [
+        {
+            id: 1,
+            video: "Video 26b",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "You want to incorporate a claim made by Jones, Smith, and Taylor in a 2009 publication directly within a narrative sentence in your report. How should this be appropriately formatted according to the specified academic guidelines?",
+            options: [
+                "Jones et al. (2009) claim that there will be a sharp increase in business opportunities.",
+                "Jones, Smith, & Taylor (2009) claim that there will be a sharp increase in business opportunities.",
+                "Jones et al. claim that there will be a sharp increase in business opportunities (2009).",
+                "Jones, Smith, and Taylor claim that there will be a sharp increase in business opportunities (2009)."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\n\n\nMateri menjelaskan bahwa jika terdapat beberapa penulis (lebih dari dua) dan disebutkan dalam alur kalimat naratif, maka format yang digunakan adalah nama penulis pertama diikuti singkatan Latin 'et al.' (atau dkk) lalu tahun di dalam tanda kurung."
+        },
+        {
+            id: 2,
+            video: "Video 26b",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In the standardized structure of a highly structured technical report, what section should immediately follow the title page?",
+            options: [
+                "A comprehensive reference list detailing all books and internet sources utilized in the research.",
+                "An acknowledgments section listing the contributing organizations and interviewed individuals.",
+                "A brief summary that encapsulates the report's most important features, significant results, and ultimate conclusions.",
+                "The main body text which is systematically divided by relevant subheadings."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n\n\nMateri video 26b secara gamblang menyebutkan bahwa setelah title page (halaman judul), elemen yang harus segera mengikuti dalam laporan teknis adalah ringkasan (summary)."
+        },
+        {
+            id: 3,
+            video: "Video 26e",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "When utilizing the Chicago Manual Style for footnotes in an academic paper, what does the Latin abbreviation 'Ibid.' signify when it appears in consecutive footnotes?",
+            options: [
+                "It indicates that the cited material is drawn from an anonymous author or an unknown publication.",
+                "It signifies that the current citation is taken from the exact same source as the immediately preceding footnote.",
+                "It shows that the source was published in the same year as the previously cited material, but by a completely different author.",
+                "It means that there are multiple authors who collaborated on the referenced work."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nVideo 26e menjelaskan bahwa jika penulis mengutip sumber yang sama secara berturut-turut pada Chicago Style, mereka harus menggunakan 'Ibid.' untuk merujuk pada sumber yang identik dengan catatan kaki tepat di atasnya."
+        },
+        {
+            id: 4,
+            video: "Video 26c",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "If you are citing a book titled 'Facts, myths and future prospects' written by A. Beck and J. Cohen in 2015, published by the American Psychological Association in Washington, DC, how should it be correctly formatted in an APA reference list?",
+            options: [
+                "Beck, A., & Cohen, J. (2015). Facts, myths and future prospects. Washington, DC: American Psychological Association.",
+                "Beck, A. and Cohen, J. (2015). Facts, myths and future prospects. Washington, DC: American Psychological Association.",
+                "Beck, A., & Cohen, J. (2015). Facts, myths and future prospects. Washington, DC: American Psychological Association.",
+                "Beck, A., & Cohen, J. 2015. Facts, myths and future prospects. Washington, DC: American Psychological Association."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nFormat APA yang benar mengharuskan penggunaan ampersand (&) untuk dua penulis, tahun di dalam tanda kurung, penulisan judul buku dengan huruf miring (italic), kota publikasi dan singkatan negara bagian (Washington, DC), diakhiri dengan penerbit."
+        },
+        {
+            id: 5,
+            video: "Video 26d",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "Where should citations for personal communications, such as direct live lectures or personal interviews, be placed in an academic report?",
+            options: [
+                "They are strictly cited within the text and are generally not placed in the final reference list.",
+                "They are placed exclusively in the final reference list under a special 'Interviews' section.",
+                "They are only placed in the appendices alongside raw data and spreadsheets.",
+                "They must be included in the abstract of the report before the main body text."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nDi video 26d dijelaskan bahwa komunikasi pribadi (personal communications) seperti kuliah langsung atau wawancara hanya dikutip di dalam teks utama (in-text) dan umumnya tidak dimasukkan ke daftar referensi akhir (reference list)."
+        },
+        {
+            id: 6,
+            video: "Video 26a & 26b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "Based on the structural guidelines for writing reports, what action should an author strictly avoid when writing the conclusion section of their document?",
+            options: [
+                "Summarizing the materials and main points discussed in the body of the paper.",
+                "Re-evaluating the findings to ensure they align with the original objectives set by the instructor.",
+                "Interpreting the findings and analyzing the overall results of the research.",
+                "Introducing entirely new information or arguments that were not previously discussed."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nVideo 26b menekankan bahwa penulis 'tidak boleh memperkenalkan sesuatu yang baru dalam simpulan' (seperti informasi atau argumen asing yang belum pernah dibahas sebelumnya)."
+        },
+        {
+            id: 7,
+            video: "Video 26a",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the systematic steps of writing a report, which action must be completely finished before an author begins writing the first draft?",
+            options: [
+                "Compiling the final table of contents and the complete alphabetical reference list.",
+                "Making structured notes from all the reading materials and gathered references.",
+                "Asking a peer to proofread the document and provide guiding questions.",
+                "Formulating detailed recommendations based on the interpreted findings."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\n\n\nVideo 26a menyatakan dengan sangat jelas: 'Kalian tidak akan membuat draf sampai kalian membuat catatan (dari artikel, buku, dan wawancara).'"
+        },
+        {
+            id: 8,
+            video: "Video 26f",
+            category: "C3 - Menerapkan (30 Poin)",
+            points: 30,
+            text: "In an essay written in MLA format, you are citing a specific quote from page 127 of a book authored by Demaree. Which of the following represents the correct format for the parenthetical in-text citation?",
+            options: [
+                "(Demaree, 127)",
+                "(Demaree, p. 127)",
+                "(Demaree 127)",
+                "(Demaree 2010, 127)"
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\n[Image comparing MLA vs APA in-text citation format]\n\nDi video 26f disebutkan bahwa kutipan dalam teks bergaya MLA secara struktural hanya terdiri dari nama belakang penulis yang segera diikuti nomor halaman TANPA ada pemisah koma apa pun (misal: Demaree 127)."
+        },
+        {
+            id: 9,
+            video: "Video 26e",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "According to the discussion on academic formatting, what is considered a primary disadvantage of using footnotes in a research report?",
+            options: [
+                "They can severely disrupt the flow of the document and consume valuable physical page space.",
+                "They require the reader to constantly flip to the end of the paper to verify the source material.",
+                "They do not provide immediate reader accessibility to the reference source while reading.",
+                "They are exclusively used for legal documents and cannot be applied to other academic subjects."
+            ],
+            correct: 0, 
+            explanation: "Jawaban Benar: A\n\nDi video 26e dijelaskan bahwa kelemahan utama footnotes (catatan kaki) adalah memakan ruang halaman di bawah dan dapat mengganggu alur dokumen secara visual."
+        },
+        {
+            id: 10,
+            video: "Video 26b",
+            category: "C2 - Memahami (20 Poin)",
+            points: 20,
+            text: "How does the video accurately describe the act of plagiarism in the context of academic writing?",
+            options: [
+                "It is the process of physically stealing books or reference materials from a library for personal use.",
+                "It is the failure to properly format the title page and table of contents in a technical report.",
+                "It is the act of excessively citing sources, which reduces the originality of the academic paper.",
+                "It is a form of intellectual theft where someone uses another person's ideas and makes them appear as their own."
+            ],
+            correct: 3, 
+            explanation: "Jawaban Benar: D\n\nVideo 26b menggambarkan plagiarisme secara metaforis sebagai bentuk pencurian hak kekayaan intelektual (ide orisinal) karena tidak memberikan penghargaan (kredit) dengan benar, membuat ide itu seolah milik sendiri."
+        },
+        {
+            id: 11,
+            video: "Video 26c",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "When citing a newspaper article specifically in APA format, what detail must be included in the date section that is not typically required for a standard book citation?",
+            options: [
+                "The specific time of day the article was published online.",
+                "The exact page count of the entire newspaper issue.",
+                "The precise day and month of publication, in addition to the year.",
+                "The name of the journalist's editorial department."
+            ],
+            correct: 2, 
+            explanation: "Jawaban Benar: C\n\nDalam kaidah kutipan surat kabar (newspaper), video 26c menyatakan, 'untuk artikel surat kabar kalian tidak hanya harus menulis tahun, tetapi juga tanggal (hari dan bulan persis).'"
+        },
+        {
+            id: 12,
+            video: "Video 26f",
+            category: "C1 - Mengingat (10 Poin)",
+            points: 10,
+            text: "In a standard MLA formatted paper, what is the specific font size and type required for the entirety of the document, unless a professor explicitly specifies otherwise?",
+            options: [
+                "10-point Arial font.",
+                "12-point Times New Roman font.",
+                "12-point Calibri font.",
+                "11-point Times New Roman font."
+            ],
+            correct: 1, 
+            explanation: "Jawaban Benar: B\n\nVideo 26f menyebutkan secara kaku tentang pembuatan MLA paper bahwa 'Kalian harus menggunakan fon Times New Roman ukuran 12', kecuali dosen menentukan lain."
+        }
+    ];
+
+    let quizData = [];
+    const userAnswers = {};
+    const totalPossiblePoints = rawQuizData.reduce((sum, q) => sum + q.points, 0);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+        quizData = shuffleArray([...rawQuizData]);
+
+        const questionsPerPage = 3;
+        const totalPages = Math.ceil(quizData.length / questionsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `step ${i === 0 ? 'active' : ''}`;
+            stepDiv.id = `step-${i}`;
+
+            const startIdx = i * questionsPerPage;
+            const endIdx = Math.min(startIdx + questionsPerPage, quizData.length);
+            const pageQuestions = quizData.slice(startIdx, endIdx);
+
+            let html = ``;
+            
+            pageQuestions.forEach((q, indexOnPage) => {
+                const displayNum = startIdx + indexOnPage + 1;
+
+                html += `
+                <div class="card">
+                    <div class="meta-tags">
+                        <span class="video-tag">${q.video}</span>
+                        <span class="category-tag">${q.category}</span>
+                    </div>
+                    <p class="question-text"><strong>${displayNum}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${idx}">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            if (i < totalPages - 1) {
+                html += `<button type="button" class="btn" onclick="nextStep(${i})">Lanjut ke Halaman Berikutnya</button>`;
+            } else {
+                html += `<button type="button" class="btn" style="background-color: #4caf50; color: white;" onclick="finishQuiz()">Kirim & Lihat Nilai Akhir</button>`;
+            }
+
+            stepDiv.innerHTML = html;
+            container.appendChild(stepDiv);
+        }
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = 'result-step';
+        resultDiv.className = 'step';
+        container.appendChild(resultDiv);
+    }
+
+    function nextStep(currentStepIndex) {
+        const stepDiv = document.getElementById(`step-${currentStepIndex}`);
+        const inputs = stepDiv.querySelectorAll('input[type="radio"]');
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        let allAnswered = true;
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal di halaman ini sebelum melanjutkan.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        document.getElementById(`step-${currentStepIndex}`).classList.remove('active');
+        document.getElementById(`step-${currentStepIndex + 1}`).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function finishQuiz() {
+        const inputs = document.querySelectorAll('.step.active input[type="radio"]');
+        let allAnswered = true;
+        const questionsOnPage = new Set();
+        inputs.forEach(input => questionsOnPage.add(input.name));
+
+        questionsOnPage.forEach(name => {
+            if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered) {
+            alert("Harap jawab semua soal sebelum mengirimkan jawaban.");
+            return;
+        }
+
+        inputs.forEach(input => {
+            if (input.checked) {
+                const qId = parseInt(input.name.substring(1));
+                userAnswers[qId] = parseInt(input.value);
+            }
+        });
+
+        calculateAndShowResults();
+    }
+
+    function calculateAndShowResults() {
+        let earnedPoints = 0;
+        let correctCount = 0;
+        let reviewHTML = '';
+
+        quizData.forEach((q, index) => {
+            const userAnswer = userAnswers[q.id];
+            const isCorrect = userAnswer === q.correct;
+            
+            if (isCorrect) {
+                earnedPoints += q.points;
+                correctCount++;
+            }
+
+            const statusClass = isCorrect ? 'correct' : 'wrong';
+            const statusIcon = isCorrect ? '✅ BENAR' : '❌ SALAH';
+            const pointDisplay = isCorrect ? `(+${q.points} Poin)` : `(0 Poin)`;
+
+            reviewHTML += `
+            <div class="review-item ${statusClass}">
+                <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                    Soal #${index + 1} | ${q.category}
+                </div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.15rem;">${q.text}</div>
+                
+                <div style="margin-bottom: 8px; color: ${isCorrect ? '#4caf50' : '#f44336'}; font-weight:bold;">
+                    ${statusIcon} ${pointDisplay} <br>
+                    <span style="font-weight:normal; color:#ddd;">Jawaban Anda: ${q.options[userAnswer]}</span>
+                </div>
+                
+                ${!isCorrect ? `<div style="color: #4caf50; font-size: 1rem; margin-bottom:10px;"><strong>Jawaban Benar:</strong> ${q.options[q.correct]}</div>` : ''}
+                
+                <div class="review-explanation">
+                    <span class="indonesian-flag">🇮🇩 PENJELASAN:</span>
+                    <p class="explanation-text" style="white-space: pre-wrap;">${q.explanation}</p>
+                </div>
+            </div>`;
+        });
+
+        const finalPercentage = Math.round((earnedPoints / totalPossiblePoints) * 100);
+
+        const resultContainer = document.getElementById('result-step');
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        resultContainer.classList.add('active');
+
+        // Added the explicit "Back to Dashboard / Menu Utama" button here
+        resultContainer.innerHTML = `
+            <div class="card result-box">
+                <h2>Kuis Selesai!</h2>
+                <div class="score-circle">
+                    <span class="score-number">${finalPercentage}%</span>
+                    <span class="score-label">Skor Akhir</span>
+                </div>
+                <p style="font-size:1.2rem;">Total Poin: <strong style="color:#4da6ff">${earnedPoints}</strong> / ${totalPossiblePoints}</p>
+                <p style="color:#aaa;">Jawaban Benar: ${correctCount} dari ${quizData.length} soal</p>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-direction: column;">
+                    <button type="button" class="btn" onclick="location.reload()">🔄 Kerjakan Ulang Kuis</button>
+                    <button type="button" class="btn btn-dashboard" onclick="window.location.href='index.html'">🏠 Kembali ke Menu Utama (Dashboard)</button>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 15px; text-align: left;">Ulasan & Penjelasan</h3>
+            ${reviewHTML}
+            
+            <button type="button" class="btn btn-nav" onclick="window.scrollTo(0,0)" style="margin-top:30px;">⬆ Kembali ke Atas</button>
+        `;
+
+        window.scrollTo(0,0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initQuiz);
+
+</script>
+
+</body>
+</html>
