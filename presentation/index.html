@@ -3,235 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Materi BA-ALS - Abu Ismail Mannix</title>
+    <title>Mahad Sibawayh | Revolusi Belajar Bahasa Arab</title>
     <style>
         :root {
-            --bg-color: #000000;       /* Hitam Pekat */
-            --card-bg: #1A1A1A;        /* Abu Gelap untuk Tombol */
-            --text-color: #FFFFFF;     /* Putih */
-            --accent-gold: #FFD700;    /* Emas */
-            --accent-green: #4ADE80;   /* Hijau (Untuk File Ready) */
-            --accent-blue: #3399FF;    /* Biru (Untuk Orientasi) */
-            --text-muted: #666666;     /* Abu untuk yang belum ada */
+            --primary-color: #065f46; /* Hijau gelap elegan */
+            --secondary-color: #d97706; /* Emas kecoklatan */
+            --bg-light: #f3f4f6;
+            --text-dark: #1f2937;
+            --text-light: #4b5563;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
         }
 
         header {
+            background: linear-gradient(135deg, var(--primary-color), #047857);
+            color: white;
             text-align: center;
-            margin-bottom: 50px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
-            width: 100%;
-            max-width: 800px;
+            padding: 4rem 2rem;
         }
 
-        h1 {
-            color: var(--accent-gold);
+        header h1 {
             font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
 
-        p { font-size: 1.2rem; color: #BBB; }
-
-        /* Container Menu */
-        .menu-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        header p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
         }
 
-        /* Tombol Link Umum */
-        a.card {
-            display: block;
-            text-decoration: none;
-            background-color: var(--card-bg);
-            border: 2px solid #333;
-            padding: 25px;
-            border-radius: 12px;
-            transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
-            color: var(--text-color);
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        a.card:hover {
-            transform: scale(1.02);
-            background-color: #252525;
-            border-color: var(--accent-gold);
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        /* Tipe 1: Orientasi (Special Style) */
-        .orientation-card {
-            border-left: 10px solid var(--accent-blue) !important;
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 0.5rem;
         }
-        .orientation-card h2 { color: var(--accent-blue); }
 
-        /* Tipe 2: Hari Harian (Grid) */
-        .days-grid {
+        .section-header {
+            text-align: center;
+        }
+
+        .story p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .story strong {
+            color: var(--text-dark);
+        }
+
+        /* Grid for Pillars */
+        .grid-pillars {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsif */
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
-        .day-card {
-            border-left: 5px solid #444; /* Default belum ada */
+        .pillar-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pillar-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .pillar-card p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        /* Curriculum List */
+        .curriculum-list {
+            list-style: none;
+        }
+
+        .curriculum-list li {
+            background: #fdfdfd;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .curriculum-list h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: #ecfdf5;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .cta-info {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-info ul {
+            list-style: none;
+            display: inline-block;
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        .cta-info li {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .cta-buttons {
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            height: 120px;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .day-card h3 { font-size: 1.5rem; margin-bottom: 5px; }
-        .day-card span { font-size: 1rem; color: #888; }
-
-        /* Status: READY (Hijau) */
-        .ready {
-            border-left-color: var(--accent-green) !important;
-            background-color: #0d1f0d !important; /* Hijau sangat gelap */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.3s;
         }
-        .ready h3 { color: var(--accent-green); }
-        .ready span { color: #FFF; font-weight: bold; }
 
-        /* Typography Card */
-        h2 { font-size: 1.8rem; margin-bottom: 5px; }
-        
-        /* Footer */
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
         footer {
-            margin-top: 50px;
-            color: #444;
-            font-size: 0.9rem;
+            text-align: center;
+            padding: 2rem;
+            background: var(--text-dark);
+            color: white;
+            margin-top: 2rem;
         }
 
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .grid-pillars {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Portal Materi BA-ALS</h1>
-        <p>Abu Ismail Mannix</p>
+        <h1>MAHAD SIBAWAYH</h1>
+        <p>Revolusi Belajar Bahasa Arab & Ilmu Syar'i</p>
+        <p style="margin-top: 10px; font-weight: bold; color: var(--secondary-color);">Terstruktur. Bebas Burnout. Terintegrasi Teknologi AI.</p>
     </header>
 
-    <div class="menu-container">
+    <div class="container">
         
-        <a href="Begin.html" class="card orientation-card">
-            <h2>🔰 Orientasi (Ahlan wa Sahlan)</h2>
-            <p>Pengenalan, Strategi SKS, & Manajemen Waktu</p>
-        </a>
+        <section class="story">
+            <div class="section-header">
+                <h2>Mengapa Memilih Mahad Sibawayh?</h2>
+            </div>
+            <p>Belajar bahasa Arab seringkali terasa berat dan melelahkan. Banyak santri berguguran di tengah jalan karena <em>burnout</em>—dipaksa mempelajari 6 kitab sekaligus secara bersamaan (paralel) tanpa fondasi yang kuat.</p>
+            <p><strong>Kami mengubah pendekatan tersebut.</strong> Berangkat dari evaluasi mendalam terhadap kurikulum klasik <em>Silsilah Ta'lim Al-Lughah Al-Arabiyah</em>, Mahad Sibawayh menghadirkan sistem belajar yang revolusioner. Kami meninggalkan sistem paralel dan beralih ke <strong>Metode Mulazamah (Serial)</strong>. Anda akan menuntaskan penguasaan alat (bahasa/Lughah) terlebih dahulu secara fokus, sebelum menggunakannya untuk membedah kitab-kitab literatur agama (Syar'i).</p>
+            <p>Hasilnya? Beban kognitif jauh lebih ringan, fokus lebih tajam, dan pemahaman jauh lebih mendalam.</p>
+        </section>
 
-        <div style="margin-top: 10px; border-bottom: 1px solid #333;"></div>
-        <h2 style="color: var(--accent-gold); font-size: 1.5rem; margin-top: 10px;">Materi Harian (ENES101)</h2>
+        <section>
+            <div class="section-header">
+                <h2>4 Pilar Ekosistem Belajar</h2>
+            </div>
+            <div class="grid-pillars">
+                <div class="pillar-card">
+                    <h3>1. Metode Serial & "Timeboxing"</h3>
+                    <p>Tidak ada lagi materi tumpang tindih. Belajar bahasa sebagai alat, lalu praktikkan pada kitab syariat. Kami menerapkan target penyelesaian esensi (50%-70%) agar kelas disiplin jadwal tanpa mengorbankan kualitas.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>2. Integrasi AI Voice Synthesis</h3>
+                    <p>Sesi awal dilengkapi 10 menit audio sintesis AI berstandar <em>native speaker</em>, dilanjutkan 50 menit <em>Syarah</em>. Pendekatan hibrida memastikan input bahasa murni dan pemahaman yang membumi.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>3. Kuis Suara (Voice-Based)</h3>
+                    <p>Modul harian diakhiri kuis 5 soal. Platform LMS mendukung ujian lisan interaktif; rekam suara langsung ke dalam sistem untuk memastikan kemampuan <em>Qira'ah</em> dan <em>Kalam</em> terlatih baik.</p>
+                </div>
+                <div class="pillar-card">
+                    <h3>4. Siklus 10 Harian & Live Session</h3>
+                    <p>Hari ke-5 & ke-10 diisi <em>Live Session Zoom (1 Jam)</em> untuk diskusi aktif dan bedah soal, bukan mengulang teori. Setelah hari ke-10, ada jeda libur sebelum Ujian Akhir Blok.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="days-grid">
-            
-            <a href="day-01.html" class="card day-card ready">
-                <h3>HARI 01</h3>
-                <span>Literasi Akademik</span>
-            </a>
+        <section>
+            <div class="section-header">
+                <h2>Kurikulum Terarah (Silsilah Ta'lim)</h2>
+            </div>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-light);">Program dirancang simetris dalam 4 Semester (Total 480 Jam KBM). 6 mata kuliah presisi per semester.</p>
+            <ul class="curriculum-list">
+                <li>
+                    <h4>Semester 1 (120 Jam): Fondasi Dasar</h4>
+                    <p>Fokus pada <em>Maharatul Lughah</em> (Membaca & Ekspresi), <em>Nahwu, Sharaf</em>, dan praktik <em>Qira'ah</em> pada <em>Durus minal Qur'anil Karim</em>.</p>
+                </li>
+                <li>
+                    <h4>Semester 2 (120 Jam): Ekspansi Kaidah</h4>
+                    <p>Peningkatan <em>Kitabah, Ta'bir</em>, dan perluasan praktik literatur syar'i (<em>Tafsir, Hadits, Tauhid, Fikih</em>).</p>
+                </li>
+                <li>
+                    <h4>Semester 3 (120 Jam): Kesusastraan Awal</h4>
+                    <p>Pendalaman tata bahasa kompleks dan pengenalan literatur <em>Al-Adab</em> (Sastra Arab).</p>
+                </li>
+                <li>
+                    <h4>Semester 4 (120 Jam): Penguasaan Mahir</h4>
+                    <p>Aplikasi tata bahasa mahir, <em>Balaghah</em> (Retorika), dan pembedahan ragam teks literatur syar'i termasuk <em>At-Tarikh</em> (Sejarah Islam).</p>
+                </li>
+            </ul>
+        </section>
 
-            <a href="day-02.html" class="card day-card">
-                <h3>HARI 02</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
+        <section class="cta-section">
+            <div class="section-header">
+                <h2>Siap Memulai Perjalanan Anda?</h2>
+            </div>
+            <div class="cta-info">
+                <p>Mari bergabung bersama angkatan pertama Mahad Sibawayh.</p>
+                <ul>
+                    <li>📅 Masa Orientasi: Awal Rabi'ul Awwal 1448 H (September 2026 M)</li>
+                    <li>🚀 Start KBM: 28 Rabi'ul Awwal 1448 H (9 September 2026 M)</li>
+                </ul>
+                <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 10px;"><em>*Penanggalan mengacu pada Kalender Hijriah Global</em></p>
+            </div>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">DAFTAR SEKARANG</a>
+                <a href="#" class="btn btn-secondary">UNDUH SILABUS LENGKAP</a>
+            </div>
+        </section>
 
-            <a href="day-03.html" class="card day-card">
-                <h3>HARI 03</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-04.html" class="card day-card">
-                <h3>HARI 04</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-05.html" class="card day-card">
-                <h3>HARI 05</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-06.html" class="card day-card">
-                <h3>HARI 06</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-07.html" class="card day-card">
-                <h3>HARI 07</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-08.html" class="card day-card">
-                <h3>HARI 08</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-09.html" class="card day-card">
-                <h3>HARI 09</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-10.html" class="card day-card">
-                <h3>HARI 10</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-11.html" class="card day-card">
-                <h3>HARI 11</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-12.html" class="card day-card">
-                <h3>HARI 12</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-13.html" class="card day-card">
-                <h3>HARI 13</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-14.html" class="card day-card">
-                <h3>HARI 14</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-15.html" class="card day-card">
-                <h3>HARI 15</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-16.html" class="card day-card">
-                <h3>HARI 16</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-17.html" class="card day-card">
-                <h3>HARI 17</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-            <a href="day-18.html" class="card day-card">
-                <h3>HARI 18</h3>
-                <span>(Belum Tersedia)</span>
-            </a>
-
-        </div>
     </div>
 
     <footer>
-        <p>&copy; Fall 2025 - BA-ALS IOU</p>
+        <p>&copy; 2026 Mahad Sibawayh. Membangun Pemahaman Teks Syar'i dengan Fondasi Bahasa yang Kokoh.</p>
     </footer>
 
 </body>
